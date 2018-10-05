@@ -1,0 +1,37 @@
+:host {
+    padding: 24px;
+}
+
+.product-details {
+    display: flex;
+}
+.product-images {
+    max-width: 350px;
+}
+
+.alt-images {
+    display: flex;
+    flex-wrap: wrap;
+
+    .alt-image {
+        cursor: pointer;
+        border: 6px solid transparent;
+
+        &.selected {
+            border-color: #e1e1e1;
+        }
+    }
+}
+.description {
+    padding-left: 24px;
+}
+.price {
+    margin: 0 24px;
+}
+.qty-input {
+    width: 100px;
+}
+.add-to-cart-btn {
+    min-width: 124px;
+    margin-left: 12px;
+}

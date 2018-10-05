@@ -1,0 +1,13 @@
+:host {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 24px;
+}
+
+.product-card {
+    max-width: 150px;
+    margin-bottom: 24px;
+    &:not(:last-child) {
+        margin-right: 24px;
+    }
+}

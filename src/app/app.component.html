@@ -1,0 +1,16 @@
+<mat-sidenav-container class="app-container">
+  <mat-sidenav #sidenav mode="over" position="end">
+      <app-cart-contents></app-cart-contents>
+  </mat-sidenav>
+
+  <mat-sidenav-content class="app-content">
+      <div class="top-bar mat-elevation-z6">
+          <a [routerLink]="['/']" class="logo">Vendure Shop Demo</a>
+          <div class="flex-spacer"></div>
+          <app-cart (toggle)="sidenav.toggle()"></app-cart>
+      </div>
+      <div class="page">
+          <router-outlet></router-outlet>
+      </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

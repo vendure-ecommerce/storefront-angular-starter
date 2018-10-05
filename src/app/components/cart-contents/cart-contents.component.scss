@@ -1,0 +1,54 @@
+@import "variables";
+
+:host {
+    display: block;
+    min-width: 400px;
+}
+
+.cart-contents {
+    padding: 12px;
+}
+
+.item {
+    display: flex;
+    font-size: 14px;
+
+    .details {
+        display: flex;
+        flex-direction: column;
+        padding: 0 12px;
+        flex: 1;
+    }
+    .name {
+        margin-bottom: 6px;
+    }
+    .figures {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .qty-controls {
+        display: flex;
+        align-items: center;
+
+        [mat-icon-button] {
+            @include mat-icon-button-size(24px);
+        }
+    }
+    .price {
+        color: #999;
+    }
+}
+
+.order-adjustment, .totals {
+    font-size: 18px;
+    margin-top: 12px;
+    border-top: 1px dashed #ddd;
+    padding-top: 12px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.order-adjustment {
+    font-size: 14px;
+}

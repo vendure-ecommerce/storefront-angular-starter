@@ -1,0 +1,13 @@
+<mat-card class="product-card" *ngFor="let product of products$ | async">
+    <mat-card-header>
+        <mat-card-title>
+            <a [routerLink]="[product.id]">
+                {{ product.name }}
+            </a>
+        </mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="product.featuredAsset.preview + '?preset=thumb'">
+    <mat-card-content>
+        <p>{{ product.description }}</p>
+    </mat-card-content>
+</mat-card>

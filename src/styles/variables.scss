@@ -1,0 +1,18 @@
+@mixin mat-icon-button-size($size: 40px) {
+  width: $size;
+  height: $size;
+  line-height: $size;
+
+  .mat-icon, .mat-icon-button i {
+    line-height: $size / 2;
+  }
+
+  .mat-icon {
+    width: $size / 2;
+    height: $size / 2;
+  }
+
+  .material-icons {
+    font-size: $size / 2;
+  }
+}
