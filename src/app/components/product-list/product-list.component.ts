@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { DataService } from '../../providers/data.service';
 
 @Component({
-    selector: 'app-product-list',
+    selector: 'vsf-product-list',
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.scss'],
 })

@@ -7,7 +7,7 @@ import { DataService } from '../../providers/data.service';
 import { CART_FRAGMENT } from '../../types/fragments';
 
 @Component({
-    selector: 'app-cart-contents',
+    selector: 'vsf-cart-contents',
     templateUrl: './cart-contents.component.html',
     styleUrls: ['./cart-contents.component.scss'],
 })

@@ -7,7 +7,7 @@ import { DataService } from '../../providers/data.service';
 import { CART_FRAGMENT } from '../../types/fragments';
 
 @Component({
-    selector: 'app-cart',
+    selector: 'vsf-cart',
     templateUrl: './cart-toggle.component.html',
     styleUrls: ['./cart-toggle.component.scss'],
 })

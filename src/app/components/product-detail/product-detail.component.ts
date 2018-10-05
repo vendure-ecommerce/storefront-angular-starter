@@ -8,7 +8,7 @@ import { DataService } from '../../providers/data.service';
 import { CART_FRAGMENT } from '../../types/fragments';
 
 @Component({
-    selector: 'app-product-detail',
+    selector: 'vsf-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
 })

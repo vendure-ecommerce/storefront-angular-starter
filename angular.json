@@ -3,17 +3,17 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "test-shop-app": {
+    "vendure-storefront": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "vsf",
       "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/test-shop-app",
+            "outputPath": "dist/vendure-storefront",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -55,18 +55,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "test-shop-app:build"
+            "browserTarget": "vendure-storefront:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "test-shop-app:build:production"
+              "browserTarget": "vendure-storefront:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "test-shop-app:build"
+            "browserTarget": "vendure-storefront:build"
           }
         },
         "test": {
@@ -101,7 +101,7 @@
       }
     }
   },
-  "defaultProject": "test-shop-app",
+  "defaultProject": "vendure-storefront",
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss",
