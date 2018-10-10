@@ -11,7 +11,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
-import { CartToggleComponent } from './components/cart/cart-toggle.component';
+import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { MaterialModule } from './material.module';
