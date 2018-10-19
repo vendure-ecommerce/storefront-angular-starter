@@ -1,33 +1,41 @@
 <div *ngIf="cart$ | async as cart;" class="cart-contents">
     <h3>Cart</h3>
     <div class="items">
-        <div class="item"
-             *ngFor="let item of cart.items">
-            <div class="thumb">
-                <img [src]="item.featuredAsset.preview + '?preset=tiny'">
-            </div>
-            <div class="details">
-                <div class="name">{{ item.productVariant?.name }}</div>
-                <div class="figures">
-                    <div class="price">{{ (item.unitPrice / 100) | currency }}</div>
-                    <div class="qty-controls">
-                        <button mat-icon-button (click)="decrement(item)">
-                            <mat-icon aria-label="Remove 1">remove</mat-icon>
-                        </button>
-                        <div class="qty">{{ item.quantity }}</div>
-                        <button mat-icon-button (click)="increment(item)">
-                            <mat-icon aria-label="Add 1">add</mat-icon>
-                        </button>
+        <ng-container *ngFor="let line of cart.lines">
+            <div class="item">
+                <div class="thumb">
+                    <img [src]="line.featuredAsset.preview + '?preset=tiny'">
+                </div>
+                <div class="details">
+                    <div class="name">{{ line.productVariant?.name }}</div>
+                    <div class="figures">
+                        <div class="price">{{ (line.unitPrice / 100) | currency }}</div>
+                        <div class="price">{{ (line.unitPricePromotions / 100) | currency }}</div>
+                        <div class="price">{{ (line.unitPriceWithTax / 100) | currency }}</div>
+                        <div class="qty-controls">
+                            <button mat-icon-button (click)="decrement(line)">
+                                <mat-icon aria-label="Remove 1">remove</mat-icon>
+                            </button>
+                            <div class="qty">{{ line.quantity }}</div>
+                            <button mat-icon-button (click)="increment(line)">
+                                <mat-icon aria-label="Add 1">add</mat-icon>
+                            </button>
+                        </div>
+                        <div class="total">{{ (line.totalPrice / 100) | currency }}</div>
                     </div>
-                    <div class="total">{{ (item.totalPrice / 100) | currency }}</div>
                 </div>
             </div>
-        </div>
+            <div class="line-adjustments">
+                <div class="adjustment" *ngFor="let adjustment of line.adjustments">
+                    <div>{{ adjustment.description }}</div>
+                    <div>{{ adjustment.amount / 100 | currency }}</div>
+                </div>
+            </div>
+        </ng-container>
     </div>
-    <div class="order-adjustment"
-         *ngFor="let adjustment of cart.adjustments">
-            <span>{{ adjustment.description }}</span>
-            <span>{{ (adjustment.amount / 100) | currency }}</span>
+    <div class="order-tax">
+        <span>Tax:</span>
+        <span>{{ ((cart.totalPrice - cart.totalPriceBeforeTax) / 100) | currency }}</span>
     </div>
     <div class="totals">
         <span>Total:</span>

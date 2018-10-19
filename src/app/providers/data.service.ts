@@ -11,7 +11,7 @@ export class DataService {
 
     private readonly context =  {
         headers: {
-            'vendure-token': '5drsscz0iqcr96agi32r',
+            'vendure-token': 'default-channel',
         },
     };
 

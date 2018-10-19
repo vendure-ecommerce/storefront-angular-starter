@@ -39,6 +39,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                                     name
                                 }
                                 price
+                                priceWithTax
                                 sku
                             }
                             featuredAsset {

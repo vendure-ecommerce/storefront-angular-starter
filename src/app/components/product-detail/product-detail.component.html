@@ -27,6 +27,9 @@
             <div class="price">
                 {{ variant.price / 100 | currency }}
             </div>
+            <div class="price">
+                {{ variant.priceWithTax / 100 | currency }}
+            </div>
             <mat-form-field class="qty-input">
                 <input matInput type="number" min="0" max="99" placeholder="Qty" [(ngModel)]="qty[variant.id]">
             </mat-form-field>

@@ -3,29 +3,30 @@ import gql from 'graphql-tag';
 export const CART_FRAGMENT = gql`
     fragment Cart on Order {
         id
-        items {
+        lines {
             id
-            adjustments {
-                amount
-                description
-            }
             featuredAsset {
                 id
                 preview
                 name
             }
             unitPrice
+            unitPriceWithPromotions
+            unitPriceWithTax
             quantity
             totalPrice
             productVariant {
                 id
                 name
             }
+            adjustments {
+                amount
+                description
+                adjustmentSource
+                type
+            }
         }
+        totalPriceBeforeTax
         totalPrice
-        adjustments {
-            amount
-            description
-        }
     }
 `;
