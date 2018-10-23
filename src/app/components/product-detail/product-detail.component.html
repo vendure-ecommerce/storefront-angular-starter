@@ -25,9 +25,6 @@
         <mat-list-item *ngFor="let variant of product?.variants">
             <h4 mat-line>{{ variant.name }}</h4>
             <div class="price">
-                {{ variant.price / 100 | currency }}
-            </div>
-            <div class="price">
                 {{ variant.priceWithTax / 100 | currency }}
             </div>
             <mat-form-field class="qty-input">

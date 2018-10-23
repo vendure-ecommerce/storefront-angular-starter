@@ -9,8 +9,6 @@
                 <div class="details">
                     <div class="name">{{ line.productVariant?.name }}</div>
                     <div class="figures">
-                        <div class="price">{{ (line.unitPrice / 100) | currency }}</div>
-                        <div class="price">{{ (line.unitPricePromotions / 100) | currency }}</div>
                         <div class="price">{{ (line.unitPriceWithTax / 100) | currency }}</div>
                         <div class="qty-controls">
                             <button mat-icon-button (click)="decrement(line)">
@@ -26,19 +24,26 @@
                 </div>
             </div>
             <div class="line-adjustments">
-                <div class="adjustment" *ngFor="let adjustment of line.adjustments">
+                <div class="adjustment" *ngFor="let adjustment of getLinePromotions(line.adjustments)">
                     <div>{{ adjustment.description }}</div>
                     <div>{{ adjustment.amount / 100 | currency }}</div>
                 </div>
             </div>
         </ng-container>
     </div>
-    <div class="order-tax">
+    <!--<div class="order-tax">
         <span>Tax:</span>
-        <span>{{ ((cart.totalPrice - cart.totalPriceBeforeTax) / 100) | currency }}</span>
+        <span>{{ ((cart.total - cart.totalBeforeTax) / 100) | currency }}</span>
+    </div>-->
+    <div class="order-adjustments" *ngIf="cart.adjustments.length">
+        Order adjustments:
+        <div class="adjustment" *ngFor="let adjustment of cart.adjustments">
+            <div>{{ adjustment.description }}</div>
+            <div>{{ adjustment.amount / 100 | currency }}</div>
+        </div>
     </div>
     <div class="totals">
         <span>Total:</span>
-        <span>{{ (cart.totalPrice / 100) | currency }}</span>
+        <span>{{ (cart.total / 100) | currency }}</span>
     </div>
 </div>

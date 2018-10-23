@@ -43,15 +43,23 @@
     display: flex;
     justify-content: space-between;
     font-size: 12px;
+    margin-bottom: 12px;
+    color: #555;
+    padding-right: 12px;
 }
 
-.order-tax, .totals {
+.order-tax, .totals, .order-adjustments {
     font-size: 18px;
     margin-top: 12px;
     border-top: 1px dashed #ddd;
     padding-top: 12px;
     display: flex;
     justify-content: space-between;
+}
+
+.order-adjustments {
+    flex-direction: column;
+    font-size: 14px;
 }
 
 .order-tax {

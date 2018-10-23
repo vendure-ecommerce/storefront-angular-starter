@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { CART_FRAGMENT } from '../../types/fragments';
     selector: 'vsf-cart-contents',
     templateUrl: './cart-contents.component.html',
     styleUrls: ['./cart-contents.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartContentsComponent implements OnInit {
     cart$: Observable<any>;
@@ -38,6 +39,22 @@ export class CartContentsComponent implements OnInit {
             this.removeItem(item.id);
         }
 
+    }
+
+    /**
+     * Filters out the Promotion adjustments for an OrderLine and aggregates the discount.
+     */
+    getLinePromotions(adjustments: any[]) {
+        const groupedPromotions = adjustments.filter(a => a.type === 'PROMOTION')
+            .reduce((groups, promotion) => {
+                if (!groups[promotion.description]) {
+                    groups[promotion.description] = promotion.amount;
+                } else {
+                    groups[promotion.description] += promotion.amount;
+                }
+                return groups;
+            }, {});
+        return Object.entries(groupedPromotions).map(([key, value]) => ({ description: key, amount: value }));
     }
 
     private adjustItemQuantity(id, qty) {

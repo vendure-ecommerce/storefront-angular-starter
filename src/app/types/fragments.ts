@@ -11,7 +11,6 @@ export const CART_FRAGMENT = gql`
                 name
             }
             unitPrice
-            unitPriceWithPromotions
             unitPriceWithTax
             quantity
             totalPrice
@@ -25,8 +24,29 @@ export const CART_FRAGMENT = gql`
                 adjustmentSource
                 type
             }
+            items {
+                id
+                unitPrice
+                taxRate
+                unitPriceIncludesTax
+                unitPriceWithTax
+                adjustments {
+                    amount
+                    description
+                    adjustmentSource
+                    type
+                }
+            }
         }
-        totalPriceBeforeTax
-        totalPrice
+        subTotal
+        subTotalBeforeTax
+        totalBeforeTax
+        total
+        adjustments {
+            amount
+            description
+            adjustmentSource
+            type
+        }
     }
 `;
