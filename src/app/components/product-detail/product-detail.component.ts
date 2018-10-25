@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { filter, map, switchMap } from 'rxjs/operators';
 
 import { AddToCart, GetProductDetail } from '../../../../codegen/generated-types';
+import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
@@ -27,9 +28,11 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.sub = this.route.paramMap.pipe(
-            switchMap(paramMap => {
+            map(paramMap => paramMap.get('id')),
+            filter(notNullOrUndefined),
+            switchMap(id => {
                 return this.dataService.query<GetProductDetail.Query, GetProductDetail.Variables>(GET_PRODUCT_DETAIL, {
-                        id: paramMap.get('id'),
+                        id,
                     },
                 );
             }),
@@ -38,7 +41,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             this.selectedAsset = this.product.featuredAsset;
             this.qty = this.product.variants.reduce((qty, v) => {
                 return { ...qty, [v.id]: 1 };
-            }, {});
+            }, {} as { [id: string]: number; });
         });
     }
 

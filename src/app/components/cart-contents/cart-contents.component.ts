@@ -51,7 +51,7 @@ export class CartContentsComponent implements OnInit {
                     groups[promotion.description] += promotion.amount;
                 }
                 return groups;
-            }, {});
+            }, {} as { [description: string]: number; });
         return Object.entries(groupedPromotions).map(([key, value]) => ({ description: key, amount: value }));
     }
 

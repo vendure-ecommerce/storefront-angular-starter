@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 
 import { GetAccountOverview, SignOut } from '../../../../codegen/generated-types';
+import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
+import { StateService } from '../../providers/state.service';
 
 import { GET_ACCOUNT_OVERVIEW, SIGN_OUT } from './account-dashboard.graphql';
-import { Router } from '@angular/router';
-import { StateService } from '../../providers/state.service';
 
 @Component({
     selector: 'vsf-account-dashboard',
@@ -25,6 +26,7 @@ export class AccountDashboardComponent implements OnInit {
     ngOnInit() {
         this.activeCustomer$ = this.dataService.query<GetAccountOverview.Query>(GET_ACCOUNT_OVERVIEW).pipe(
             map(data => data.activeCustomer),
+            filter(notNullOrUndefined),
         );
     }
 

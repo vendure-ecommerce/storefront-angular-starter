@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 
 import { GetActiveCustomer } from '../../../../codegen/generated-types';
+import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
@@ -16,7 +17,7 @@ import { GET_ACTIVE_CUSTOMER } from './account-link.graphql';
 })
 export class AccountLinkComponent implements OnInit {
 
-    activeCustomer$: Observable<GetActiveCustomer.ActiveCustomer | null>;
+    activeCustomer$: Observable<GetActiveCustomer.ActiveCustomer>;
     constructor(private dataService: DataService,
                 private stateService: StateService) {}
 
@@ -32,6 +33,7 @@ export class AccountLinkComponent implements OnInit {
         this.activeCustomer$ = this.stateService.select(state => state.signedIn).pipe(
             switchMap(() => getActiveCustomer$),
             map(data => data && data.activeCustomer),
+            filter(notNullOrUndefined),
         );
     }
 

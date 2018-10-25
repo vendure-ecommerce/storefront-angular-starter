@@ -3,10 +3,11 @@ import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { GetCartTotals } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
+
 import { GET_CART_TOTALS } from './cart-toggle.graphql';
-import { GetCartTotals } from '../../../../codegen/generated-types';
 
 @Component({
     selector: 'vsf-cart',
@@ -23,8 +24,8 @@ export class CartToggleComponent implements OnInit {
         this.cart$ = this.dataService.query<GetCartTotals.Query>(GET_CART_TOTALS).pipe(
             map(({ activeOrder }) => {
                 return {
-                    total: activeOrder.total,
-                    quantity: activeOrder.lines.reduce((qty, line) => qty + line.quantity, 0),
+                    total: activeOrder ? activeOrder.total : 0,
+                    quantity: activeOrder ? activeOrder.lines.reduce((qty, line) => qty + line.quantity, 0) : 0,
                 };
             }),
         );
