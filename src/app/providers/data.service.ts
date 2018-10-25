@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
+import { NetworkStatus } from 'apollo-client';
 import { DocumentNode } from 'graphql';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map, tap } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root',
@@ -22,7 +23,10 @@ export class DataService {
             query,
             variables,
             context: this.context,
-        }).valueChanges.pipe(map(response => response.data));
+            fetchPolicy: 'cache-and-network',
+        }).valueChanges.pipe(
+            filter(result => result.networkStatus === NetworkStatus.ready),
+            map(response => response.data));
     }
 
     mutate<T = any, V = any>(mutation: DocumentNode, variables?: V): Observable<T> {

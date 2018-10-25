@@ -10,11 +10,14 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
+import { AccountLinkComponent } from './components/account-link/account-link.component';
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
-import { MaterialModule } from './material.module';
+import { SignInComponent } from './components/sign-in/sign-in.component';
+import { MaterialModule } from './material/material.module';
+import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
 
 @NgModule({
     declarations: [
@@ -23,6 +26,9 @@ import { MaterialModule } from './material.module';
         ProductDetailComponent,
         CartToggleComponent,
         CartContentsComponent,
+        AccountLinkComponent,
+        SignInComponent,
+        AccountDashboardComponent,
     ],
     imports: [
         BrowserModule,

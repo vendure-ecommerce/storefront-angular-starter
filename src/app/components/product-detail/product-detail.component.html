@@ -2,7 +2,7 @@
 
 <div class="product-details">
     <mat-card class="product-images">
-        <img mat-card-image [src]="selectedAsset?.preview + '?preset=medium'">
+        <img *ngIf="selectedAsset" mat-card-image [src]="selectedAsset?.preview + '?preset=medium'">
         <mat-card-content>
             <div class="alt-images">
                 <div *ngFor="let asset of product?.assets"

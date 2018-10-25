@@ -1,3 +1,5 @@
+@import '~@angular/material/theming';
+
 @mixin mat-icon-button-size($size: 40px) {
   width: $size;
   height: $size;
@@ -16,3 +18,5 @@
     font-size: $size / 2;
   }
 }
+
+$color-warn: #c43231;

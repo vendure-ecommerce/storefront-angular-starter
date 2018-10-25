@@ -1,11 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 
 import { AdjustItemQuantity, Cart, GetCartContents, RemoveItemFromCart } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
-import { CART_FRAGMENT } from '../../types/fragments.graphql';
+import { StateService } from '../../providers/state.service';
 
 import { ADJUST_ITEM_QUANTITY, GET_CART_CONTENTS, REMOVE_ITEM_FROM_CART } from './cart-contents.graphql';
 
@@ -18,11 +17,14 @@ import { ADJUST_ITEM_QUANTITY, GET_CART_CONTENTS, REMOVE_ITEM_FROM_CART } from '
 export class CartContentsComponent implements OnInit {
     cart$: Observable<any>;
 
-    constructor(private dataService: DataService) {}
+    constructor(private dataService: DataService,
+                private stateService: StateService) {}
 
     ngOnInit() {
-        this.cart$ = this.dataService.query<GetCartContents.Query, GetCartContents.Variables>(GET_CART_CONTENTS)
-            .pipe(map(data => data.activeOrder));
+        this.cart$ = this.stateService.select(state => state.signedIn).pipe(
+            switchMap(() => this.dataService.query<GetCartContents.Query, GetCartContents.Variables>(GET_CART_CONTENTS)),
+            map(data => data.activeOrder)
+        );
     }
 
     increment(item: Cart.Lines) {

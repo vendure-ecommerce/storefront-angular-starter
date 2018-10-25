@@ -1,0 +1,5 @@
+<div *ngIf="activeCustomer$ | async as customer">
+    {{ customer.firstName }} {{ customer.lastName }}
+</div>
+
+<button mat-button (click)="signOut()">Sign out</button>

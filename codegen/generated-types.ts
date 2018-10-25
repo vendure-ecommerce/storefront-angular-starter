@@ -866,6 +866,49 @@ export enum AdjustmentType {
   PROMOTION_REFUND = "PROMOTION_REFUND"
 }
 
+export namespace GetAccountOverview {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    activeCustomer?: ActiveCustomer | null;
+  };
+
+  export type ActiveCustomer = {
+    __typename?: "Customer";
+    id: string;
+    title?: string | null;
+    firstName: string;
+    lastName: string;
+    emailAddress: string;
+  };
+}
+
+export namespace SignOut {
+  export type Variables = {};
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    logout: boolean;
+  };
+}
+
+export namespace GetActiveCustomer {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    activeCustomer?: ActiveCustomer | null;
+  };
+
+  export type ActiveCustomer = {
+    __typename?: "Customer";
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
+}
+
 export namespace GetCartContents {
   export type Variables = {};
 
@@ -1037,6 +1080,29 @@ export namespace GetProductList {
     name: string;
     preview: string;
     type: AssetType;
+  };
+}
+
+export namespace SignIn {
+  export type Variables = {
+    emailAddress: string;
+    password: string;
+    rememberMe: boolean;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    login: Login;
+  };
+
+  export type Login = {
+    __typename?: "LoginResult";
+    user: User;
+  };
+
+  export type User = {
+    __typename?: "CurrentUser";
+    id: string;
   };
 }
 

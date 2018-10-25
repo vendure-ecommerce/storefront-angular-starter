@@ -105,7 +105,8 @@
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss",
-      "spec": false
+      "spec": false,
+      "changeDetection": "OnPush"
     },
     "@schematics/angular:directive": {
       "spec": false
