@@ -17,16 +17,16 @@ export class DataService {
 
     constructor(private apollo: Apollo) { }
 
-    query<T = any>(query: DocumentNode, variables?: any): Observable<T> {
-        return this.apollo.watchQuery<T>({
+    query<T = any, V = any>(query: DocumentNode, variables?: V): Observable<T> {
+        return this.apollo.watchQuery<T, V>({
             query,
             variables,
             context: this.context,
         }).valueChanges.pipe(map(response => response.data));
     }
 
-    mutate<T = any>(mutation: DocumentNode, variables?: any): Observable<T> {
-        return this.apollo.mutate<T>({
+    mutate<T = any, V = any>(mutation: DocumentNode, variables?: V): Observable<T> {
+        return this.apollo.mutate<T, V>({
             mutation,
             variables,
             context: this.context,

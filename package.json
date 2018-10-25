@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "generate-types": "gql-gen --schema ../vendure/schema.json --template graphql-codegen-typescript-template --skip-schema --out ./codegen/generated-types.ts \"./src/**/*.graphql.ts\""
   },
   "private": true,
   "dependencies": {
@@ -43,6 +44,8 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
     "codelyzer": "~4.3.0",
+    "graphql-code-generator": "^0.12.6",
+    "graphql-codegen-typescript-template": "^0.12.6",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~3.0.0",

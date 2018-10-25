@@ -4,7 +4,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { DataService } from '../../providers/data.service';
-import { CART_FRAGMENT } from '../../types/fragments';
+import { CART_FRAGMENT } from '../../types/fragments.graphql';
+import { GET_CART_TOTALS } from './cart-toggle.graphql';
+import { GetCartTotals } from '../../../../codegen/generated-types';
 
 @Component({
     selector: 'vsf-cart',
@@ -13,19 +15,19 @@ import { CART_FRAGMENT } from '../../types/fragments';
 })
 export class CartToggleComponent implements OnInit {
     @Output() toggle = new EventEmitter<void>();
-    cart$: Observable<any>;
+    cart$: Observable<{ total: number; quantity: number; }>;
 
     constructor(private dataService: DataService) {}
 
     ngOnInit() {
-        this.cart$ = this.dataService.query(gql`
-            query {
-                activeOrder {
-                    ...Cart
-                }
-            }
-            ${CART_FRAGMENT}
-        `).pipe(map(data => data.activeOrder));
+        this.cart$ = this.dataService.query<GetCartTotals.Query>(GET_CART_TOTALS).pipe(
+            map(({ activeOrder }) => {
+                return {
+                    total: activeOrder.total,
+                    quantity: activeOrder.lines.reduce((qty, line) => qty + line.quantity, 0),
+                };
+            }),
+        );
     }
 
 }

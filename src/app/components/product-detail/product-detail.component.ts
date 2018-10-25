@@ -4,8 +4,11 @@ import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { AddToCart, GetProductDetail } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
-import { CART_FRAGMENT } from '../../types/fragments';
+import { CART_FRAGMENT } from '../../types/fragments.graphql';
+
+import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 
 @Component({
     selector: 'vsf-product-detail',
@@ -25,37 +28,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.sub = this.route.paramMap.pipe(
             switchMap(paramMap => {
-                return this.dataService.query<any>(gql`
-                    query($id: ID!) {
-                        product(id: $id) {
-                            id
-                            name
-                            description
-                            variants {
-                                id
-                                name
-                                options {
-                                    code
-                                    name
-                                }
-                                price
-                                priceWithTax
-                                sku
-                            }
-                            featuredAsset {
-                                id
-                                name
-                                preview
-                                type
-                            }
-                            assets {
-                                id
-                                name
-                                preview
-                                type
-                            }
-                        }
-                    }`, {
+                return this.dataService.query<GetProductDetail.Query, GetProductDetail.Variables>(GET_PRODUCT_DETAIL, {
                         id: paramMap.get('id'),
                     },
                 );
@@ -76,14 +49,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     addToCart(variant, qty: number) {
-        this.dataService.mutate(gql`
-            mutation ($variantId: ID!, $qty: Int!) {
-                addItemToOrder(productVariantId: $variantId, quantity: $qty) {
-                    ...Cart
-                }
-            }
-            ${CART_FRAGMENT}
-        `, {
+        this.dataService.mutate<AddToCart.Mutation, AddToCart.Variables>(ADD_TO_CART, {
             variantId: variant.id,
             qty,
         }).subscribe((data) => {

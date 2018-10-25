@@ -3,8 +3,11 @@ import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
+import { AdjustItemQuantity, Cart, GetCartContents, RemoveItemFromCart } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
-import { CART_FRAGMENT } from '../../types/fragments';
+import { CART_FRAGMENT } from '../../types/fragments.graphql';
+
+import { ADJUST_ITEM_QUANTITY, GET_CART_CONTENTS, REMOVE_ITEM_FROM_CART } from './cart-contents.graphql';
 
 @Component({
     selector: 'vsf-cart-contents',
@@ -18,33 +21,26 @@ export class CartContentsComponent implements OnInit {
     constructor(private dataService: DataService) {}
 
     ngOnInit() {
-        this.cart$ = this.dataService.query(gql`
-            query {
-                activeOrder {
-                    ...Cart
-                }
-            }
-            ${CART_FRAGMENT}
-        `).pipe(map(data => data.activeOrder));
+        this.cart$ = this.dataService.query<GetCartContents.Query, GetCartContents.Variables>(GET_CART_CONTENTS)
+            .pipe(map(data => data.activeOrder));
     }
 
-    increment(item) {
+    increment(item: Cart.Lines) {
         this.adjustItemQuantity(item.id, item.quantity + 1);
     }
 
-    decrement(item) {
+    decrement(item: Cart.Lines) {
         if (item.quantity > 1) {
             this.adjustItemQuantity(item.id, item.quantity - 1);
         } else {
             this.removeItem(item.id);
         }
-
     }
 
     /**
      * Filters out the Promotion adjustments for an OrderLine and aggregates the discount.
      */
-    getLinePromotions(adjustments: any[]) {
+    getLinePromotions(adjustments: Cart.Adjustments[]) {
         const groupedPromotions = adjustments.filter(a => a.type === 'PROMOTION')
             .reduce((groups, promotion) => {
                 if (!groups[promotion.description]) {
@@ -57,15 +53,8 @@ export class CartContentsComponent implements OnInit {
         return Object.entries(groupedPromotions).map(([key, value]) => ({ description: key, amount: value }));
     }
 
-    private adjustItemQuantity(id, qty) {
-        this.dataService.mutate(gql`
-            mutation ($id: ID!, $qty: Int!) {
-                adjustItemQuantity(orderItemId: $id, quantity: $qty){
-                    ...Cart
-                }
-            }
-            ${CART_FRAGMENT}
-        `, {
+    private adjustItemQuantity(id: string, qty: number) {
+        this.dataService.mutate<AdjustItemQuantity.Mutation, AdjustItemQuantity.Variables>(ADJUST_ITEM_QUANTITY, {
             id,
             qty,
         }).pipe(
@@ -75,15 +64,8 @@ export class CartContentsComponent implements OnInit {
         });
     }
 
-    private removeItem(id) {
-        this.dataService.mutate(gql`
-            mutation ($id: ID!) {
-                removeItemFromOrder(orderItemId: $id){
-                    ...Cart
-                }
-            }
-            ${CART_FRAGMENT}
-        `, {
+    private removeItem(id: string) {
+        this.dataService.mutate<RemoveItemFromCart.Mutation, RemoveItemFromCart.Variables>(REMOVE_ITEM_FROM_CART, {
             id,
         }).pipe(
             take(1),
