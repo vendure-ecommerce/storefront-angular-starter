@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { merge, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
 import { AdjustItemQuantity, Cart, GetCartContents, RemoveItemFromCart } from '../../../../codegen/generated-types';
@@ -21,9 +21,12 @@ export class CartContentsComponent implements OnInit {
                 private stateService: StateService) {}
 
     ngOnInit() {
-        this.cart$ = this.stateService.select(state => state.signedIn).pipe(
+        this.cart$ = merge(
+            this.stateService.select(state => state.activeOrderId),
+            this.stateService.select(state => state.signedIn),
+        ).pipe(
             switchMap(() => this.dataService.query<GetCartContents.Query, GetCartContents.Variables>(GET_CART_CONTENTS)),
-            map(data => data.activeOrder)
+            map(data => data.activeOrder),
         );
     }
 

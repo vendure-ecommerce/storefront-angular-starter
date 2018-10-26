@@ -4,10 +4,12 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 
 export interface AppState {
     signedIn: boolean;
+    activeOrderId: string | null;
 }
 
 export const initialState: AppState = {
     signedIn: false,
+    activeOrderId: null,
 };
 
 /**

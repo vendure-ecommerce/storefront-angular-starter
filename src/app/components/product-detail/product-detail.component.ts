@@ -7,6 +7,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { AddToCart, GetProductDetail } from '../../../../codegen/generated-types';
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
+import { StateService } from '../../providers/state.service';
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
@@ -18,12 +19,13 @@ import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
-    product: any;
+    product: GetProductDetail.Product;
     selectedAsset: { id: string; preview: string; };
     qty: { [variantId: string]: number };
     private sub: Subscription;
 
     constructor(private dataService: DataService,
+                private stateService: StateService,
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -36,9 +38,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                     },
                 );
             }),
-        ).subscribe(data => {
-            this.product = data.product;
-            this.selectedAsset = this.product.featuredAsset;
+            map(data => data.product),
+            filter(notNullOrUndefined),
+        ).subscribe(product => {
+            this.product = product;
+            if (this.product.featuredAsset) {
+                this.selectedAsset = this.product.featuredAsset;
+            }
             this.qty = this.product.variants.reduce((qty, v) => {
                 return { ...qty, [v.id]: 1 };
             }, {} as { [id: string]: number; });
@@ -51,12 +57,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    addToCart(variant, qty: number) {
+    addToCart(variant: GetProductDetail.Variants, qty: number) {
         this.dataService.mutate<AddToCart.Mutation, AddToCart.Variables>(ADD_TO_CART, {
             variantId: variant.id,
             qty,
         }).subscribe((data) => {
-            console.log(data);
+            this.stateService.setState('activeOrderId', data.addItemToOrder ? data.addItemToOrder.id : null);
         });
     }
 
