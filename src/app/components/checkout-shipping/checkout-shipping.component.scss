@@ -1,0 +1,11 @@
+@import "variables";
+
+.customer-address {
+    display: inline-block;
+    padding: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    &:hover {
+        background-color: #d8e5f1;
+    }
+}

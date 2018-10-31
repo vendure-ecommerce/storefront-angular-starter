@@ -7,5 +7,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutStageIndicatorComponent  {
+    @Input() signedIn = false;
     @Input() activeStage = 1;
 }

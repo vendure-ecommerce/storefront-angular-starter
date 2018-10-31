@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { CART_FRAGMENT, COUNTRY_FRAGMENT, SHIPPING_ADDRESS_FRAGMENT } from '../../types/fragments.graphql';
+import { ADDRESS_FRAGMENT, CART_FRAGMENT, COUNTRY_FRAGMENT, SHIPPING_ADDRESS_FRAGMENT } from '../../types/fragments.graphql';
 
 export const GET_AVAILABLE_COUNTRIES = gql`
     query GetAvailableCountries {
@@ -21,6 +21,18 @@ export const GET_SHIPPING_ADDRESS = gql`
         }
     }
     ${SHIPPING_ADDRESS_FRAGMENT}
+`;
+
+export const GET_CUSTOMER_ADDRESSES = gql`
+    query GetCustomerAddresses {
+        activeCustomer {
+            id
+            addresses {
+                ...Address
+            }
+        }
+    }
+    ${ADDRESS_FRAGMENT}
 `;
 
 export const SET_SHIPPING_ADDRESS = gql`

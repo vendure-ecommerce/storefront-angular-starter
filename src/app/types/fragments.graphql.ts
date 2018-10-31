@@ -63,3 +63,20 @@ export const SHIPPING_ADDRESS_FRAGMENT = gql`
         phoneNumber
     }
 `;
+
+export const ADDRESS_FRAGMENT = gql`
+    fragment Address on Address {
+        id
+        fullName
+        company
+        streetLine1
+        streetLine2
+        city
+        province
+        postalCode
+        country
+        phoneNumber
+        defaultShippingAddress
+        defaultBillingAddress
+    }
+`;

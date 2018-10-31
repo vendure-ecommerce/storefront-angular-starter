@@ -1062,6 +1062,23 @@ export namespace GetShippingAddress {
   export type ShippingAddress = ShippingAddress.Fragment;
 }
 
+export namespace GetCustomerAddresses {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    activeCustomer?: ActiveCustomer | null;
+  };
+
+  export type ActiveCustomer = {
+    __typename?: "Customer";
+    id: string;
+    addresses?: Addresses[] | null;
+  };
+
+  export type Addresses = Address.Fragment;
+}
+
 export namespace SetShippingAddress {
   export type Variables = {
     input: CreateAddressInput;
@@ -1352,5 +1369,23 @@ export namespace ShippingAddress {
     postalCode?: string | null;
     country?: string | null;
     phoneNumber?: string | null;
+  };
+}
+
+export namespace Address {
+  export type Fragment = {
+    __typename?: "Address";
+    id: string;
+    fullName?: string | null;
+    company?: string | null;
+    streetLine1?: string | null;
+    streetLine2?: string | null;
+    city?: string | null;
+    province?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+    phoneNumber?: string | null;
+    defaultShippingAddress?: boolean | null;
+    defaultBillingAddress?: boolean | null;
   };
 }

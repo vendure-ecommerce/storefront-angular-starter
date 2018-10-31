@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map, switchMap, filter, startWith } from 'rxjs/operators';
+import { filter, map, startWith, switchMap } from 'rxjs/operators';
 
 import { GetNextOrderStates, GetOrderForCheckout, TransitionToAddingItems } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
+import { StateService } from '../../providers/state.service';
 
 import { GET_NEXT_ORDER_STATES, TRANSITION_TO_ADDING_ITEMS } from './checkout-process.graphql';
 
@@ -19,11 +20,14 @@ export class CheckoutProcessComponent implements OnInit {
     cart$: Observable<GetOrderForCheckout.ActiveOrder | null | undefined>;
     nextStates$: Observable<string[]>;
     activeStage$: Observable<number>;
+    signedIn$: Observable<boolean>;
     constructor(private dataService: DataService,
+                private stateService: StateService,
                 private route: ActivatedRoute,
                 private router: Router) { }
 
     ngOnInit() {
+        this.signedIn$ = this.stateService.select(state => state.signedIn);
         this.cart$ = this.route.data.pipe(switchMap(data => data.activeOrder));
         this.nextStates$ = this.dataService.query<GetNextOrderStates.Query>(GET_NEXT_ORDER_STATES).pipe(
             map(data => data.nextOrderStates),
