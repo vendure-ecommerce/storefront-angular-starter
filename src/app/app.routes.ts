@@ -10,7 +10,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { AccountGuard } from './providers/routing/account.guard';
 import { CheckoutResolver } from './providers/routing/checkout-resolver';
-import { CheckoutShippingGuard } from './providers/routing/checkout-shipping.guard';
+import { CheckoutGuard } from './providers/routing/checkout.guard';
 import { SignInGuard } from './providers/routing/sign-in.guard';
 
 export const routes: Route[] = [
@@ -49,15 +49,17 @@ export const routes: Route[] = [
                 path: '',
                 pathMatch: 'full',
                 component: CheckoutSignInComponent,
+                canActivate: [CheckoutGuard],
             },
             {
                 path: 'shipping',
                 component: CheckoutShippingComponent,
-                canActivate: [CheckoutShippingGuard],
+                canActivate: [CheckoutGuard],
             },
             {
                 path: 'payment',
                 component: CheckoutPaymentComponent,
+                canActivate: [CheckoutGuard],
             },
         ],
     },

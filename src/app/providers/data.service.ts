@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
-import { NetworkStatus } from 'apollo-client';
+import { FetchPolicy, NetworkStatus } from 'apollo-client';
 import { DocumentNode } from 'graphql';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';
@@ -18,12 +18,12 @@ export class DataService {
 
     constructor(private apollo: Apollo) { }
 
-    query<T = any, V = any>(query: DocumentNode, variables?: V): Observable<T> {
+    query<T = any, V = any>(query: DocumentNode, variables?: V, fetchPolicy?: FetchPolicy): Observable<T> {
         return this.apollo.watchQuery<T, V>({
             query,
             variables,
             context: this.context,
-            fetchPolicy: 'cache-and-network',
+            fetchPolicy: fetchPolicy || 'cache-and-network',
         }).valueChanges.pipe(
             filter(result => result.networkStatus === NetworkStatus.ready),
             map(response => response.data));
