@@ -1,0 +1,13 @@
+@import "variables";
+
+:host {
+    display: block;
+    min-width: 400px;
+    padding: 12px;
+}
+
+.checkout-button {
+    margin-top: 60px;
+    display: flex;
+    flex-direction: column;
+}

@@ -1,14 +1,5 @@
 @import "variables";
 
-:host {
-    display: block;
-    min-width: 400px;
-}
-
-.cart-contents {
-    padding: 12px;
-}
-
 .item {
     display: flex;
     font-size: 14px;
@@ -16,7 +7,7 @@
     .details {
         display: flex;
         flex-direction: column;
-        padding: 0 12px;
+        padding-left: 12px;
         flex: 1;
     }
     .name {
@@ -36,7 +27,7 @@
         }
     }
     .price {
-        color: #999;
+        color: $color-subdued;
     }
 }
 .adjustment {
@@ -48,13 +39,26 @@
     padding-right: 12px;
 }
 
-.order-tax, .totals, .order-adjustments {
-    font-size: 18px;
+.order-tax, .totals, .order-adjustments, .shipping {
     margin-top: 12px;
     border-top: 1px dashed #ddd;
     padding-top: 12px;
     display: flex;
     justify-content: space-between;
+}
+
+.shipping {
+    display: block;
+}
+
+.shipping-price {
+    display: flex;
+    justify-content: space-between;
+}
+
+.shipping-method {
+    font-size: 12px;
+    color: $color-subdued;
 }
 
 .order-adjustments {

@@ -245,6 +245,28 @@ export interface RoleFilterParameter {
   updatedAt?: DateOperators | null;
 }
 
+export interface ShippingMethodListOptions {
+  take?: number | null;
+  skip?: number | null;
+  sort?: ShippingMethodSortParameter | null;
+  filter?: ShippingMethodFilterParameter | null;
+}
+
+export interface ShippingMethodSortParameter {
+  id?: SortOrder | null;
+  createdAt?: SortOrder | null;
+  updatedAt?: SortOrder | null;
+  code?: SortOrder | null;
+  description?: SortOrder | null;
+}
+
+export interface ShippingMethodFilterParameter {
+  code?: StringOperators | null;
+  description?: StringOperators | null;
+  createdAt?: DateOperators | null;
+  updatedAt?: DateOperators | null;
+}
+
 export interface TaxRateListOptions {
   take?: number | null;
   skip?: number | null;
@@ -310,14 +332,20 @@ export interface UpdateChannelInput {
 
 export interface CreateCountryInput {
   code: string;
-  name: string;
+  translations: CountryTranslationInput[];
   enabled: boolean;
+}
+
+export interface CountryTranslationInput {
+  id?: string | null;
+  languageCode: LanguageCode;
+  name?: string | null;
 }
 
 export interface UpdateCountryInput {
   id: string;
   code?: string | null;
-  name?: string | null;
+  translations?: CountryTranslationInput[] | null;
   enabled?: boolean | null;
 }
 
@@ -563,6 +591,21 @@ export interface UpdateRoleInput {
   code?: string | null;
   description?: string | null;
   permissions?: Permission[] | null;
+}
+
+export interface CreateShippingMethodInput {
+  code: string;
+  description: string;
+  checker: AdjustmentOperationInput;
+  calculator: AdjustmentOperationInput;
+}
+
+export interface UpdateShippingMethodInput {
+  id: string;
+  code?: string | null;
+  description?: string | null;
+  checker?: AdjustmentOperationInput | null;
+  calculator?: AdjustmentOperationInput | null;
 }
 
 export interface CreateTaxCategoryInput {
@@ -861,9 +904,11 @@ export enum AssetType {
 export enum AdjustmentType {
   TAX = "TAX",
   PROMOTION = "PROMOTION",
+  SHIPPING = "SHIPPING",
   REFUND = "REFUND",
   TAX_REFUND = "TAX_REFUND",
-  PROMOTION_REFUND = "PROMOTION_REFUND"
+  PROMOTION_REFUND = "PROMOTION_REFUND",
+  SHIPPING_REFUND = "SHIPPING_REFUND"
 }
 
 export namespace GetAccountOverview {
@@ -909,7 +954,7 @@ export namespace GetActiveCustomer {
   };
 }
 
-export namespace GetCartContents {
+export namespace GetActiveOrder {
   export type Variables = {};
 
   export type Query = {
@@ -967,6 +1012,112 @@ export namespace GetCartTotals {
     id: string;
     quantity: number;
   };
+}
+
+export namespace GetNextOrderStates {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    nextOrderStates: string[];
+  };
+}
+
+export namespace TransitionToAddingItems {
+  export type Variables = {};
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    transitionOrderToState?: TransitionOrderToState | null;
+  };
+
+  export type TransitionOrderToState = Cart.Fragment;
+}
+
+export namespace GetAvailableCountries {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    availableCountries: AvailableCountries[];
+  };
+
+  export type AvailableCountries = Country.Fragment;
+}
+
+export namespace GetShippingAddress {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    activeOrder?: ActiveOrder | null;
+  };
+
+  export type ActiveOrder = {
+    __typename?: "Order";
+    id: string;
+    shippingAddress?: ShippingAddress | null;
+  };
+
+  export type ShippingAddress = ShippingAddress.Fragment;
+}
+
+export namespace SetShippingAddress {
+  export type Variables = {
+    input: CreateAddressInput;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    setOrderShippingAddress?: SetOrderShippingAddress | null;
+  };
+
+  export type SetOrderShippingAddress = {
+    __typename?: "Order";
+    shippingAddress?: ShippingAddress | null;
+  } & Cart.Fragment;
+
+  export type ShippingAddress = ShippingAddress.Fragment;
+}
+
+export namespace GetEligibleShippingMethods {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    eligibleShippingMethods: EligibleShippingMethods[];
+  };
+
+  export type EligibleShippingMethods = {
+    __typename?: "ShippingMethodQuote";
+    shippingMethodId: string;
+    description: string;
+    price: number;
+  };
+}
+
+export namespace SetShippingMethod {
+  export type Variables = {
+    id: string;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    setOrderShippingMethod?: SetOrderShippingMethod | null;
+  };
+
+  export type SetOrderShippingMethod = Cart.Fragment;
+}
+
+export namespace TransitionToArrangingPayment {
+  export type Variables = {};
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    transitionOrderToState?: TransitionOrderToState | null;
+  };
+
+  export type TransitionOrderToState = Cart.Fragment;
 }
 
 export namespace GetProductDetail {
@@ -1106,16 +1257,35 @@ export namespace SignIn {
   };
 }
 
+export namespace GetOrderForCheckout {
+  export type Variables = {};
+
+  export type Query = {
+    __typename?: "Query";
+    activeOrder?: ActiveOrder | null;
+  };
+
+  export type ActiveOrder = {
+    __typename?: "Order";
+    shippingAddress?: ShippingAddress | null;
+  } & Cart.Fragment;
+
+  export type ShippingAddress = ShippingAddress.Fragment;
+}
+
 export namespace Cart {
   export type Fragment = {
     __typename?: "Order";
     id: string;
+    state: string;
     lines: Lines[];
     subTotal: number;
     subTotalBeforeTax: number;
     totalBeforeTax: number;
+    shipping: number;
+    shippingMethod?: string | null;
     total: number;
-    adjustments: __Adjustments[];
+    adjustments: _Adjustments[];
   };
 
   export type Lines = {
@@ -1128,7 +1298,6 @@ export namespace Cart {
     totalPrice: number;
     productVariant: ProductVariant;
     adjustments: Adjustments[];
-    items: Items[];
   };
 
   export type FeaturedAsset = {
@@ -1152,16 +1321,6 @@ export namespace Cart {
     type: AdjustmentType;
   };
 
-  export type Items = {
-    __typename?: "OrderItem";
-    id: string;
-    unitPrice: number;
-    taxRate: number;
-    unitPriceIncludesTax: boolean;
-    unitPriceWithTax: number;
-    adjustments: _Adjustments[];
-  };
-
   export type _Adjustments = {
     __typename?: "Adjustment";
     amount: number;
@@ -1169,12 +1328,29 @@ export namespace Cart {
     adjustmentSource: string;
     type: AdjustmentType;
   };
+}
 
-  export type __Adjustments = {
-    __typename?: "Adjustment";
-    amount: number;
-    description: string;
-    adjustmentSource: string;
-    type: AdjustmentType;
+export namespace Country {
+  export type Fragment = {
+    __typename?: "Country";
+    id: string;
+    code: string;
+    name: string;
+    enabled: boolean;
+  };
+}
+
+export namespace ShippingAddress {
+  export type Fragment = {
+    __typename?: "ShippingAddress";
+    fullName?: string | null;
+    company?: string | null;
+    streetLine1?: string | null;
+    streetLine2?: string | null;
+    city?: string | null;
+    province?: string | null;
+    postalCode?: string | null;
+    country?: string | null;
+    phoneNumber?: string | null;
   };
 }

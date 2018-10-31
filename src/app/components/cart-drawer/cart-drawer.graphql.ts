@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
-export const GET_CART_CONTENTS = gql`
-    query GetCartContents {
+export const GET_ACTIVE_ORDER = gql`
+    query GetActiveOrder {
         activeOrder {
             ...Cart
         }

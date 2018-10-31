@@ -1,0 +1,33 @@
+<form [formGroup]="addressForm" class="address-form">
+    <mat-form-field>
+        <input matInput placeholder="Full name" formControlName="fullName">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Company" formControlName="company">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Street Line 1" formControlName="streetLine1">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Street Line 2" formControlName="streetLine2">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="City" formControlName="city">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Province" formControlName="province">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Post code" formControlName="postalCode">
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Country" formControlName="country">
+            <mat-option *ngFor="let country of availableCountries" [value]="country.code">
+                {{ country.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Phone number" formControlName="phoneNumber">
+    </mat-form-field>
+</form>

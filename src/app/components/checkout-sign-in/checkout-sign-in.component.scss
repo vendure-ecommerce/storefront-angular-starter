@@ -1,0 +1,18 @@
+@import "variables";
+
+.sign-in-row {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.or {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    font-size: 2em;
+}
+
+.guest {
+    display: flex;
+    align-items: center;
+}

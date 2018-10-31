@@ -1,11 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SignIn } from '../../../../codegen/generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { SIGN_IN } from './sign-in.graphql';
-import { Router } from '@angular/router';
 
 @Component({
     selector: 'vsf-sign-in',
@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
+    @Input() navigateToOnSuccess: any[] | undefined;
+
     emailAddress: string;
     password: string;
     rememberMe = false;
@@ -32,7 +34,8 @@ export class SignInComponent {
         }).subscribe({
             next: data => {
                 this.stateService.setState('signedIn', true);
-                this.router.navigate(['/']);
+                const commands = this.navigateToOnSuccess || ['/'];
+                this.router.navigate(commands);
             },
             error: err => {
                 if (err.graphQLErrors && err.graphQLErrors[0]) {

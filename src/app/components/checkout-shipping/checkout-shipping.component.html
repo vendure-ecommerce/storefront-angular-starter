@@ -1,0 +1,46 @@
+<mat-accordion>
+    <mat-expansion-panel [expanded]="step === 0">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Shipping Address
+            </mat-panel-title>
+            <mat-panel-description>
+                Address Summary
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <vsf-address-form #addressForm
+                          [address]="shippingAddress$ | async"
+                          [availableCountries]="availableCountries$ | async"></vsf-address-form>
+        <mat-action-row>
+            <button mat-raised-button
+                    color="primary"
+                    [disabled]="addressForm.addressForm.invalid"
+                    (click)="setShippingAddress(addressForm.addressForm.value)">Send to this address</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [disabled]="step !== 1 || (eligibleShippingMethods$ | async)?.length === 0"
+                         [expanded]="step === 1">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Shipping Method
+            </mat-panel-title>
+            <mat-panel-description>
+
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <mat-radio-group [(ngModel)]="shippingMethodId">
+            <mat-radio-button *ngFor="let method of eligibleShippingMethods$ | async" [value]="method.shippingMethodId">
+                <div class="description">{{ method.description }}</div>
+                <div class="price">{{ method.price / 100 | currency }}</div>
+            </mat-radio-button>
+        </mat-radio-group>
+        <mat-action-row>
+            <button mat-raised-button
+                    color="primary"
+                    [disabled]="!shippingMethodId"
+                    (click)="proceedToPayment()">Proceed to payment</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+</mat-accordion>

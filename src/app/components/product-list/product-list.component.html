@@ -1,7 +1,7 @@
 <mat-card class="product-card" *ngFor="let product of products$ | async">
     <mat-card-header>
         <mat-card-title>
-            <a [routerLink]="[product.id]">
+            <a [routerLink]="['/catalog', product.id]">
                 {{ product.name }}
             </a>
         </mat-card-title>
