@@ -3,7 +3,7 @@
 </button>
 <div *ngIf="cart$ | async as cart;" class="cart-contents">
     <h3>Cart</h3>
-    <vsf-cart-contents [cart]="cart$ | async"
+    <vsf-cart-contents [cart]="cart"
                        [canAdjustQuantities]="true"
                        (setQuantity)="setQuantity($event)"></vsf-cart-contents>
     <div class="checkout-button">

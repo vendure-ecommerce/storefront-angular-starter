@@ -1,0 +1,12 @@
+<div *ngIf="order$ | async as order; else notFound">
+    <h2>Thank you for your order!</h2>
+    <ul class="order-details">
+        <li>Order code: {{ order.code }}</li>
+        <li>Placed: {{ order.updatedAt | date: 'medium' }}</li>
+    </ul>
+    <vsf-cart-contents [cart]="order"
+                       [canAdjustQuantities]="false"></vsf-cart-contents>
+</div>
+<ng-template #notFound>
+    <h2>Page not found</h2>
+</ng-template>

@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
+import { CheckoutConfirmationComponent } from './components/checkout-confirmation/checkout-confirmation.component';
 import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
 import { CheckoutProcessComponent } from './components/checkout-process/checkout-process.component';
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
@@ -59,6 +60,11 @@ export const routes: Route[] = [
             {
                 path: 'payment',
                 component: CheckoutPaymentComponent,
+                canActivate: [CheckoutGuard],
+            },
+            {
+                path: 'confirmation/:code',
+                component: CheckoutConfirmationComponent,
                 canActivate: [CheckoutGuard],
             },
         ],

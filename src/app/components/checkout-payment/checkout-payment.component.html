@@ -1,3 +1,35 @@
-<p>
-  checkout-payment works!
-</p>
+<form class="payment-form" #paymentForm="ngForm" (submit)="completeOrder()">
+    <mat-form-field>
+        <input matInput placeholder="Credit card #"
+               name="cardNumber"
+               [(ngModel)]="cardNumber"
+               required>
+        <mat-icon matPrefix>credit_card</mat-icon>
+    </mat-form-field>
+    <div class="expiry-date">
+        <mat-form-field>
+            <mat-select placeholder="Expiry month"
+                        name="expMonth"
+                        [(ngModel)]="expMonth"
+                        required>
+                <mat-option *ngFor="let month of getMonths()" [value]="month">
+                    {{ month }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-select placeholder="Expiry year"
+                        name="expYear"
+                        [(ngModel)]="expYear"
+                        required>
+                <mat-option *ngFor="let year of getYears()" [value]="year">
+                    {{ year }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <button mat-raised-button
+            color="primary"
+            [disabled]="paymentForm.pristine || paymentForm.invalid">Complete order</button>
+</form>

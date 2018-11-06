@@ -3,7 +3,9 @@ import gql from 'graphql-tag';
 export const CART_FRAGMENT = gql`
     fragment Cart on Order {
         id
+        code
         state
+        active
         lines {
             id
             featuredAsset {

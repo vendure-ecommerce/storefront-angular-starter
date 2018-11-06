@@ -16,15 +16,16 @@ import { AddressFormComponent } from './components/address-form/address-form.com
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
+import { CheckoutConfirmationComponent } from './components/checkout-confirmation/checkout-confirmation.component';
+import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
 import { CheckoutProcessComponent } from './components/checkout-process/checkout-process.component';
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
+import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MaterialModule } from './material/material.module';
-import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
-import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { CheckoutStageIndicatorComponent } from './components/checkout-stage-ind
         AddressFormComponent,
         CheckoutPaymentComponent,
         CheckoutStageIndicatorComponent,
+        CheckoutConfirmationComponent,
     ],
     imports: [
         BrowserModule,

@@ -171,6 +171,26 @@ export interface OrderFilterParameter {
   updatedAt?: DateOperators | null;
 }
 
+export interface PaymentMethodListOptions {
+  take?: number | null;
+  skip?: number | null;
+  sort?: PaymentMethodSortParameter | null;
+  filter?: PaymentMethodFilterParameter | null;
+}
+
+export interface PaymentMethodSortParameter {
+  id?: SortOrder | null;
+  createdAt?: SortOrder | null;
+  updatedAt?: SortOrder | null;
+  code?: SortOrder | null;
+}
+
+export interface PaymentMethodFilterParameter {
+  code?: StringOperators | null;
+  createdAt?: DateOperators | null;
+  updatedAt?: DateOperators | null;
+}
+
 export interface ProductListOptions {
   take?: number | null;
   skip?: number | null;
@@ -474,6 +494,23 @@ export interface UpdateFacetValueCustomFieldsInput {
   available?: boolean | null;
 }
 
+export interface PaymentInput {
+  method: string;
+  metadata: Json;
+}
+
+export interface UpdatePaymentMethodInput {
+  id: string;
+  code?: string | null;
+  enabled?: boolean | null;
+  configArgs?: ConfigArgInput[] | null;
+}
+
+export interface ConfigArgInput {
+  name: string;
+  value: string;
+}
+
 export interface CreateProductOptionGroupInput {
   code: string;
   translations: ProductOptionGroupTranslationInput[];
@@ -564,12 +601,7 @@ export interface CreatePromotionInput {
 
 export interface AdjustmentOperationInput {
   code: string;
-  arguments: AdjustmentOperationInputArg[];
-}
-
-export interface AdjustmentOperationInputArg {
-  name: string;
-  value: string;
+  arguments: ConfigArgInput[];
 }
 
 export interface UpdatePromotionInput {
@@ -1003,6 +1035,7 @@ export namespace GetCartTotals {
   export type ActiveOrder = {
     __typename?: "Order";
     id: string;
+    active: boolean;
     lines: Lines[];
     total: number;
   };
@@ -1012,6 +1045,35 @@ export namespace GetCartTotals {
     id: string;
     quantity: number;
   };
+}
+
+export namespace GetOrderByCode {
+  export type Variables = {
+    code: string;
+  };
+
+  export type Query = {
+    __typename?: "Query";
+    orderByCode?: OrderByCode | null;
+  };
+
+  export type OrderByCode = {
+    __typename?: "Order";
+    updatedAt: DateTime;
+  } & Cart.Fragment;
+}
+
+export namespace AddPayment {
+  export type Variables = {
+    input: PaymentInput;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    addPaymentToOrder?: AddPaymentToOrder | null;
+  };
+
+  export type AddPaymentToOrder = Cart.Fragment;
 }
 
 export namespace GetNextOrderStates {
@@ -1294,7 +1356,9 @@ export namespace Cart {
   export type Fragment = {
     __typename?: "Order";
     id: string;
+    code: string;
     state: string;
+    active: boolean;
     lines: Lines[];
     subTotal: number;
     subTotalBeforeTax: number;

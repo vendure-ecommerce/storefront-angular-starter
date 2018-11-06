@@ -45,7 +45,7 @@ export class CheckoutProcessComponent implements OnInit {
                             return 2;
                         case 'payment':
                             return 3;
-                        case 'complete':
+                        case 'confirmation/:code':
                             return 4;
                     }
                 }

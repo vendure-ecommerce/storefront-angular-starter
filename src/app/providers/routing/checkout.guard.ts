@@ -4,6 +4,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { GetOrderForCheckout } from '../../../../codegen/generated-types';
+import { CheckoutConfirmationComponent } from '../../components/checkout-confirmation/checkout-confirmation.component';
 import { CheckoutPaymentComponent } from '../../components/checkout-payment/checkout-payment.component';
 import { CheckoutShippingComponent } from '../../components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from '../../components/checkout-sign-in/checkout-sign-in.component';
@@ -60,6 +61,8 @@ export class CheckoutGuard implements CanActivate {
                     } else {
                         return false;
                     }
+                } else if (component === CheckoutConfirmationComponent) {
+                    return true;
                 }
 
                 return true;
