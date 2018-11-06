@@ -26,6 +26,7 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { MaterialModule } from './material/material.module';
+import { PriceRangePipe } from './pipes/price-range.pipe';
 
 @NgModule({
     declarations: [
@@ -45,6 +46,7 @@ import { MaterialModule } from './material/material.module';
         CheckoutPaymentComponent,
         CheckoutStageIndicatorComponent,
         CheckoutConfirmationComponent,
+        PriceRangePipe,
     ],
     imports: [
         BrowserModule,

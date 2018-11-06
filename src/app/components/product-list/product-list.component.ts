@@ -16,7 +16,7 @@ import { GET_PRODUCT_LIST } from './product-list.graphql';
 })
 export class ProductListComponent implements OnInit {
 
-    products$: Observable<any[]>;
+    products$: Observable<GetProductList.Items[]>;
 
     constructor(private dataService: DataService) { }
 

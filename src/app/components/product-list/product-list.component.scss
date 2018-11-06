@@ -11,3 +11,10 @@
         margin-right: 24px;
     }
 }
+.product-details {
+    min-height: 64px;
+    .price {
+        position: absolute;
+        bottom: 12px;
+    }
+}

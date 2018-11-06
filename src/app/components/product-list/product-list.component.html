@@ -1,13 +1,13 @@
 <mat-card class="product-card" *ngFor="let product of products$ | async">
-    <mat-card-header>
-        <mat-card-title>
+    <img mat-card-image [src]="product.featuredAsset?.preview + '?preset=thumb'">
+    <mat-card-content>
+        <div class="product-details">
             <a [routerLink]="['/catalog', product.id]">
                 {{ product.name }}
             </a>
-        </mat-card-title>
-    </mat-card-header>
-    <img mat-card-image [src]="product.featuredAsset.preview + '?preset=thumb'">
-    <mat-card-content>
-        <p>{{ product.description }}</p>
+            <div class="price">
+                {{ product.variants | priceRange:'priceWithTax'}}
+            </div>
+        </div>
     </mat-card-content>
 </mat-card>

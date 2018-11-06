@@ -1292,24 +1292,13 @@ export namespace GetProductList {
   export type Variants = {
     __typename?: "ProductVariant";
     id: string;
-    name: string;
-    options: Options[];
-    price: number;
-    sku: string;
-  };
-
-  export type Options = {
-    __typename?: "ProductOption";
-    code?: string | null;
-    name?: string | null;
+    priceWithTax: number;
   };
 
   export type FeaturedAsset = {
     __typename?: "Asset";
     id: string;
-    name: string;
     preview: string;
-    type: AssetType;
   };
 }
 

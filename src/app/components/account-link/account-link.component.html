@@ -1,6 +1,9 @@
 <div *ngIf="activeCustomer$ | async as customer; else notLoggedIn">
-    <a [routerLink]="['/account']">{{ customer.firstName }} {{ customer.lastName }}</a>
+    <a mat-button [routerLink]="['/account']">
+        <mat-icon>person</mat-icon>
+        {{ customer.firstName }} {{ customer.lastName }}
+    </a>
 </div>
 <ng-template #notLoggedIn>
-    <a [routerLink]="['/sign-in']">Sign In</a>
+    <a mat-button [routerLink]="['/sign-in']">Sign In</a>
 </ng-template>

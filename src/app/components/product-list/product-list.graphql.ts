@@ -9,19 +9,11 @@ export const GET_PRODUCT_LIST = gql`
                 description
                 variants {
                     id
-                    name
-                    options {
-                        code
-                        name
-                    }
-                    price
-                    sku
+                    priceWithTax
                 }
                 featuredAsset {
                     id
-                    name
                     preview
-                    type
                 }
             }
             totalItems
