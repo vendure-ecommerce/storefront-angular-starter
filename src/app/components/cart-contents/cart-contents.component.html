@@ -51,7 +51,7 @@
             <span>{{ (cart.shipping / 100) | currency }}</span>
         </div>
         <div class="shipping-method">
-            {{ cart.shippingMethod }}
+            {{ cart.shippingMethod?.description }}
         </div>
     </div>
     <div class="totals">

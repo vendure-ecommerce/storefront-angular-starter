@@ -1169,7 +1169,7 @@ export namespace GetEligibleShippingMethods {
 
   export type EligibleShippingMethods = {
     __typename?: "ShippingMethodQuote";
-    shippingMethodId: string;
+    id: string;
     description: string;
     price: number;
   };
@@ -1364,7 +1364,7 @@ export namespace Cart {
     subTotalBeforeTax: number;
     totalBeforeTax: number;
     shipping: number;
-    shippingMethod?: string | null;
+    shippingMethod?: ShippingMethod | null;
     total: number;
     adjustments: _Adjustments[];
   };
@@ -1400,6 +1400,13 @@ export namespace Cart {
     description: string;
     adjustmentSource: string;
     type: AdjustmentType;
+  };
+
+  export type ShippingMethod = {
+    __typename?: "ShippingMethod";
+    id: string;
+    code: string;
+    description: string;
   };
 
   export type _Adjustments = {

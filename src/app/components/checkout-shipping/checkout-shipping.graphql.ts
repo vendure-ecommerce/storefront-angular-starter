@@ -51,7 +51,7 @@ export const SET_SHIPPING_ADDRESS = gql`
 export const GET_ELIGIBLE_SHIPPING_METHODS = gql`
     query GetEligibleShippingMethods {
         eligibleShippingMethods {
-            shippingMethodId
+            id
             description
             price
         }

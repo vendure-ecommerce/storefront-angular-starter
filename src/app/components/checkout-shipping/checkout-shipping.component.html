@@ -45,7 +45,7 @@
         </mat-expansion-panel-header>
 
         <mat-radio-group [(ngModel)]="shippingMethodId">
-            <mat-radio-button *ngFor="let method of eligibleShippingMethods$ | async" [value]="method.shippingMethodId">
+            <mat-radio-button *ngFor="let method of eligibleShippingMethods$ | async" [value]="method.id">
                 <div class="description">{{ method.description }}</div>
                 <div class="price">{{ method.price / 100 | currency }}</div>
             </mat-radio-button>

@@ -32,7 +32,11 @@ export const CART_FRAGMENT = gql`
         subTotalBeforeTax
         totalBeforeTax
         shipping
-        shippingMethod
+        shippingMethod {
+            id
+            code
+            description
+        }
         total
         adjustments {
             amount
