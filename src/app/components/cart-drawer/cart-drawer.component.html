@@ -1,7 +1,7 @@
 <button mat-icon-button (click)="close()">
     <mat-icon aria-label="Close">close</mat-icon>
 </button>
-<div *ngIf="cart$ | async as cart;" class="cart-contents">
+<div *ngIf="cart$ | async as cart; else empty" class="cart-contents">
     <h3>Cart</h3>
     <vsf-cart-contents [cart]="cart"
                        [canAdjustQuantities]="true"
@@ -13,3 +13,8 @@
            [routerLink]="['/checkout']">Check Out</a>
     </div>
 </div>
+<ng-template #empty>
+    <div class="empty">
+        Cart is empty
+    </div>
+</ng-template>
