@@ -140,7 +140,6 @@ export interface FacetSortParameter {
   updatedAt?: SortOrder | null;
   name?: SortOrder | null;
   code?: SortOrder | null;
-  searchable?: SortOrder | null;
 }
 
 export interface FacetFilterParameter {
@@ -148,7 +147,6 @@ export interface FacetFilterParameter {
   code?: StringOperators | null;
   createdAt?: DateOperators | null;
   updatedAt?: DateOperators | null;
-  searchable?: BooleanOperators | null;
 }
 
 export interface OrderListOptions {
@@ -206,9 +204,6 @@ export interface ProductSortParameter {
   slug?: SortOrder | null;
   description?: SortOrder | null;
   image?: SortOrder | null;
-  infoUrl?: SortOrder | null;
-  downloadable?: SortOrder | null;
-  nickname?: SortOrder | null;
 }
 
 export interface ProductFilterParameter {
@@ -217,9 +212,6 @@ export interface ProductFilterParameter {
   description?: StringOperators | null;
   createdAt?: DateOperators | null;
   updatedAt?: DateOperators | null;
-  infoUrl?: StringOperators | null;
-  downloadable?: BooleanOperators | null;
-  nickname?: StringOperators | null;
 }
 
 export interface PromotionListOptions {
@@ -433,7 +425,7 @@ export interface CreateFacetInput {
   code: string;
   translations: FacetTranslationInput[];
   values?: CreateFacetValueWithFacetInput[] | null;
-  customFields?: CreateFacetCustomFieldsInput | null;
+  customFields?: Json | null;
 }
 
 export interface FacetTranslationInput {
@@ -455,43 +447,25 @@ export interface FacetValueTranslationInput {
   customFields?: Json | null;
 }
 
-export interface CreateFacetCustomFieldsInput {
-  searchable?: boolean | null;
-}
-
 export interface UpdateFacetInput {
   id: string;
   code?: string | null;
   translations?: FacetTranslationInput[] | null;
-  customFields?: UpdateFacetCustomFieldsInput | null;
-}
-
-export interface UpdateFacetCustomFieldsInput {
-  searchable?: boolean | null;
+  customFields?: Json | null;
 }
 
 export interface CreateFacetValueInput {
   facetId: string;
   code: string;
   translations: FacetValueTranslationInput[];
-  customFields?: CreateFacetValueCustomFieldsInput | null;
-}
-
-export interface CreateFacetValueCustomFieldsInput {
-  link?: string | null;
-  available?: boolean | null;
+  customFields?: Json | null;
 }
 
 export interface UpdateFacetValueInput {
   id: string;
   code?: string | null;
   translations?: FacetValueTranslationInput[] | null;
-  customFields?: UpdateFacetValueCustomFieldsInput | null;
-}
-
-export interface UpdateFacetValueCustomFieldsInput {
-  link?: string | null;
-  available?: boolean | null;
+  customFields?: Json | null;
 }
 
 export interface PaymentInput {
@@ -542,7 +516,7 @@ export interface CreateProductInput {
   featuredAssetId?: string | null;
   assetIds?: string[] | null;
   translations: ProductTranslationInput[];
-  customFields?: CreateProductCustomFieldsInput | null;
+  customFields?: Json | null;
 }
 
 export interface ProductTranslationInput {
@@ -551,16 +525,7 @@ export interface ProductTranslationInput {
   name?: string | null;
   slug?: string | null;
   description?: string | null;
-  customFields?: ProductTranslationCustomFieldsInput | null;
-}
-
-export interface ProductTranslationCustomFieldsInput {
-  nickname?: string | null;
-}
-
-export interface CreateProductCustomFieldsInput {
-  infoUrl?: string | null;
-  downloadable?: boolean | null;
+  customFields?: Json | null;
 }
 
 export interface UpdateProductInput {
@@ -568,12 +533,7 @@ export interface UpdateProductInput {
   featuredAssetId?: string | null;
   assetIds?: string[] | null;
   translations?: ProductTranslationInput[] | null;
-  customFields?: UpdateProductCustomFieldsInput | null;
-}
-
-export interface UpdateProductCustomFieldsInput {
-  infoUrl?: string | null;
-  downloadable?: boolean | null;
+  customFields?: Json | null;
 }
 
 export interface UpdateProductVariantInput {
@@ -1186,6 +1146,31 @@ export namespace SetShippingMethod {
   };
 
   export type SetOrderShippingMethod = Cart.Fragment;
+}
+
+export namespace SetCustomerForOrder {
+  export type Variables = {
+    input: CreateCustomerInput;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    setCustomerForOrder?: SetCustomerForOrder | null;
+  };
+
+  export type SetCustomerForOrder = {
+    __typename?: "Order";
+    id: string;
+    customer?: Customer | null;
+  };
+
+  export type Customer = {
+    __typename?: "Customer";
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+  };
 }
 
 export namespace TransitionToArrangingPayment {

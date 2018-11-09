@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import {
@@ -9,6 +9,7 @@ import {
     GetCustomerAddresses,
     GetEligibleShippingMethods,
     GetShippingAddress,
+    SetCustomerForOrder,
     SetShippingAddress,
     SetShippingMethod,
     TransitionToArrangingPayment,
@@ -23,6 +24,7 @@ import {
     GET_CUSTOMER_ADDRESSES,
     GET_ELIGIBLE_SHIPPING_METHODS,
     GET_SHIPPING_ADDRESS,
+    SET_CUSTOMER_FOR_ORDER,
     SET_SHIPPING_ADDRESS,
     SET_SHIPPING_METHOD,
     TRANSITION_TO_ARRANGING_PAYMENT,
@@ -44,7 +46,10 @@ export class CheckoutShippingComponent implements OnInit {
     shippingAddress$: Observable<GetShippingAddress.ShippingAddress | null | undefined>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
-    step: 'selectAddress' | 'editAddress' | 'selectMethod' = 'selectAddress';
+    step: 'selectAddress' | 'customerDetails' | 'editAddress' | 'selectMethod' = 'selectAddress';
+    firstName = '';
+    lastName = '';
+    emailAddress = '';
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
@@ -55,7 +60,7 @@ export class CheckoutShippingComponent implements OnInit {
     ngOnInit() {
         this.signedIn$ = this.stateService.select(state => state.signedIn).pipe(
             tap(signedIn => {
-                this.step = signedIn ? 'selectAddress' : 'editAddress';
+                this.step = signedIn ? 'selectAddress' : 'customerDetails';
             }),
         );
         this.customerAddresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
@@ -90,6 +95,13 @@ export class CheckoutShippingComponent implements OnInit {
         this.step = 'editAddress';
     }
 
+    setCustomerDetails() {
+        this.addressForm.addressForm.patchValue({
+            fullName: `${this.firstName} ${this.lastName}`,
+        });
+        this.step = 'editAddress';
+    }
+
     setShippingAddress(value: any) {
         this.dataService.mutate<SetShippingAddress.Mutation, SetShippingAddress.Variables>(SET_SHIPPING_ADDRESS, {
             input: value,
@@ -100,13 +112,30 @@ export class CheckoutShippingComponent implements OnInit {
     }
 
     proceedToPayment() {
-        if (this.shippingMethodId) {
-            this.dataService.mutate<SetShippingMethod.Mutation, SetShippingMethod.Variables>(SET_SHIPPING_METHOD, {
-                id: this.shippingMethodId,
-            }).pipe(
+        const shippingMethodId = this.shippingMethodId;
+        if (shippingMethodId) {
+            this.stateService.select(state => state.signedIn).pipe(
+                mergeMap(signedIn => !signedIn ? this.setCustomerForOrder() || of({}) : of({})),
+                mergeMap(() =>
+                    this.dataService.mutate<SetShippingMethod.Mutation, SetShippingMethod.Variables>(SET_SHIPPING_METHOD, {
+                        id: shippingMethodId,
+                    }),
+                ),
                 mergeMap(() => this.dataService.mutate<TransitionToArrangingPayment.Mutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
             ).subscribe((data) => {
                 this.router.navigate(['../payment'], { relativeTo: this.route });
+            });
+        }
+    }
+
+    private setCustomerForOrder() {
+        if (this.emailAddress) {
+            return this.dataService.mutate<SetCustomerForOrder.Mutation, SetCustomerForOrder.Variables>(SET_CUSTOMER_FOR_ORDER, {
+                input: {
+                    emailAddress: this.emailAddress,
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                },
             });
         }
     }

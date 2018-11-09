@@ -14,7 +14,46 @@
             </div>
         </div>
     </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step === 'editAddress'">
+    <mat-expansion-panel [expanded]="step === 'customerDetails'" *ngIf="!(signedIn$ | async)">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                Customer Details
+            </mat-panel-title>
+            <mat-panel-description>
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+        <form #customerForm="ngForm">
+            <mat-form-field>
+                <input matInput
+                       placeholder="First Name"
+                       name="firstName"
+                       [(ngModel)]="firstName"
+                       required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Last Name"
+                       name="lastName"
+                       [(ngModel)]="lastName"
+                       required>
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput
+                       placeholder="Email Address"
+                       name="emailAddress"
+                       [(ngModel)]="emailAddress"
+                       required>
+            </mat-form-field>
+        </form>
+        <mat-action-row>
+            <button mat-raised-button
+                    color="primary"
+                    [disabled]="customerForm.invalid"
+                    (click)="setCustomerDetails()">Next</button>
+        </mat-action-row>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="step === 'editAddress'"
+                         [disabled]="step === 'customerDetails'">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 Shipping Address

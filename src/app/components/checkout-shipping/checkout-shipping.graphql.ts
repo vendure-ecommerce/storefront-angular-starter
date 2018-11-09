@@ -67,6 +67,20 @@ export const SET_SHIPPING_METHOD = gql`
     ${CART_FRAGMENT}
 `;
 
+export const SET_CUSTOMER_FOR_ORDER = gql`
+    mutation SetCustomerForOrder($input: CreateCustomerInput!) {
+        setCustomerForOrder(input: $input) {
+            id
+            customer {
+                id
+                emailAddress
+                firstName
+                lastName
+            }
+        }
+    }
+`;
+
 export const TRANSITION_TO_ARRANGING_PAYMENT = gql`
     mutation TransitionToArrangingPayment {
         transitionOrderToState(state: "ArrangingPayment") {
