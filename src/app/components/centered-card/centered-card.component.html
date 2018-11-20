@@ -1,0 +1,9 @@
+<mat-card class="centered-card">
+    <mat-card-header *ngIf="title || subTitle">
+        <mat-card-title *ngIf="title">{{ title }}</mat-card-title>
+        <mat-card-subtitle *ngIf="subTitle">{{ subTitle }}</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <ng-content></ng-content>
+    </mat-card-content>
+</mat-card>

@@ -1,11 +1,13 @@
 <form #signInForm="ngForm"
       (submit)="signIn()">
-    <mat-card class="sign-in-form">
+    <vsf-centered-card>
 
         <mat-form-field>
             <input matInput
                    placeholder="Email address"
                    name="emailAddress"
+                   type="email"
+                   email
                    required
                    [(ngModel)]="emailAddress">
         </mat-form-field>
@@ -31,9 +33,12 @@
                 color="primary">
             Sign In
         </button>
-
         <div class="invalid-credentials" [class.visible]="invalidCredentials">
             Invalid credentials. Please try again.
         </div>
-    </mat-card>
+
+        <div *ngIf="displayRegisterLink" class="register-link">
+            <a [routerLink]="['/register']">No account? Register here</a>
+        </div>
+    </vsf-centered-card>
 </form>

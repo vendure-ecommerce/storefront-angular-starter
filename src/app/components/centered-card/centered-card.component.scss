@@ -1,0 +1,15 @@
+@import "variables";
+
+.centered-card {
+    max-width: 400px;
+    margin: auto;
+}
+
+.mat-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+::ng-deep .centered-card button[type="submit"] {
+    margin-top: 24px;
+}

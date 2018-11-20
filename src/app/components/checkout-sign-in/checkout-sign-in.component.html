@@ -1,7 +1,8 @@
 <h2>Already have an account?</h2>
 
 <div class="sign-in-row">
-    <vsf-sign-in [navigateToOnSuccess]="['/checkout', 'shipping']"></vsf-sign-in>
+    <vsf-sign-in [navigateToOnSuccess]="['/checkout', 'shipping']"
+                 [displayRegisterLink]="false"></vsf-sign-in>
     <div class="or"><div>or</div></div>
     <mat-card class="guest">
         <a [routerLink]="['./shipping']"

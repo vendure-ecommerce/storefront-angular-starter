@@ -16,6 +16,7 @@ import { AddressFormComponent } from './components/address-form/address-form.com
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
+import { CenteredCardComponent } from './components/centered-card/centered-card.component';
 import { CheckoutConfirmationComponent } from './components/checkout-confirmation/checkout-confirmation.component';
 import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
 import { CheckoutProcessComponent } from './components/checkout-process/checkout-process.component';
@@ -24,7 +25,9 @@ import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { VerifyComponent } from './components/verify/verify.component';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 
@@ -47,6 +50,9 @@ import { PriceRangePipe } from './pipes/price-range.pipe';
         CheckoutStageIndicatorComponent,
         CheckoutConfirmationComponent,
         PriceRangePipe,
+        RegisterComponent,
+        VerifyComponent,
+        CenteredCardComponent,
     ],
     imports: [
         BrowserModule,

@@ -1,7 +1,7 @@
 <div *ngIf="activeCustomer$ | async as customer; else notLoggedIn">
     <a mat-button [routerLink]="['/account']">
         <mat-icon>person</mat-icon>
-        {{ customer.firstName }} {{ customer.lastName }}
+        {{ userName(customer) }}
     </a>
 </div>
 <ng-template #notLoggedIn>

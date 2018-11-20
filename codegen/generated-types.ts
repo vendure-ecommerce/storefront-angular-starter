@@ -323,6 +323,13 @@ export interface CreateAssetInput {
   file: Upload;
 }
 
+export interface RegisterCustomerInput {
+  emailAddress: string;
+  title?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+}
+
 export interface CreateChannelInput {
   code: string;
   token: string;
@@ -943,6 +950,7 @@ export namespace GetActiveCustomer {
     id: string;
     firstName: string;
     lastName: string;
+    emailAddress: string;
   };
 }
 
@@ -1287,6 +1295,17 @@ export namespace GetProductList {
   };
 }
 
+export namespace Register {
+  export type Variables = {
+    input: RegisterCustomerInput;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    registerCustomerAccount: boolean;
+  };
+}
+
 export namespace SignIn {
   export type Variables = {
     emailAddress: string;
@@ -1307,6 +1326,29 @@ export namespace SignIn {
   export type User = {
     __typename?: "CurrentUser";
     id: string;
+  };
+}
+
+export namespace Verify {
+  export type Variables = {
+    password: string;
+    token: string;
+  };
+
+  export type Mutation = {
+    __typename?: "Mutation";
+    verifyCustomerAccount: VerifyCustomerAccount;
+  };
+
+  export type VerifyCustomerAccount = {
+    __typename?: "LoginResult";
+    user: User;
+  };
+
+  export type User = {
+    __typename?: "CurrentUser";
+    id: string;
+    identifier: string;
   };
 }
 

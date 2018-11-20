@@ -1,17 +1,5 @@
 @import "variables";
 
-.sign-in-form {
-    max-width: 400px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    padding: 12px;
-
-    button[type="submit"] {
-        margin-top: 24px;
-    }
-}
-
 .invalid-credentials {
     color: $color-warn;
     text-align: center;
@@ -23,4 +11,8 @@
     &.visible {
         opacity: 1;
     }
+}
+
+.register-link {
+    margin-top: 12px;
 }

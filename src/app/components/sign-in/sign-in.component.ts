@@ -15,6 +15,7 @@ import { SIGN_IN } from './sign-in.graphql';
 })
 export class SignInComponent {
     @Input() navigateToOnSuccess: any[] | undefined;
+    @Input() displayRegisterLink = true;
 
     emailAddress: string;
     password: string;

@@ -13,6 +13,8 @@ import { AccountGuard } from './providers/routing/account.guard';
 import { CheckoutResolver } from './providers/routing/checkout-resolver';
 import { CheckoutGuard } from './providers/routing/checkout.guard';
 import { SignInGuard } from './providers/routing/sign-in.guard';
+import { RegisterComponent } from './components/register/register.component';
+import { VerifyComponent } from './components/verify/verify.component';
 
 export const routes: Route[] = [
     {
@@ -33,6 +35,16 @@ export const routes: Route[] = [
         path: 'sign-in',
         canActivate: [SignInGuard],
         component: SignInComponent,
+    },
+    {
+        path: 'register',
+        canActivate: [SignInGuard],
+        component: RegisterComponent,
+    },
+    {
+        path: 'verify',
+        canActivate: [SignInGuard],
+        component: VerifyComponent,
     },
     {
         path: 'account',

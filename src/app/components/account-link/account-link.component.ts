@@ -35,4 +35,13 @@ export class AccountLinkComponent implements OnInit {
         );
     }
 
+    userName(customer: GetActiveCustomer.ActiveCustomer): string {
+        const { firstName, lastName, emailAddress } = customer;
+        if (firstName && lastName) {
+            return `${firstName} ${lastName}`;
+        } else {
+            return emailAddress;
+        }
+    }
+
 }

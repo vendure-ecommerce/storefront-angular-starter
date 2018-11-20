@@ -6,6 +6,7 @@ export const GET_ACTIVE_CUSTOMER = gql`
             id
             firstName
             lastName
+            emailAddress
         }
     }
 `;
