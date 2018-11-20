@@ -1,12 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { filter, map, mergeMap, switchMap, take } from 'rxjs/operators';
 
-import { GetOrderByCode } from '../../../../codegen/generated-types';
+import { GetOrderByCode, Register } from '../../../../codegen/generated-types';
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
+import { REGISTER } from '../register/register.graphql';
 
 import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
 
@@ -17,11 +18,12 @@ import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutConfirmationComponent implements OnInit {
-
+    registrationSent = false;
     order$: Observable<GetOrderByCode.OrderByCode>;
 
     constructor(private stateService: StateService,
                 private dataService: DataService,
+                private changeDetector: ChangeDetectorRef,
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
@@ -35,5 +37,28 @@ export class CheckoutConfirmationComponent implements OnInit {
             map(data => data.orderByCode),
             filter(notNullOrUndefined),
         );
+    }
+
+    register() {
+        this.order$.pipe(
+            take(1),
+            mergeMap(order => {
+                const { customer } = order;
+                if (customer) {
+                    return this.dataService.mutate<Register.Mutation, Register.Variables>(REGISTER, {
+                        input: {
+                            emailAddress: customer.emailAddress,
+                            firstName: customer.firstName,
+                            lastName: customer.lastName,
+                        },
+                    });
+                } else {
+                    return of({});
+                }
+            }),
+        ).subscribe(() => {
+            this.registrationSent = true;
+            this.changeDetector.markForCheck();
+        });
     }
 }

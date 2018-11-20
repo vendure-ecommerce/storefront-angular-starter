@@ -7,6 +7,17 @@ export const GET_ORDER_BY_CODE = gql`
         orderByCode(code: $code) {
             ...Cart
             updatedAt
+            customer {
+                id
+                emailAddress
+                firstName
+                lastName
+                user {
+                    id
+                    identifier
+                    verified
+                }
+            }
         }
     }
     ${CART_FRAGMENT}

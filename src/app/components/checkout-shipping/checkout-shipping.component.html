@@ -1,5 +1,5 @@
 <mat-accordion>
-    <mat-expansion-panel [expanded]="step === 'selectAddress'" *ngIf="signedIn$ | async">
+    <mat-expansion-panel [expanded]="step === 'selectAddress'" *ngIf="(signedIn$ | async) && (customerAddresses$ | async)?.length">
         <mat-expansion-panel-header>
             <mat-panel-title>
                 Select Address

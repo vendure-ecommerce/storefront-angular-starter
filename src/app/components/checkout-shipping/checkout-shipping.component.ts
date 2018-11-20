@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
+import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 
 import {
     Address,
@@ -58,11 +58,7 @@ export class CheckoutShippingComponent implements OnInit {
                 private router: Router) { }
 
     ngOnInit() {
-        this.signedIn$ = this.stateService.select(state => state.signedIn).pipe(
-            tap(signedIn => {
-                this.step = signedIn ? 'selectAddress' : 'customerDetails';
-            }),
-        );
+        this.signedIn$ = this.stateService.select(state => state.signedIn);
         this.customerAddresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
             map(data => data.activeCustomer ? data.activeCustomer.addresses || [] : []),
         );
@@ -76,6 +72,11 @@ export class CheckoutShippingComponent implements OnInit {
             switchMap(() => this.dataService.query<GetEligibleShippingMethods.Query>(GET_ELIGIBLE_SHIPPING_METHODS)),
             map(data => data.eligibleShippingMethods),
         );
+        combineLatest(this.signedIn$, this.customerAddresses$).pipe(
+            take(1),
+        ).subscribe(([signedIn, addresses]) => {
+            this.step = signedIn ? (addresses.length ? 'selectAddress' : 'editAddress') : 'customerDetails';
+        });
     }
 
     getLines(address: Address.Fragment): string[] {

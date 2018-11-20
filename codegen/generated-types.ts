@@ -1028,7 +1028,24 @@ export namespace GetOrderByCode {
   export type OrderByCode = {
     __typename?: "Order";
     updatedAt: DateTime;
+    customer?: Customer | null;
   } & Cart.Fragment;
+
+  export type Customer = {
+    __typename?: "Customer";
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    user?: User | null;
+  };
+
+  export type User = {
+    __typename?: "User";
+    id: string;
+    identifier: string;
+    verified: boolean;
+  };
 }
 
 export namespace AddPayment {
