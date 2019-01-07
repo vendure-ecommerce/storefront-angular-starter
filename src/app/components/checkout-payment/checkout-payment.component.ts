@@ -35,7 +35,7 @@ export class CheckoutPaymentComponent {
     completeOrder() {
         this.dataService.mutate<AddPayment.Mutation, AddPayment.Variables>(ADD_PAYMENT, {
             input: {
-                method: 'gripe',
+                method: 'example-payment-provider',
                 metadata: {
                     foo: 'bar',
                 },
