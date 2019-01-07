@@ -189,6 +189,28 @@ export interface PaymentMethodFilterParameter {
   updatedAt?: DateOperators | null;
 }
 
+export interface ProductCategoryListOptions {
+  take?: number | null;
+  skip?: number | null;
+  sort?: ProductCategorySortParameter | null;
+  filter?: ProductCategoryFilterParameter | null;
+}
+
+export interface ProductCategorySortParameter {
+  id?: SortOrder | null;
+  createdAt?: SortOrder | null;
+  updatedAt?: SortOrder | null;
+  name?: SortOrder | null;
+  description?: SortOrder | null;
+}
+
+export interface ProductCategoryFilterParameter {
+  name?: StringOperators | null;
+  description?: StringOperators | null;
+  createdAt?: DateOperators | null;
+  updatedAt?: DateOperators | null;
+}
+
 export interface ProductListOptions {
   take?: number | null;
   skip?: number | null;
@@ -255,6 +277,14 @@ export interface RoleFilterParameter {
   description?: StringOperators | null;
   createdAt?: DateOperators | null;
   updatedAt?: DateOperators | null;
+}
+
+export interface SearchInput {
+  term?: string | null;
+  facetIds?: string[] | null;
+  groupByProduct?: boolean | null;
+  take?: number | null;
+  skip?: number | null;
 }
 
 export interface ShippingMethodListOptions {
@@ -492,6 +522,39 @@ export interface ConfigArgInput {
   value: string;
 }
 
+export interface CreateProductCategoryInput {
+  featuredAssetId?: string | null;
+  assetIds?: string[] | null;
+  parentId?: string | null;
+  facetValueIds?: string[] | null;
+  translations: ProductCategoryTranslationInput[];
+  customFields?: Json | null;
+}
+
+export interface ProductCategoryTranslationInput {
+  id?: string | null;
+  languageCode: LanguageCode;
+  name?: string | null;
+  description?: string | null;
+  customFields?: Json | null;
+}
+
+export interface UpdateProductCategoryInput {
+  id: string;
+  featuredAssetId?: string | null;
+  parentId?: string | null;
+  assetIds?: string[] | null;
+  facetValueIds?: string[] | null;
+  translations: ProductCategoryTranslationInput[];
+  customFields?: Json | null;
+}
+
+export interface MoveProductCategoryInput {
+  categoryId: string;
+  parentId: string;
+  index: number;
+}
+
 export interface CreateProductOptionGroupInput {
   code: string;
   translations: ProductOptionGroupTranslationInput[];
@@ -522,6 +585,7 @@ export interface UpdateProductOptionGroupInput {
 export interface CreateProductInput {
   featuredAssetId?: string | null;
   assetIds?: string[] | null;
+  facetValueIds?: string[] | null;
   translations: ProductTranslationInput[];
   customFields?: Json | null;
 }
@@ -539,6 +603,7 @@ export interface UpdateProductInput {
   id: string;
   featuredAssetId?: string | null;
   assetIds?: string[] | null;
+  facetValueIds?: string[] | null;
   translations?: ProductTranslationInput[] | null;
   customFields?: Json | null;
 }
@@ -546,9 +611,12 @@ export interface UpdateProductInput {
 export interface UpdateProductVariantInput {
   id: string;
   translations?: ProductVariantTranslationInput[] | null;
+  facetValueIds?: string[] | null;
   sku?: string | null;
   taxCategoryId?: string | null;
   price?: number | null;
+  featuredAssetId?: string | null;
+  assetIds?: string[] | null;
   customFields?: Json | null;
 }
 
@@ -647,10 +715,13 @@ export interface UpdateZoneInput {
 
 export interface CreateProductVariantInput {
   translations: ProductVariantTranslationInput[];
+  facetValueIds?: string[] | null;
   sku: string;
   price?: number | null;
   taxCategoryId: string;
-  optionCodes?: string[] | null;
+  optionIds?: string[] | null;
+  featuredAssetId?: string | null;
+  assetIds?: string[] | null;
   customFields?: Json | null;
 }
 
@@ -1277,7 +1348,9 @@ export namespace AddToCart {
 }
 
 export namespace GetProductList {
-  export type Variables = {};
+  export type Variables = {
+    options?: ProductListOptions | null;
+  };
 
   export type Query = {
     __typename?: "Query";

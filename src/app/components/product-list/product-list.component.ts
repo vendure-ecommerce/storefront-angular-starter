@@ -21,7 +21,11 @@ export class ProductListComponent implements OnInit {
     constructor(private dataService: DataService) { }
 
     ngOnInit() {
-        this.products$ = this.dataService.query<GetProductList.Query, GetProductList.Variables>(GET_PRODUCT_LIST)
+        this.products$ = this.dataService.query<GetProductList.Query, GetProductList.Variables>(GET_PRODUCT_LIST, {
+            options: {
+                take: 50,
+            },
+        })
             .pipe(map(data => data.products.items));
     }
 
