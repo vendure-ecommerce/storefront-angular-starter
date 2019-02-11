@@ -28,7 +28,7 @@ export class CheckoutProcessComponent implements OnInit {
 
     ngOnInit() {
         this.signedIn$ = this.stateService.select(state => state.signedIn);
-        this.cart$ = this.route.data.pipe(switchMap(data => data.activeOrder));
+        this.cart$ = this.route.data.pipe(switchMap(data => data.activeOrder as Observable<GetOrderForCheckout.ActiveOrder>));
         this.nextStates$ = this.dataService.query<GetNextOrderStates.Query>(GET_NEXT_ORDER_STATES).pipe(
             map(data => data.nextOrderStates),
         );
