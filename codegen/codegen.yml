@@ -1,0 +1,13 @@
+overwrite: true
+schema: "../vendure/schema.json"
+documents: "./src/**/*.graphql.ts"
+generates:
+  ./codegen/generated-types.ts:
+    plugins:
+      - add: "// tslint:disable"
+      - "time"
+      - "typescript-common"
+      - "typescript-client"
+    config:
+      namingConvention:
+          enumValues: 'keep'

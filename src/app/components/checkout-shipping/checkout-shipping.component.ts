@@ -87,7 +87,7 @@ export class CheckoutShippingComponent implements OnInit {
             address.streetLine2,
             address.province,
             address.postalCode,
-            address.country,
+            address.country.name,
         ].filter(notNullOrUndefined);
     }
 
