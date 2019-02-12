@@ -1,10 +1,10 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
@@ -31,6 +31,8 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 
+const STATE_KEY = makeStateKey<any>('apollo.state');
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -55,7 +57,8 @@ import { PriceRangePipe } from './pipes/price-range.pipe';
         CenteredCardComponent,
     ],
     imports: [
-        BrowserModule,
+        BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        BrowserTransferStateModule,
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
@@ -65,21 +68,42 @@ import { PriceRangePipe } from './pipes/price-range.pipe';
         MaterialModule,
         RouterModule.forRoot(routes),
     ],
-    providers: [
-        {
-            provide: APOLLO_OPTIONS,
-            useFactory(httpLink: HttpLink) {
-                return {
-                    cache: new InMemoryCache(),
-                    link: httpLink.create({
-                        uri: 'http://localhost:3000/api',
-                        withCredentials: true,
-                    }),
-                };
-            },
-            deps: [HttpLink],
-        },
-    ],
     bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+    cache: InMemoryCache;
+
+    constructor(
+        apollo: Apollo,
+        httpLink: HttpLink,
+        private readonly transferState: TransferState,
+    ) {
+        this.cache = new InMemoryCache();
+
+        apollo.create({
+            link: httpLink.create({ uri: 'http://localhost:3000/api' }),
+            cache: this.cache,
+        });
+
+        const isBrowser = this.transferState.hasKey<any>(STATE_KEY);
+
+        console.log('AppModule constructor, isBrowser:', isBrowser);
+        if (isBrowser) {
+            this.onBrowser();
+        } else {
+            this.onServer();
+        }
+    }
+
+    onServer() {
+        this.transferState.onSerialize(STATE_KEY, () => {
+            const state = this.cache.extract();
+            return state;
+        });
+    }
+
+    onBrowser() {
+        const state = this.transferState.get<any>(STATE_KEY, null);
+        this.cache.restore(state);
+    }
+}

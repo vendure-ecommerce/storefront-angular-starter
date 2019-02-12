@@ -23,9 +23,11 @@ export class StateService {
     private readonly stateSubject = new BehaviorSubject<AppState>(initialState);
 
     constructor() {
-        Object.defineProperty(window, 'appState', {
-            get: () => this.stateSubject.value,
-        });
+        if (typeof window !== 'undefined') {
+            Object.defineProperty(window, 'appState', {
+                get: () => this.stateSubject.value,
+            });
+        }
     }
 
     setState<T extends keyof AppState>(key: T, value: AppState[T]) {

@@ -23,7 +23,7 @@ export class DataService {
             query,
             variables,
             context: this.context,
-            fetchPolicy: fetchPolicy || 'cache-and-network',
+            fetchPolicy: fetchPolicy || 'cache-first',
         }).valueChanges.pipe(
             filter(result => result.networkStatus === NetworkStatus.ready),
             map(response => response.data));
