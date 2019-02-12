@@ -81,13 +81,12 @@ export class AppModule {
         this.cache = new InMemoryCache();
 
         apollo.create({
-            link: httpLink.create({ uri: 'http://localhost:3000/api' }),
+            link: httpLink.create({ uri: 'http://localhost:3000/api', withCredentials: true }),
             cache: this.cache,
         });
 
         const isBrowser = this.transferState.hasKey<any>(STATE_KEY);
 
-        console.log('AppModule constructor, isBrowser:', isBrowser);
         if (isBrowser) {
             this.onBrowser();
         } else {

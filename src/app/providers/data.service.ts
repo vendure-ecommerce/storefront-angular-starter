@@ -11,9 +11,7 @@ import { filter, map, tap } from 'rxjs/operators';
 export class DataService {
 
     private readonly context =  {
-        headers: {
-            'vendure-token': 'default-channel',
-        },
+        headers: {},
     };
 
     constructor(private apollo: Apollo) { }
@@ -23,7 +21,7 @@ export class DataService {
             query,
             variables,
             context: this.context,
-            fetchPolicy: fetchPolicy || 'cache-first',
+            fetchPolicy: fetchPolicy || 'cache-and-network',
         }).valueChanges.pipe(
             filter(result => result.networkStatus === NetworkStatus.ready),
             map(response => response.data));
