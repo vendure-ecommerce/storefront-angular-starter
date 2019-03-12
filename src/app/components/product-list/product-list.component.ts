@@ -10,7 +10,7 @@ import { DataService } from '../../providers/data.service';
 import { GET_PRODUCT_LIST } from './product-list.graphql';
 
 @Component({
-    selector: 'vsf-product-list',
+    selector: 'sf-product-list',
     templateUrl: './product-list.component.html',
     styleUrls: ['./product-list.component.scss'],
 })

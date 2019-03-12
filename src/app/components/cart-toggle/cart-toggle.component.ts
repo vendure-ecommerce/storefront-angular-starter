@@ -11,7 +11,7 @@ import { CART_FRAGMENT } from '../../types/fragments.graphql';
 import { GET_CART_TOTALS } from './cart-toggle.graphql';
 
 @Component({
-    selector: 'vsf-cart',
+    selector: 'sf-cart',
     templateUrl: './cart-toggle.component.html',
     styleUrls: ['./cart-toggle.component.scss'],
 })

@@ -9,7 +9,7 @@ import { StateService } from '../../providers/state.service';
 import { GET_ACTIVE_CUSTOMER } from './account-link.graphql';
 
 @Component({
-    selector: 'vsf-account-link',
+    selector: 'sf-account-link',
     templateUrl: './account-link.component.html',
     styleUrls: ['./account-link.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -6,7 +6,7 @@ import { DataService } from '../../providers/data.service';
 import { REGISTER } from './register.graphql';
 
 @Component({
-    selector: 'vsf-register',
+    selector: 'sf-register',
     templateUrl: './register.component.html',
     styleUrls: ['./register.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

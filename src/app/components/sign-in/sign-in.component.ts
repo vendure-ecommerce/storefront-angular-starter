@@ -8,7 +8,7 @@ import { StateService } from '../../providers/state.service';
 import { SIGN_IN } from './sign-in.graphql';
 
 @Component({
-    selector: 'vsf-sign-in',
+    selector: 'sf-sign-in',
     templateUrl: './sign-in.component.html',
     styleUrls: ['./sign-in.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

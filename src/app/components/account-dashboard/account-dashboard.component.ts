@@ -11,7 +11,7 @@ import { StateService } from '../../providers/state.service';
 import { GET_ACCOUNT_OVERVIEW, SIGN_OUT } from './account-dashboard.graphql';
 
 @Component({
-    selector: 'vsf-account-dashboard',
+    selector: 'sf-account-dashboard',
     templateUrl: './account-dashboard.component.html',
     styleUrls: ['./account-dashboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

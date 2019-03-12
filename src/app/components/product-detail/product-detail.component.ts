@@ -13,7 +13,7 @@ import { CART_FRAGMENT } from '../../types/fragments.graphql';
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 
 @Component({
-    selector: 'vsf-product-detail',
+    selector: 'sf-product-detail',
     templateUrl: './product-detail.component.html',
     styleUrls: ['./product-detail.component.scss'],
 })

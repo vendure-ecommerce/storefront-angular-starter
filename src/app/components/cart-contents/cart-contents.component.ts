@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { Cart, GetActiveOrder } from '../../../../codegen/generated-types';
 
 @Component({
-    selector: 'vsf-cart-contents',
+    selector: 'sf-cart-contents',
     templateUrl: './cart-contents.component.html',
     styleUrls: ['./cart-contents.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

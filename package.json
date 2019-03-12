@@ -1,5 +1,5 @@
 {
-  "name": "vendure-storefront",
+  "name": "reference-storefront",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -14,7 +14,7 @@
     "compile:server": "webpack --config webpack.server.config.js --progress --colors",
     "serve:ssr": "node dist/server",
     "build:ssr": "npm run build:client-and-server-bundles && npm run compile:server",
-    "build:client-and-server-bundles": "ng build --prod && ng run vendure-storefront:server:production"
+    "build:client-and-server-bundles": "ng build --prod && ng run reference-storefront:server:production"
   },
   "private": true,
   "dependencies": {

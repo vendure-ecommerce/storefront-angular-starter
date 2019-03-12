@@ -1,6 +1,6 @@
 <form #registerForm="ngForm"
       (submit)="register()">
-    <vsf-centered-card>
+    <sf-centered-card>
 
         <mat-form-field>
             <input matInput
@@ -38,5 +38,5 @@
         <div *ngIf="registrationSent" class="registration-sent">
             Great! Now check your email ({{ emailAddress }}) to complete registration.
         </div>
-    </vsf-centered-card>
+    </sf-centered-card>
 </form>

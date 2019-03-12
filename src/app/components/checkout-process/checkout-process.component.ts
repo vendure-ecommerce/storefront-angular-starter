@@ -10,7 +10,7 @@ import { StateService } from '../../providers/state.service';
 import { GET_NEXT_ORDER_STATES, TRANSITION_TO_ADDING_ITEMS } from './checkout-process.graphql';
 
 @Component({
-    selector: 'vsf-checkout-process',
+    selector: 'sf-checkout-process',
     templateUrl: './checkout-process.component.html',
     styleUrls: ['./checkout-process.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

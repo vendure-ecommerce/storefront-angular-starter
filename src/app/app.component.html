@@ -1,6 +1,6 @@
 <mat-sidenav-container class="app-container">
     <mat-sidenav #sidenav mode="over" position="end">
-        <vsf-cart-drawer></vsf-cart-drawer>
+        <sf-cart-drawer></sf-cart-drawer>
     </mat-sidenav>
 
     <mat-sidenav-content class="app-content">
@@ -11,8 +11,8 @@
                 <lib-storefront></lib-storefront>
             </a>
             <div class="flex-spacer"></div>
-            <vsf-account-link></vsf-account-link>
-            <vsf-cart (toggle)="sidenav.toggle()"></vsf-cart>
+            <sf-account-link></sf-account-link>
+            <sf-cart (toggle)="sidenav.toggle()"></sf-cart>
         </div>
         <div class="page">
             <router-outlet></router-outlet>

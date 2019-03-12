@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'vsf-root',
+  selector: 'sf-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

@@ -1,6 +1,6 @@
 <form #signInForm="ngForm"
       (submit)="signIn()">
-    <vsf-centered-card>
+    <sf-centered-card>
 
         <mat-form-field>
             <input matInput
@@ -40,5 +40,5 @@
         <div *ngIf="displayRegisterLink" class="register-link">
             <a [routerLink]="['/register']">No account? Register here</a>
         </div>
-    </vsf-centered-card>
+    </sf-centered-card>
 </form>

@@ -32,7 +32,7 @@ import {
 import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMethods;
 
 @Component({
-    selector: 'vsf-checkout-shipping',
+    selector: 'sf-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
     styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

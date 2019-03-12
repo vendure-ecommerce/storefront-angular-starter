@@ -62,9 +62,9 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <vsf-address-form #addressForm
+        <sf-address-form #addressForm
                           [address]="shippingAddress$ | async"
-                          [availableCountries]="availableCountries$ | async"></vsf-address-form>
+                          [availableCountries]="availableCountries$ | async"></sf-address-form>
         <mat-action-row>
             <button mat-raised-button
                     color="primary"

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Country, ShippingAddress } from '../../../../codegen/generated-types';
 
 @Component({
-    selector: 'vsf-address-form',
+    selector: 'sf-address-form',
     templateUrl: './address-form.component.html',
     styleUrls: ['./address-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

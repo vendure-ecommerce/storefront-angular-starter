@@ -10,7 +10,7 @@ import { StateService } from '../../providers/state.service';
 import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from './cart-drawer.graphql';
 
 @Component({
-    selector: 'vsf-cart-drawer',
+    selector: 'sf-cart-drawer',
     templateUrl: './cart-drawer.component.html',
     styleUrls: ['./cart-drawer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

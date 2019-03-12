@@ -12,7 +12,7 @@ import { REGISTER } from '../register/register.graphql';
 import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
 
 @Component({
-    selector: 'vsf-checkout-confirmation',
+    selector: 'sf-checkout-confirmation',
     templateUrl: './checkout-confirmation.component.html',
     styleUrls: ['./checkout-confirmation.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -3,11 +3,11 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "vendure-storefront": {
+    "reference-storefront": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "vsf",
+      "prefix": "sf",
       "schematics": {},
       "architect": {
         "build": {
@@ -55,18 +55,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "vendure-storefront:build"
+            "browserTarget": "reference-storefront:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "vendure-storefront:build:production"
+              "browserTarget": "reference-storefront:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "vendure-storefront:build"
+            "browserTarget": "reference-storefront:build"
           }
         },
         "test": {
@@ -128,7 +128,7 @@
       "root": "projects/storefront",
       "sourceRoot": "projects/storefront/src",
       "projectType": "library",
-      "prefix": "lib",
+      "prefix": "vsf",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
@@ -160,7 +160,7 @@
       }
     }
   },
-  "defaultProject": "vendure-storefront",
+  "defaultProject": "reference-storefront",
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss",

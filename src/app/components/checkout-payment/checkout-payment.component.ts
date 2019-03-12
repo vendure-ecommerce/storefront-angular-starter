@@ -8,7 +8,7 @@ import { StateService } from '../../providers/state.service';
 import { ADD_PAYMENT } from './checkout-payment.graphql';
 
 @Component({
-    selector: 'vsf-checkout-payment',
+    selector: 'sf-checkout-payment',
     templateUrl: './checkout-payment.component.html',
     styleUrls: ['./checkout-payment.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
