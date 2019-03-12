@@ -1,5 +1,5 @@
 overwrite: true
-schema: "../vendure/schema.json"
+schema: "./schema.graphql"
 documents: "./src/**/*.graphql.ts"
 generates:
   ./codegen/generated-types.ts:
