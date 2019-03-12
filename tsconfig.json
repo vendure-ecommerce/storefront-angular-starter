@@ -20,6 +20,14 @@
       "es2017",
       "dom",
       "esnext.asynciterable"
-    ]
+    ],
+    "paths": {
+      "storefront": [
+        "dist/storefront"
+      ],
+      "storefront/*": [
+        "dist/storefront/*"
+      ]
+    }
   }
 }

@@ -30,6 +30,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
+import { StorefrontModule } from 'storefront';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
 
@@ -57,7 +58,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         CenteredCardComponent,
     ],
     imports: [
-        BrowserModule.withServerTransition({ appId: 'serverApp' }),
+        BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
         BrowserAnimationsModule,
         FormsModule,
@@ -67,6 +68,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         HttpLinkModule,
         MaterialModule,
         RouterModule.forRoot(routes),
+        StorefrontModule,
     ],
     bootstrap: [AppComponent],
 })
@@ -81,7 +83,7 @@ export class AppModule {
         this.cache = new InMemoryCache();
 
         apollo.create({
-            link: httpLink.create({ uri: 'http://localhost:3000/api', withCredentials: true }),
+            link: httpLink.create({ uri: 'https://demo.vendure.io/shop-api', withCredentials: true }),
             cache: this.cache,
         });
 
