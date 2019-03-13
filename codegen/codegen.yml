@@ -1,8 +1,8 @@
 overwrite: true
 schema: "./schema.graphql"
-documents: "./src/**/*.graphql.ts"
+documents: "./projects/storefront/src/**/*.graphql.ts"
 generates:
-  ./codegen/generated-types.ts:
+  ./projects/storefront/src/lib/generated-types.ts:
     plugins:
       - add: "// tslint:disable"
       - "time"

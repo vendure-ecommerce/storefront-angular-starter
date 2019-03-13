@@ -7,55 +7,16 @@ import { RouterModule } from '@angular/router';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { StorefrontModule } from 'storefront';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
-import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
-import { AccountLinkComponent } from './components/account-link/account-link.component';
-import { AddressFormComponent } from './components/address-form/address-form.component';
-import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
-import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
-import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
-import { CenteredCardComponent } from './components/centered-card/centered-card.component';
-import { CheckoutConfirmationComponent } from './components/checkout-confirmation/checkout-confirmation.component';
-import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
-import { CheckoutProcessComponent } from './components/checkout-process/checkout-process.component';
-import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
-import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
-import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
-import { ProductDetailComponent } from './components/product-detail/product-detail.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
-import { RegisterComponent } from './components/register/register.component';
-import { SignInComponent } from './components/sign-in/sign-in.component';
-import { VerifyComponent } from './components/verify/verify.component';
-import { MaterialModule } from './material/material.module';
-import { PriceRangePipe } from './pipes/price-range.pipe';
-import { StorefrontModule } from 'storefront';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
 
 @NgModule({
     declarations: [
-        AppComponent,
-        ProductListComponent,
-        ProductDetailComponent,
-        CartToggleComponent,
-        CartContentsComponent,
-        AccountLinkComponent,
-        SignInComponent,
-        AccountDashboardComponent,
-        CheckoutProcessComponent,
-        CartDrawerComponent,
-        CheckoutSignInComponent,
-        CheckoutShippingComponent,
-        AddressFormComponent,
-        CheckoutPaymentComponent,
-        CheckoutStageIndicatorComponent,
-        CheckoutConfirmationComponent,
-        PriceRangePipe,
-        RegisterComponent,
-        VerifyComponent,
-        CenteredCardComponent,
+        AppComponent
     ],
     imports: [
         BrowserModule.withServerTransition({appId: 'serverApp'}),
@@ -66,7 +27,6 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         HttpClientModule,
         ApolloModule,
         HttpLinkModule,
-        MaterialModule,
         RouterModule.forRoot(routes),
         StorefrontModule,
     ],

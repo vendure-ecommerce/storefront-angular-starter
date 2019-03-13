@@ -1,0 +1,42 @@
+<form #registerForm="ngForm"
+      (submit)="register()">
+    <vsf-centered-card>
+
+        <mat-form-field>
+            <input matInput
+                   placeholder="First name"
+                   name="firstName"
+                   required
+                   [disabled]="registrationSent"
+                   [(ngModel)]="firstName">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   placeholder="Last name"
+                   name="lastName"
+                   required
+                   [disabled]="registrationSent"
+                   [(ngModel)]="lastName">
+        </mat-form-field>
+        <mat-form-field>
+            <input matInput
+                   placeholder="Email address"
+                   name="emailAddress"
+                   required
+                   type="email"
+                   email
+                   [disabled]="registrationSent"
+                   [(ngModel)]="emailAddress">
+        </mat-form-field>
+
+        <button mat-raised-button
+                [disabled]="registerForm.invalid || registrationSent"
+                type="submit"
+                color="primary">
+            Register
+        </button>
+        <div *ngIf="registrationSent" class="registration-sent">
+            Great! Now check your email ({{ emailAddress }}) to complete registration.
+        </div>
+    </vsf-centered-card>
+</form>
