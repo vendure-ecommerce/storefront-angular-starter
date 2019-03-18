@@ -1,3 +1,4 @@
+<h1 class="title is-1">Products</h1>
 <mat-card class="product-card" *ngFor="let product of products$ | async">
     <img mat-card-image [src]="product.featuredAsset?.preview + '?preset=thumb'">
     <mat-card-content>

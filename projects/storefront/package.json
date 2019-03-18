@@ -6,7 +6,8 @@
     "apollo-angular-link-http": "^1.5.0",
     "apollo-cache-inmemory": "^1.4.2",
     "apollo-client": "^2.4.12",
-    "apollo-link": "^1.2.8"
+    "apollo-link": "^1.2.8",
+    "bulma": "^0.7.4"
   },
   "peerDependencies": {
     "@angular/common": "^7.2.0",

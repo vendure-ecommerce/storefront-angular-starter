@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "lib:global-styles": "cd projects/storefront && node-sass ./src/styles/styles.scss  ../../dist/storefront/styles.css",
     "lib:build": "ng build storefront",
     "lib:watch": "ng build storefront --watch",
     "start": "ng serve --port 4201",
