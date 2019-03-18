@@ -1,4 +1,11 @@
-import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { HttpLink, HttpLinkModule, Options } from 'apollo-angular-link-http';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
 import { AccountLinkComponent } from './components/account-link/account-link.component';
@@ -21,9 +28,6 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 import { StorefrontComponent } from './storefront.component';
-import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 const COMPONENTS = [
     StorefrontComponent,
@@ -48,6 +52,10 @@ const COMPONENTS = [
     CenteredCardComponent,
 ];
 
+export interface StorefrontConfig {
+    apolloOptions: Options;
+}
+
 @NgModule({
     declarations: [
         COMPONENTS,
@@ -58,10 +66,39 @@ const COMPONENTS = [
         FormsModule,
         ReactiveFormsModule,
         RouterModule.forChild([]),
+        HttpClientModule,
+        ApolloModule,
+        HttpLinkModule,
     ],
     exports: [
         COMPONENTS,
         MaterialModule,
     ],
 })
-export class StorefrontModule { }
+export class StorefrontModule {
+
+    static forRoot(config: StorefrontConfig): ModuleWithProviders {
+        return {
+            ngModule: StorefrontModule,
+            providers: [
+                {
+                    provide: APOLLO_OPTIONS,
+                    useFactory: apolloOptionsFactory(config.apolloOptions),
+                    deps: [HttpLink],
+                },
+            ],
+        };
+    }
+}
+
+export function apolloOptionsFactory(options: Options) {
+    // Note: the intermediate assignment to `fn` is required to prevent
+    // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
+    const fn = (httpLink: HttpLink) => {
+        return {
+            cache: new InMemoryCache(),
+            link: httpLink.create(options),
+        };
+    };
+    return fn;
+}
