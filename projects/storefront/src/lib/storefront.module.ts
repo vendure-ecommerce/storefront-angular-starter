@@ -28,6 +28,7 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 import { StorefrontComponent } from './storefront.component';
+import { LayoutComponent } from './components/layout/layout.component';
 
 const COMPONENTS = [
     StorefrontComponent,
@@ -59,6 +60,7 @@ export interface StorefrontConfig {
 @NgModule({
     declarations: [
         COMPONENTS,
+        LayoutComponent,
     ],
     imports: [
         MaterialModule,
@@ -73,6 +75,7 @@ export interface StorefrontConfig {
     exports: [
         COMPONENTS,
         MaterialModule,
+        LayoutComponent,
     ],
 })
 export class StorefrontModule {

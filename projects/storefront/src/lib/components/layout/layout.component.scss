@@ -1,0 +1,41 @@
+@import "variables";
+
+.app-container {
+
+    .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0 16px;
+        height: 64px;
+        background-color: var(--top-bar-background-color);
+
+        .flex-spacer {
+            flex: 1;
+        }
+
+        .logo-link {
+            display: flex;
+            align-items: center;
+
+            img.logo {
+                max-height: 50px;
+                margin-right: 12px;
+            }
+
+            &:link, &:visited {
+                color: #0e95c7;
+                font-size: 22px;
+            }
+        }
+    }
+
+    .content {
+        margin-top: 100px;
+    }
+}

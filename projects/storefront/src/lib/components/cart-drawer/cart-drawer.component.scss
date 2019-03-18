@@ -2,8 +2,13 @@
 
 :host {
     display: block;
+    position: fixed;
     min-width: 400px;
     padding: 12px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    transform: translateX(400px);
 }
 
 .checkout-button {

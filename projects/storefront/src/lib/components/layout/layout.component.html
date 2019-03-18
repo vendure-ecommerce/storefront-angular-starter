@@ -1,0 +1,15 @@
+<div class="app-container">
+    <div class="top-bar">
+        <a [routerLink]="['/']" class="logo-link">
+            <img src="/assets/cube-logo-75px.png" class="logo">
+            <div class="logo-type">Vendure Storefront</div>
+        </a>
+        <div class="flex-spacer"></div>
+        <vsf-account-link></vsf-account-link>
+        <vsf-cart></vsf-cart>
+    </div>
+    <div class="content container">
+        <ng-content></ng-content>
+    </div>
+    <vsf-cart-drawer></vsf-cart-drawer>
+</div>

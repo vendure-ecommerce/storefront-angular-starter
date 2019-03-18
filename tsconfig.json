@@ -23,10 +23,7 @@
     ],
     "paths": {
       "storefront": [
-        "dist/storefront"
-      ],
-      "storefront/*": [
-        "dist/storefront/*"
+        "projects/storefront/src/public_api"
       ]
     }
   }
