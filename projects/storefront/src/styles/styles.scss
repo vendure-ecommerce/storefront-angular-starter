@@ -1,7 +1,6 @@
-@import "../../node_modules/turretcss/turret/turret";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
 
-:root {
-    --top-bar-background-color: var(--light);
-}
-
-
+@import "variables";
+@import "components";

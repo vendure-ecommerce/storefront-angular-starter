@@ -13,7 +13,7 @@ import { GET_ACCOUNT_OVERVIEW, SIGN_OUT } from './account-dashboard.graphql';
 @Component({
     selector: 'vsf-account-dashboard',
     templateUrl: './account-dashboard.component.html',
-    styleUrls: ['./account-dashboard.component.scss'],
+    // styleUrls: ['./account-dashboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDashboardComponent implements OnInit {

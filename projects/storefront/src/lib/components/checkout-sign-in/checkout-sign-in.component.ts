@@ -3,7 +3,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 @Component({
   selector: 'vsf-checkout-sign-in',
   templateUrl: './checkout-sign-in.component.html',
-  styleUrls: ['./checkout-sign-in.component.scss'],
+  // styleUrls: ['./checkout-sign-in.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckoutSignInComponent implements OnInit {

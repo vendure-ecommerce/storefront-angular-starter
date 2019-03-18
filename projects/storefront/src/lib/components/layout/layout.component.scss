@@ -1,5 +1,3 @@
-@import "variables";
-
 .app-container {
 
     .top-bar {
@@ -13,7 +11,7 @@
         align-items: center;
         padding: 0 16px;
         height: 64px;
-        background-color: var(--top-bar-background-color);
+        background-color: $color-subdued;
 
         .flex-spacer {
             flex: 1;

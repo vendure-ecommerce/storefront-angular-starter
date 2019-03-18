@@ -1,4 +1,4 @@
-@import "variables";
+
 
 .item {
     display: flex;
@@ -22,9 +22,6 @@
         display: flex;
         align-items: center;
 
-        [mat-icon-button] {
-            @include mat-icon-button-size(24px);
-        }
     }
     .price {
         color: $color-subdued;

@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "lib:bundle-scss": "cd projects/storefront && yarn scss-bundle -c scss-bundle.config.json",
     "lib:global-styles": "cd projects/storefront && node-sass ./src/styles/styles.scss  ../../dist/storefront/styles.css",
-    "lib:global-styles:watch": "cd projects/storefront && node-sass ./src/styles/styles.scss  ../../dist/storefront/styles.css -w",
+    "lib:global-styles:watch": "cd projects/storefront && node-sass ./src/styles/styles.scss  ../../dist/storefront/styles.css -w --include-path ./src/styles ",
     "lib:build": "ng build storefront",
     "lib:watch": "ng build storefront --watch",
     "start": "ng serve --port 4201",

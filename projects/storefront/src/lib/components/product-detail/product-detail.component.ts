@@ -15,7 +15,7 @@ import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 @Component({
     selector: 'vsf-product-detail',
     templateUrl: './product-detail.component.html',
-    styleUrls: ['./product-detail.component.scss'],
+    // styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 

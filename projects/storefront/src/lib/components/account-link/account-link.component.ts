@@ -11,7 +11,7 @@ import { GET_ACTIVE_CUSTOMER } from './account-link.graphql';
 @Component({
     selector: 'vsf-account-link',
     templateUrl: './account-link.component.html',
-    styleUrls: ['./account-link.component.scss'],
+    // styleUrls: ['./account-link.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountLinkComponent implements OnInit {

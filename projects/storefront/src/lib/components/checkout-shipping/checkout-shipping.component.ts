@@ -34,7 +34,7 @@ import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMeth
 @Component({
     selector: 'vsf-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
-    styleUrls: ['./checkout-shipping.component.scss'],
+    // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutShippingComponent implements OnInit {

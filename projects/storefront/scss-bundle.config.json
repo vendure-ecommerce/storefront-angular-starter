@@ -1,0 +1,7 @@
+{
+  "entry": "./src/styles/styles.scss",
+  "dest": "../../dist/storefront/styles.scss",
+  "project": ".",
+  "watch": "./src/**/*.scss",
+  "includePaths": ["./src/styles"]
+}

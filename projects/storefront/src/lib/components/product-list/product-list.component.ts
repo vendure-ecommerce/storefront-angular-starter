@@ -12,7 +12,7 @@ import { GET_PRODUCT_LIST } from './product-list.graphql';
 @Component({
     selector: 'vsf-product-list',
     templateUrl: './product-list.component.html',
-    styleUrls: ['./product-list.component.scss'],
+    // styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
 

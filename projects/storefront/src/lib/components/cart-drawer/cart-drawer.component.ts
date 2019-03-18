@@ -12,7 +12,7 @@ import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from '.
 @Component({
     selector: 'vsf-cart-drawer',
     templateUrl: './cart-drawer.component.html',
-    styleUrls: ['./cart-drawer.component.scss'],
+    // styleUrls: ['./cart-drawer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartDrawerComponent implements OnInit {
