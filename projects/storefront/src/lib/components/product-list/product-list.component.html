@@ -1,7 +1,7 @@
 <h1 class="title is-1">Products</h1>
-<mat-card class="product-card" *ngFor="let product of products$ | async">
-    <img mat-card-image [src]="product.featuredAsset?.preview + '?preset=thumb'">
-    <mat-card-content>
+<div class="product-card" *ngFor="let product of products$ | async">
+    <img [src]="product.featuredAsset?.preview + '?preset=thumb'">
+    <div>
         <div class="product-details">
             <a [routerLink]="['/catalog', product.id]">
                 {{ product.name }}
@@ -10,5 +10,5 @@
                 {{ product.variants | priceRange:'priceWithTax'}}
             </div>
         </div>
-    </mat-card-content>
-</mat-card>
+    </div>
+</div>
