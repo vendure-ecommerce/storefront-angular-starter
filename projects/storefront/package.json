@@ -14,6 +14,9 @@
     "@angular/core": "^7.2.0"
   },
   "devDependencies": {
+    "@types/gulp": "^4.0.6",
+    "cross-env": "^5.2.0",
+    "gulp": "^4.0.0",
     "scss-bundle": "^2.5.0"
   }
 }
