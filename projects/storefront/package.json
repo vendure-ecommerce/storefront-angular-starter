@@ -2,6 +2,7 @@
   "name": "@vendure/storefront",
   "version": "0.0.1",
   "dependencies": {
+    "@angular/cdk": "^7.3.5",
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",

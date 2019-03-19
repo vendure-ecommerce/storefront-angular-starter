@@ -1,3 +1,4 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -21,6 +22,9 @@ import { CheckoutProcessComponent } from './components/checkout-process/checkout
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
+import { DropdownContentDirective } from './components/dropdown/dropdown-content.directive';
+import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
+import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { LayoutFooterComponent } from './components/layout/layout-footer.component';
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
@@ -57,6 +61,9 @@ const COMPONENTS = [
     LayoutHeaderComponent,
     LayoutFooterComponent,
     ProductCardComponent,
+    DropdownComponent,
+    DropdownTriggerDirective,
+    DropdownContentDirective,
 ];
 
 export interface StorefrontConfig {
@@ -76,6 +83,7 @@ export interface StorefrontConfig {
         ApolloModule,
         HttpLinkModule,
         FontAwesomeModule,
+        OverlayModule,
     ],
     exports: [
         ...COMPONENTS,
