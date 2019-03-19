@@ -1,0 +1,13 @@
+<div class="card">
+    <img class="card-img-top" [src]="product.productPreview + '?preset=thumb'">
+    <div class="card-body">
+        <h5 class="card-title">
+            <a [routerLink]="['/catalog', product.productId]">
+                {{ product.productName }}
+            </a>
+        </h5>
+        <div class="price">
+            {{ product.price }}
+        </div>
+    </div>
+</div>

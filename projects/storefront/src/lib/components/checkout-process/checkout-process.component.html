@@ -11,7 +11,7 @@
         <div class="address-line">{{ cart.shippingAddress.streetLine1 }}</div>
         <div class="address-line">{{ cart.shippingAddress.postalCode }}</div>
         <div class="address-line">{{ cart.shippingAddress.country }}</div>
-        <button mat-button
+        <button class="btn btn-secondary"
                 *ngIf="(activeStage$ | async) === 3"
                 (click)="changeShippingAddress()">Change</button>
     </div>

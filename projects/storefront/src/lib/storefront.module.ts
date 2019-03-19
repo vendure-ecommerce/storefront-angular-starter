@@ -29,7 +29,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
-import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 
 const COMPONENTS = [
@@ -65,7 +64,6 @@ export interface StorefrontConfig {
         ProductCardComponent,
     ],
     imports: [
-        MaterialModule,
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
@@ -77,7 +75,6 @@ export interface StorefrontConfig {
     ],
     exports: [
         COMPONENTS,
-        MaterialModule,
         LayoutComponent,
     ],
 })

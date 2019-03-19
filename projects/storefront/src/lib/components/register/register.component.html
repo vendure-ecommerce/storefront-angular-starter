@@ -1,25 +1,19 @@
 <form #registerForm="ngForm"
       (submit)="register()">
     <vsf-centered-card>
-
-        <mat-form-field>
-            <input matInput
+            <input class="form-control"
                    placeholder="First name"
                    name="firstName"
                    required
                    [disabled]="registrationSent"
                    [(ngModel)]="firstName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
+            <input class="form-control mt-1"
                    placeholder="Last name"
                    name="lastName"
                    required
                    [disabled]="registrationSent"
                    [(ngModel)]="lastName">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput
+            <input class="form-control mt-1"
                    placeholder="Email address"
                    name="emailAddress"
                    required
@@ -27,12 +21,10 @@
                    email
                    [disabled]="registrationSent"
                    [(ngModel)]="emailAddress">
-        </mat-form-field>
 
-        <button mat-raised-button
+        <button class="btn btn-primary btn-block mt-3"
                 [disabled]="registerForm.invalid || registrationSent"
-                type="submit"
-                color="primary">
+                type="submit">
             Register
         </button>
         <div *ngIf="registrationSent" class="registration-sent">

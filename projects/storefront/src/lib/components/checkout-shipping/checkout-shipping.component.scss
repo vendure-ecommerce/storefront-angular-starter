@@ -1,11 +1,21 @@
+vsf-checkout-shipping {
+    display: block;
+    margin-bottom: 48px;
+    .customer-address {
+        display: inline-block;
+        padding: 12px;
+        cursor: pointer;
+        transition: background-color 0.2s;
 
+        &:hover {
+            background-color: #d8e5f1;
+        }
+    }
 
-.customer-address {
-    display: inline-block;
-    padding: 12px;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    &:hover {
-        background-color: #d8e5f1;
+    .shipping-method {
+        display: flex;
+        .price {
+            margin-left: 12px;
+        }
     }
 }

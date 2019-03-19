@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'vsf-layout',
@@ -7,11 +7,6 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from '@
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
 })
-export class LayoutComponent implements OnInit {
-
-    constructor() { }
-
-    ngOnInit() {
-    }
-
+export class LayoutComponent {
+    cartDrawerVisible = false;
 }

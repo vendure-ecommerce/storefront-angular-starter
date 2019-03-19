@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard, faMinus, faPlus, faShoppingCart, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * All the icons used in the library are declared here. This allows us to
@@ -8,5 +8,10 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 export function buildIconLibrary() {
     library.add(
         faTimes,
+        faMinus,
+        faPlus,
+        faShoppingCart,
+        faUser,
+        faCreditCard,
     );
 }

@@ -1,20 +1,15 @@
 import gql from 'graphql-tag';
 
-export const GET_PRODUCT_LIST = gql`
-    query GetProductList($options: ProductListOptions) {
-        products(options: $options) {
+export const SEARCH_PRODUCTS = gql`
+    query SearchProducts($input: SearchInput!) {
+        search(input: $input) {
             items {
-                id
-                name
+                productId
+                slug
+                productName
                 description
-                variants {
-                    id
-                    priceWithTax
-                }
-                featuredAsset {
-                    id
-                    preview
-                }
+                price
+                productPreview
             }
             totalItems
         }

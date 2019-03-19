@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-13T09:45:49+01:00
+// Generated in 2019-03-19T09:46:48+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1235,19 +1235,19 @@ export namespace AddToCart {
     export type AddItemToOrder = Cart.Fragment;
 }
 
-export namespace GetProductList {
+export namespace SearchProducts {
     export type Variables = {
-        options?: Maybe<ProductListOptions>;
+        input: SearchInput;
     };
 
     export type Query = {
         __typename?: "Query";
 
-        products: Products;
+        search: Search;
     };
 
-    export type Products = {
-        __typename?: "ProductList";
+    export type Search = {
+        __typename?: "SearchResponse";
 
         items: Items[];
 
@@ -1255,33 +1255,19 @@ export namespace GetProductList {
     };
 
     export type Items = {
-        __typename?: "Product";
+        __typename?: "SearchResult";
 
-        id: string;
+        productId: string;
 
-        name: string;
+        slug: string;
+
+        productName: string;
 
         description: string;
 
-        variants: Variants[];
+        price: number;
 
-        featuredAsset: Maybe<FeaturedAsset>;
-    };
-
-    export type Variants = {
-        __typename?: "ProductVariant";
-
-        id: string;
-
-        priceWithTax: number;
-    };
-
-    export type FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
+        productPreview: string;
     };
 }
 

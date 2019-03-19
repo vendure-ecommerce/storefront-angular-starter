@@ -1,32 +1,29 @@
 import { Component, OnInit } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import gql from 'graphql-tag';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetProductList } from '../../generated-types';
+import { SearchProducts } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 
-import { GET_PRODUCT_LIST } from './product-list.graphql';
+import { SEARCH_PRODUCTS } from './product-list.graphql';
 
 @Component({
     selector: 'vsf-product-list',
     templateUrl: './product-list.component.html',
-    // styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent implements OnInit {
 
-    products$: Observable<GetProductList.Items[]>;
+    products$: Observable<SearchProducts.Items[]>;
 
     constructor(private dataService: DataService) { }
 
     ngOnInit() {
-        this.products$ = this.dataService.query<GetProductList.Query, GetProductList.Variables>(GET_PRODUCT_LIST, {
-            options: {
-                take: 50,
+        this.products$ = this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
+            input: {
+                groupByProduct: true,
             },
         })
-            .pipe(map(data => data.products.items));
+            .pipe(map(data => data.search.items));
     }
 
 }

@@ -1,40 +1,36 @@
 <h2>{{ product?.name }}</h2>
 
-<div class="product-details">
-    <mat-card class="product-images">
-        <img *ngIf="selectedAsset" mat-card-image [src]="selectedAsset?.preview + '?preset=medium'">
-        <mat-card-content>
-            <div class="alt-images">
-                <div *ngFor="let asset of product?.assets"
-                     class="alt-image"
-                     [class.selected]="selectedAsset.id === asset.id"
-                     (click)="selectedAsset = asset">
-                    <img [src]="asset.preview + '?preset=tiny'">
-                </div>
+<div class="d-flex flex-row">
+    <div class="card product-images">
+        <img *ngIf="selectedAsset" [src]="selectedAsset?.preview + '?preset=medium'" class="img-fluid">
+        <div class="alt-images">
+            <div *ngFor="let asset of product?.assets"
+                 class="alt-image"
+                 [class.selected]="selectedAsset.id === asset.id"
+                 (click)="selectedAsset = asset">
+                <img [src]="asset.preview + '?preset=tiny'">
             </div>
-        </mat-card-content>
-    </mat-card>
-    <div class="description">
-        {{ product?.description }}
+        </div>
     </div>
-</div>
-
-<div class="variants">
-    <mat-list>
-        <h3 mat-subheader>Variants</h3>
-        <mat-list-item *ngFor="let variant of product?.variants">
-            <h4 mat-line>{{ variant.name }}</h4>
-            <div class="price">
-                {{ variant.priceWithTax / 100 | currency }}
+    <div class="product-details">
+        <div class="description">
+            {{ product?.description }}
+        </div>
+        <div class="variants">
+            <div class="variant-selector" *ngIf="product?.variants.length > 1">
+                <select [(ngModel)]="selectedVariant" class="form-control">
+                    <option *ngFor="let variant of product?.variants" [ngValue]="variant">{{ variant.name }}</option>
+                </select>
             </div>
-            <mat-form-field class="qty-input">
-                <input matInput type="number" min="0" max="99" placeholder="Qty" [(ngModel)]="qty[variant.id]">
-            </mat-form-field>
-            <button mat-flat-button
-                    [disabled]="qty[variant.id] === 0"
-                    color="primary"
-                    class="add-to-cart-btn"
-                    (click)="addToCart(variant, qty[variant.id])">Add to cart</button>
-        </mat-list-item>
-    </mat-list>
+            <div class="price">
+                {{ selectedVariant?.priceWithTax / 100 | currency }}
+            </div>
+            <div class="qty">
+                <input type="number" min="0" max="99" placeholder="Qty" [(ngModel)]="qty" class="form-control">
+            </div>
+            <button [disabled]="qty === 0"
+                    class="btn btn-primary"
+                    (click)="addToCart(selectedVariant, qty)">Add to cart</button>
+        </div>
+    </div>
 </div>

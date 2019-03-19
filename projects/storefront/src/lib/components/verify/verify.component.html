@@ -2,19 +2,16 @@
       (submit)="verify()">
     <vsf-centered-card title="Almost done!"
                        subTitle="Now just choose a password to complete the process">
-        <mat-form-field>
-            <input matInput
+            <input class="form-control"
                    placeholder="Password"
                    type="password"
                    name="password"
                    required
                    [(ngModel)]="password">
-        </mat-form-field>
 
-        <button mat-raised-button
+        <button class="btn btn-primary"
                 [disabled]="verifyForm.invalid"
-                type="submit"
-                color="primary">
+                type="submit">
             Verify
         </button>
     </vsf-centered-card>

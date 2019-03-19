@@ -1,45 +1,47 @@
 
 
-:host {
+vsf-checkout-stage-indicator {
     display: flex;
     align-items: center;
     max-width: 600px;
     margin: auto auto 32px;
-}
 
-.stage {
-    display: flex;
-    align-items: center;
-
-    .number {
+    .stage {
         display: flex;
-        border-radius: 50%;
-        width: 24px;
-        height: 24px;
-        background-color: #eee;
         align-items: center;
-        justify-content: center;
-    }
 
-    &.active {
         .number {
-            background-color: #5265ff;
-            color: white;
+            display: flex;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            background-color: #eee;
+            align-items: center;
+            justify-content: center;
+        }
+
+        &.active {
+            .number {
+                background-color: #5265ff;
+                color: white;
+            }
+
+            .label {
+                color: #111;
+            }
         }
 
         .label {
-            color: #111;
+            margin-left: 6px;
+            color: $gray-600;
         }
     }
 
-    .label {
-        margin-left: 6px;
-        color: $color-subdued;
+    .line {
+        flex: 1;
+        height: 0;
+        border-bottom: 1px solid #ccc;
     }
+
 }
 
-.line {
-    flex: 1;
-    height: 0;
-    border-bottom: 1px solid #ccc;
-}

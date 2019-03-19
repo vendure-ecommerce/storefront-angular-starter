@@ -10,7 +10,6 @@ import { SIGN_IN } from './sign-in.graphql';
 @Component({
     selector: 'vsf-sign-in',
     templateUrl: './sign-in.component.html',
-    // styleUrls: ['./sign-in.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
@@ -40,8 +39,8 @@ export class SignInComponent {
             },
             error: err => {
                 if (err.graphQLErrors && err.graphQLErrors[0]) {
-                    const status = err.graphQLErrors[0].message.statusCode;
-                    if (status === 401) {
+                    const code = err.graphQLErrors[0].extensions.code;
+                    if (code === 'UNAUTHORIZED') {
                         this.invalidCredentials = true;
                         this.changeDetector.markForCheck();
                     }

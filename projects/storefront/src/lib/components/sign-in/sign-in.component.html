@@ -1,39 +1,32 @@
 <form #signInForm="ngForm"
       (submit)="signIn()">
     <vsf-centered-card>
-
-        <mat-form-field>
-            <input matInput
+            <input class="form-control"
                    placeholder="Email address"
                    name="emailAddress"
                    type="email"
                    email
                    required
                    [(ngModel)]="emailAddress">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput
+            <input class="form-control mt-1"
                    placeholder="Password"
                    type="password"
                    name="password"
                    required
                    [(ngModel)]="password">
-        </mat-form-field>
-        <mat-slide-toggle class="example-margin"
-                          color="primary"
-                          name="rememberMe"
-                          [(ngModel)]="rememberMe">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe" [(ngModel)]="rememberMe">
+          <label class="form-check-label" for="rememberMe">
             Remember me
-        </mat-slide-toggle>
+          </label>
+        </div>
 
-        <button mat-raised-button
+        <button class="btn btn-primary btn-block mt-3"
                 [disabled]="signInForm.invalid"
-                type="submit"
-                color="primary">
+                type="submit">
             Sign In
         </button>
-        <div class="invalid-credentials" [class.visible]="invalidCredentials">
+        <div class="alert alert-warning invalid-credentials" role="alert"  [class.visible]="invalidCredentials">
             Invalid credentials. Please try again.
         </div>
 

@@ -1,6 +1,4 @@
-
-
-:host {
+vsf-cart-drawer {
     display: block;
     position: fixed;
     min-width: 400px;
@@ -8,18 +6,26 @@
     top: 0;
     right: 0;
     bottom: 0;
-    transform: translateX(400px);
-}
+    transform: translateX(450px);
+    transition: transform 0.3s;
+    background-color: $gray-100;
+    z-index: $zindex-dropdown;
+    box-shadow: $box-shadow;
 
-.checkout-button {
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-}
+    .checkout-button {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+    }
 
-.empty {
-    margin-top: 32px;
-    text-align: center;
-    font-size: 2em;
-    color: #999;
+    .empty {
+        margin-top: 32px;
+        text-align: center;
+        font-size: $font-size-lg;
+        color: #999;
+    }
+
+    &.visible {
+        transform: translateX(0);
+    }
 }

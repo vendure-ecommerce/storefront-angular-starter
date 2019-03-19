@@ -10,16 +10,16 @@
                     <div class="figures">
                         <div class="price">{{ (line.unitPriceWithTax / 100) | currency }}</div>
                         <div class="qty-controls">
-                            <button mat-icon-button
+                            <button class="btn btn-sm"
                                     *ngIf="canAdjustQuantities"
                                     (click)="decrement(line)">
-                                <mat-icon aria-label="Remove 1">remove</mat-icon>
+                                <fa-icon aria-label="Remove 1" icon="minus"></fa-icon>
                             </button>
                             <div class="qty">{{ line.quantity }}</div>
-                            <button mat-icon-button
+                            <button class="btn btn-sm"
                                     *ngIf="canAdjustQuantities"
                                     (click)="increment(line)">
-                                <mat-icon aria-label="Add 1">add</mat-icon>
+                                <fa-icon aria-label="Add 1" icon="plus"></fa-icon>
                             </button>
                         </div>
                         <div class="total">{{ (line.totalPrice / 100) | currency }}</div>

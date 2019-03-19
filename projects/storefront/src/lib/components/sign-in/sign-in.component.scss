@@ -1,13 +1,7 @@
-
-
 .invalid-credentials {
-    color: $color-warn;
-    text-align: center;
-    padding: 32px;
-    margin-top: 20px;
+    margin-top: 24px;
     opacity: 0;
     transition: opacity 0.3s;
-
     &.visible {
         opacity: 1;
     }
@@ -16,3 +10,4 @@
 .register-link {
     margin-top: 12px;
 }
+

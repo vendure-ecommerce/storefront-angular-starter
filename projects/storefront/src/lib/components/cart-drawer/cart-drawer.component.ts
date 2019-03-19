@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, Optional } from '@angular/core';
-import { MatSidenav } from '@angular/material';
+import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { merge, Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
@@ -12,15 +11,17 @@ import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from '.
 @Component({
     selector: 'vsf-cart-drawer',
     templateUrl: './cart-drawer.component.html',
-    // styleUrls: ['./cart-drawer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartDrawerComponent implements OnInit {
+    @HostBinding('class.visible')
+    @Input() visible = false;
+    @Output() close = new EventEmitter<void>();
+
     cart$: Observable<GetActiveOrder.ActiveOrder | null | undefined>;
 
     constructor(private dataService: DataService,
-                private stateService: StateService,
-                @Optional() private sideNav: MatSidenav) {}
+                private stateService: StateService) {}
 
     ngOnInit() {
         this.cart$ = merge(
@@ -37,12 +38,6 @@ export class CartDrawerComponent implements OnInit {
             this.adjustItemQuantity(event.itemId, event.quantity);
         } else {
             this.removeItem(event.itemId);
-        }
-    }
-
-    close() {
-        if (this.sideNav) {
-            this.sideNav.close();
         }
     }
 

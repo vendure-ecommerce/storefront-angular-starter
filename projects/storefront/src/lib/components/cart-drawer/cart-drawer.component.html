@@ -1,5 +1,5 @@
-<button mat-icon-button (click)="close()">
-    <mat-icon aria-label="Close">close</mat-icon>
+<button class="btn" (click)="close.emit()">
+    <fa-icon icon="times"></fa-icon>
 </button>
 <div *ngIf="cart$ | async as cart; else empty" class="cart-contents">
     <h3>Cart</h3>
@@ -7,9 +7,9 @@
                        [canAdjustQuantities]="true"
                        (setQuantity)="setQuantity($event)"></vsf-cart-contents>
     <div class="checkout-button">
-        <a mat-raised-button
+        <a class="btn btn-block btn-primary"
            color="primary"
-           (click)="close()"
+           (click)="close.emit()"
            [routerLink]="['/checkout']">Check Out</a>
     </div>
 </div>

@@ -1,21 +1,8 @@
-
-.product-list {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 24px;
-    background-color: var(--test-color);
-}
-.product-card {
-    max-width: 150px;
-    margin-bottom: 24px;
-    &:not(:last-child) {
-        margin-right: 24px;
-    }
-}
-.product-details {
-    min-height: 64px;
-    .price {
-        position: absolute;
-        bottom: 12px;
+vsf-product-list {
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 24px;
+        background-color: var(--test-color);
     }
 }

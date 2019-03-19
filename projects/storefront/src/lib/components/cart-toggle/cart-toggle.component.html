@@ -1,6 +1,6 @@
 <div *ngIf="cart$ | async as cart;">
-    <button mat-button (click)="toggle.emit()">
-        <mat-icon>shopping_cart</mat-icon>
+    <button class="btn btn-primary" (click)="toggle.emit()">
+        <fa-icon icon="shopping-cart"></fa-icon>
         {{ cart.quantity }} items: {{ (cart.total / 100) | currency }}
     </button>
 </div>

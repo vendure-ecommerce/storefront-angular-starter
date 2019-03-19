@@ -1,99 +1,83 @@
-<mat-accordion>
-    <mat-expansion-panel [expanded]="step === 'selectAddress'" *ngIf="(signedIn$ | async) && (customerAddresses$ | async)?.length">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Select Address
-            </mat-panel-title>
-            <mat-panel-description>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <div class="customer-address mat-elevation-z1" *ngFor="let address of customerAddresses$ | async"
+<div class="accordion">
+    <div class="card" *ngIf="(signedIn$ | async) && (customerAddresses$ | async)?.length">
+        <div class="card-header">
+            <button class="btn btn-light" (click)="step = 'selectAddress'">Select Address</button>>
+        </div>
+        <div class="card-body customer-address collapse" [class.show]="step === 'selectAddress'" *ngFor="let address of customerAddresses$ | async"
              (click)="editAddress(address)">
             <div class="address-line" *ngFor="let line of getLines(address)">
                 {{ line }}
             </div>
         </div>
-    </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step === 'customerDetails'" *ngIf="!(signedIn$ | async)">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Customer Details
-            </mat-panel-title>
-            <mat-panel-description>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-        <form #customerForm="ngForm">
-            <mat-form-field>
-                <input matInput
-                       placeholder="First Name"
-                       name="firstName"
-                       [(ngModel)]="firstName"
-                       required>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       placeholder="Last Name"
-                       name="lastName"
-                       [(ngModel)]="lastName"
-                       required>
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput
-                       placeholder="Email Address"
-                       name="emailAddress"
-                       [(ngModel)]="emailAddress"
-                       required>
-            </mat-form-field>
-        </form>
-        <mat-action-row>
-            <button mat-raised-button
-                    color="primary"
+    </div>
+    <div class="card" *ngIf="!(signedIn$ | async)">
+        <div class="card-header">
+            <button class="btn btn-light" (click)="step = 'customerDetails'">Customer Details</button>
+        </div>
+        <div class="card-body collapse" [class.show]="step === 'customerDetails'">
+            <form #customerForm="ngForm">
+                <div class="d-flex">
+                    <input class="form-control"
+                           placeholder="First Name"
+                           name="firstName"
+                           [(ngModel)]="firstName"
+                           required>
+                    <input class="form-control"
+                           placeholder="Last Name"
+                           name="lastName"
+                           [(ngModel)]="lastName"
+                           required>
+
+                    <input class="form-control"
+                           placeholder="Email Address"
+                           name="emailAddress"
+                           [(ngModel)]="emailAddress"
+                           required>
+                </div>
+            </form>
+
+            <button class="btn btn-secondary mt-3"
                     [disabled]="customerForm.invalid"
                     (click)="setCustomerDetails()">Next</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-    <mat-expansion-panel [expanded]="step === 'editAddress'"
-                         [disabled]="step === 'customerDetails'">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Shipping Address
-            </mat-panel-title>
-            <mat-panel-description>
-            </mat-panel-description>
-        </mat-expansion-panel-header>
+        </div>
 
-        <vsf-address-form #addressForm
-                          [address]="shippingAddress$ | async"
-                          [availableCountries]="availableCountries$ | async"></vsf-address-form>
-        <mat-action-row>
-            <button mat-raised-button
-                    color="primary"
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <button class="btn btn-light"
+                    [disabled]="step === 'customerDetails'"
+                    (click)="step = 'editAddress'">Shipping Address</button>
+        </div>
+        <div class="card-body collapse" [class.show]="step === 'editAddress'">
+            <vsf-address-form #addressForm
+                              [address]="shippingAddress$ | async"
+                              [availableCountries]="availableCountries$ | async"></vsf-address-form>
+            <button class="btn btn-secondary mt-3"
                     [disabled]="addressForm.addressForm.invalid"
                     (click)="setShippingAddress(addressForm.addressForm.value)">Send to this address</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-    <mat-expansion-panel [disabled]="step !== 'selectMethod' || (eligibleShippingMethods$ | async)?.length === 0"
-                         [expanded]="step === 'selectMethod'">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                Shipping Method
-            </mat-panel-title>
-            <mat-panel-description>
-
-            </mat-panel-description>
-        </mat-expansion-panel-header>
-
-        <mat-radio-group [(ngModel)]="shippingMethodId">
-            <mat-radio-button *ngFor="let method of eligibleShippingMethods$ | async" [value]="method.id">
-                <div class="description">{{ method.description }}</div>
-                <div class="price">{{ method.price / 100 | currency }}</div>
-            </mat-radio-button>
-        </mat-radio-group>
-        <mat-action-row>
-            <button mat-raised-button
-                    color="primary"
-                    [disabled]="!shippingMethodId"
-                    (click)="proceedToPayment()">Proceed to payment</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-</mat-accordion>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <button class="btn btn-light"
+                    [disabled]="step !== 'selectMethod' || (eligibleShippingMethods$ | async)?.length === 0"
+                    (click)="step = 'selectMethod'">Shipping Method</button>
+        </div>
+        <div class="card-body collapse" [class.show]="step === 'selectMethod'">
+            <div class="form-check" *ngFor="let method of eligibleShippingMethods$ | async">
+                <input class="form-check-input"
+                       type="radio"
+                       [(ngModel)]="shippingMethodId"
+                       [value]="method.id"
+                       [id]="method.id">
+                <label class="form-check-label shipping-method" [for]="method.id">
+                    <div class="description">{{ method.description }}</div>
+                    <div class="price">{{ method.price / 100 | currency }}</div>
+                </label>
+            </div>
+                <button class="btn btn-secondary mt-3"
+                        [disabled]="!shippingMethodId"
+                        (click)="proceedToPayment()">Proceed to payment</button>
+        </div>
+    </div>
+</div>

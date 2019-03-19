@@ -5,18 +5,15 @@
         <li>Placed: {{ order.updatedAt | date: 'medium' }}</li>
     </ul>
 
-    <mat-card *ngIf="!order.customer.user" class="account-signup">
-        <mat-card-header>
-            <mat-card-title>
+    <div *ngIf="!order.customer.user" class="account-signup card">
+        <div class="card-header">
                 <h3>Create an account</h3>
-            </mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
+        </div>>
+        <div class="card-body">
             <p>
                 (List account benefits)
             </p>
-            <button mat-raised-button
-                    color="primary"
+            <button class="btn btn-primary"
                     (click)="register()"
                     [disabled]="registrationSent">
                 Create an account!
@@ -24,8 +21,8 @@
             <div *ngIf="registrationSent" class="registration-sent">
                 Great! Now check your email ({{ order.customer.emailAddress }}) to complete registration.
             </div>
-        </mat-card-content>
-    </mat-card>
+        </div>
+    </div>
     <vsf-cart-contents [cart]="order"
                        [canAdjustQuantities]="false"></vsf-cart-contents>
 </div>

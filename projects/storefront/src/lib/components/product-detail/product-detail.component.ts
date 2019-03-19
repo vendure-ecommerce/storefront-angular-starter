@@ -1,27 +1,25 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import gql from 'graphql-tag';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
-import { AddToCart, GetProductDetail } from '../../generated-types';
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
+import { AddToCart, GetProductDetail } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
-import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 
 @Component({
     selector: 'vsf-product-detail',
     templateUrl: './product-detail.component.html',
-    // styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetail.Product;
     selectedAsset: { id: string; preview: string; };
-    qty: { [variantId: string]: number };
+    selectedVariant: GetProductDetail.Variants;
+    qty = 1;
     private sub: Subscription;
 
     constructor(private dataService: DataService,
@@ -45,9 +43,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             if (this.product.featuredAsset) {
                 this.selectedAsset = this.product.featuredAsset;
             }
-            this.qty = this.product.variants.reduce((qty, v) => {
-                return { ...qty, [v.id]: 1 };
-            }, {} as { [id: string]: number; });
+            this.selectedVariant = product.variants[0];
         });
     }
 

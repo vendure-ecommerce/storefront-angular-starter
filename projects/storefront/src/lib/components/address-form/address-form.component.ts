@@ -6,7 +6,6 @@ import { Country, ShippingAddress } from '../../generated-types';
 @Component({
     selector: 'vsf-address-form',
     templateUrl: './address-form.component.html',
-    // styleUrls: ['./address-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressFormComponent implements OnChanges {

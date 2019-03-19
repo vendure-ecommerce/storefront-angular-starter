@@ -5,7 +5,6 @@ import { Cart, GetActiveOrder } from '../../generated-types';
 @Component({
     selector: 'vsf-cart-contents',
     templateUrl: './cart-contents.component.html',
-    // styleUrls: ['./cart-contents.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartContentsComponent {

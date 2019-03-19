@@ -1,16 +1,4 @@
 <h1 class="title is-1">Products</h1>
 <div class="product-list container">
-    <div class="product-card" *ngFor="let product of products$ | async">
-        <img [src]="product.featuredAsset?.preview + '?preset=thumb'">
-        <div>
-            <div class="product-details">
-                <a [routerLink]="['/catalog', product.id]">
-                    {{ product.name }}
-                </a>
-                <div class="price">
-                    {{ product.variants | priceRange:'priceWithTax'}}
-                </div>
-            </div>
-        </div>
-    </div>
+    <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
 </div>
