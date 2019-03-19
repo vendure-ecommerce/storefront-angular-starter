@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { GetAccountOverview, SignOut } from '../../generated-types';
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
+import { GetAccountOverview, SignOut } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
@@ -13,7 +13,6 @@ import { GET_ACCOUNT_OVERVIEW, SIGN_OUT } from './account-dashboard.graphql';
 @Component({
     selector: 'vsf-account-dashboard',
     templateUrl: './account-dashboard.component.html',
-    // styleUrls: ['./account-dashboard.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDashboardComponent implements OnInit {

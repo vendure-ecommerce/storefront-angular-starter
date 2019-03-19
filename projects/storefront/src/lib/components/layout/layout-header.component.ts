@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-    selector: 'vsf-layout',
-    templateUrl: './layout.component.html',
+    selector: 'vsf-layout-header',
+    template: '<ng-content></ng-content>',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LayoutComponent {}
+export class LayoutHeaderComponent {
+}

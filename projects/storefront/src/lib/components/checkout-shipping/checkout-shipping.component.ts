@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 
+import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import {
     Address,
     GetAvailableCountries,
@@ -14,7 +15,6 @@ import {
     SetShippingMethod,
     TransitionToArrangingPayment,
 } from '../../generated-types';
-import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 import { AddressFormComponent } from '../address-form/address-form.component';
@@ -34,7 +34,6 @@ import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMeth
 @Component({
     selector: 'vsf-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
-    // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutShippingComponent implements OnInit {

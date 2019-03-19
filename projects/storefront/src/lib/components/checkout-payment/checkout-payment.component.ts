@@ -10,7 +10,6 @@ import { ADD_PAYMENT } from './checkout-payment.graphql';
 @Component({
     selector: 'vsf-checkout-payment',
     templateUrl: './checkout-payment.component.html',
-    // styleUrls: ['./checkout-payment.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutPaymentComponent {

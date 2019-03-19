@@ -1,3 +1,24 @@
 <vsf-layout>
-    <router-outlet></router-outlet>
+
+    <vsf-layout-header>
+        <div class="header">
+            <a [routerLink]="['/']" class="logo-link">
+                <img src="/assets/cube-logo-75px.png" class="logo">
+                <div class="logo-type">Vendure Storefront</div>
+            </a>
+            <div class="flex-grow-1"></div>
+            <vsf-account-link></vsf-account-link>
+            <vsf-cart-toggle (toggle)="cartDrawerVisible = !cartDrawerVisible"></vsf-cart-toggle>
+            <vsf-cart-drawer [visible]="cartDrawerVisible" (close)="cartDrawerVisible = false"></vsf-cart-drawer>
+        </div>
+    </vsf-layout-header>
+
+    <div class="container">
+        <router-outlet></router-outlet>
+    </div>
+
+    <vsf-layout-footer>
+        footer!
+    </vsf-layout-footer>
+
 </vsf-layout>

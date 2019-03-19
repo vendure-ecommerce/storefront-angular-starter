@@ -10,7 +10,6 @@ import { VERIFY } from './verify.graphql';
 @Component({
     selector: 'vsf-verify',
     templateUrl: './verify.component.html',
-    // styleUrls: ['./verify.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifyComponent {

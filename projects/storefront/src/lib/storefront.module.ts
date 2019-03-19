@@ -21,6 +21,8 @@ import { CheckoutProcessComponent } from './components/checkout-process/checkout
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
+import { LayoutFooterComponent } from './components/layout/layout-footer.component';
+import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
@@ -51,6 +53,10 @@ const COMPONENTS = [
     RegisterComponent,
     VerifyComponent,
     CenteredCardComponent,
+    LayoutComponent,
+    LayoutHeaderComponent,
+    LayoutFooterComponent,
+    ProductCardComponent,
 ];
 
 export interface StorefrontConfig {
@@ -59,9 +65,7 @@ export interface StorefrontConfig {
 
 @NgModule({
     declarations: [
-        COMPONENTS,
-        LayoutComponent,
-        ProductCardComponent,
+        ...COMPONENTS,
     ],
     imports: [
         CommonModule,
@@ -74,8 +78,7 @@ export interface StorefrontConfig {
         FontAwesomeModule,
     ],
     exports: [
-        COMPONENTS,
-        LayoutComponent,
+        ...COMPONENTS,
     ],
 })
 export class StorefrontModule {
