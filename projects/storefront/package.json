@@ -2,6 +2,9 @@
   "name": "@vendure/storefront",
   "version": "0.0.1",
   "dependencies": {
+    "@fortawesome/angular-fontawesome": "^0.3.0",
+    "@fortawesome/fontawesome-svg-core": "^1.2.15",
+    "@fortawesome/free-solid-svg-icons": "^5.7.2",
     "apollo-angular": "^1.5.0",
     "apollo-angular-link-http": "^1.5.0",
     "apollo-cache-inmemory": "^1.4.2",

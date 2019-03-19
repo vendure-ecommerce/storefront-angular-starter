@@ -3,6 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule, Options } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -20,18 +21,18 @@ import { CheckoutProcessComponent } from './components/checkout-process/checkout
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
+import { LayoutComponent } from './components/layout/layout.component';
+import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
+import { buildIconLibrary } from './icon-library';
 import { MaterialModule } from './material/material.module';
 import { PriceRangePipe } from './pipes/price-range.pipe';
-import { StorefrontComponent } from './storefront.component';
-import { LayoutComponent } from './components/layout/layout.component';
 
 const COMPONENTS = [
-    StorefrontComponent,
     ProductListComponent,
     ProductDetailComponent,
     CartToggleComponent,
@@ -61,6 +62,7 @@ export interface StorefrontConfig {
     declarations: [
         COMPONENTS,
         LayoutComponent,
+        ProductCardComponent,
     ],
     imports: [
         MaterialModule,
@@ -71,6 +73,7 @@ export interface StorefrontConfig {
         HttpClientModule,
         ApolloModule,
         HttpLinkModule,
+        FontAwesomeModule,
     ],
     exports: [
         COMPONENTS,
@@ -91,6 +94,10 @@ export class StorefrontModule {
                 },
             ],
         };
+    }
+
+    constructor() {
+        buildIconLibrary();
     }
 }
 
