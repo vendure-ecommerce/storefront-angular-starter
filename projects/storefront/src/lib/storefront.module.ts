@@ -91,7 +91,6 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
     ],
     exports: [
         ...COMPONENTS,
-        ApolloModule,
     ],
 })
 export class StorefrontModule {
