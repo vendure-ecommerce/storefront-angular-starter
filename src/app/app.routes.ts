@@ -15,7 +15,7 @@ import {
     SignInComponent,
     SignInGuard,
     VerifyComponent,
-} from 'storefront';
+} from '@vendure/storefront';
 
 export const routes: Route[] = [
     {
@@ -29,7 +29,12 @@ export const routes: Route[] = [
         pathMatch: 'full',
     },
     {
-        path: 'catalog/:id',
+        path: 'category/:collectionId',
+        component: ProductListComponent,
+        pathMatch: 'full',
+    },
+    {
+        path: 'product/:id',
         component: ProductDetailComponent,
     },
     {

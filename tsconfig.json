@@ -23,8 +23,12 @@
       "esnext.asynciterable"
     ],
     "paths": {
-      "storefront": [
+      "@vendure/storefront": [
         "projects/storefront/src/public_api"
+      ],
+      "*": [
+        "*",
+        "projects/storefront/node_modules/*"
       ]
     }
   }

@@ -108,7 +108,8 @@
             "tsConfig": "src/tsconfig.server.json",
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src/styles"
+                "src/styles",
+                "dist"
               ]
             }
           },

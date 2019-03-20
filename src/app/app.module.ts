@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { StorefrontModule } from 'storefront';
+import { StorefrontModule } from '@vendure/storefront';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
