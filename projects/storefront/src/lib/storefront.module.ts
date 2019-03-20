@@ -1,7 +1,7 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { ModuleWithProviders, NgModule } from '@angular/core';
+import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -22,6 +22,7 @@ import { CheckoutProcessComponent } from './components/checkout-process/checkout
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
+import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
 import { DropdownContentDirective } from './components/dropdown/dropdown-content.directive';
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
@@ -60,6 +61,7 @@ const COMPONENTS = [
     LayoutComponent,
     LayoutHeaderComponent,
     LayoutFooterComponent,
+    CollectionsMenuComponent,
     ProductCardComponent,
     DropdownComponent,
     DropdownTriggerDirective,
@@ -69,6 +71,8 @@ const COMPONENTS = [
 export interface StorefrontConfig {
     apolloOptions: Options;
 }
+
+export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
 
 @NgModule({
     declarations: [
@@ -87,6 +91,7 @@ export interface StorefrontConfig {
     ],
     exports: [
         ...COMPONENTS,
+        ApolloModule,
     ],
 })
 export class StorefrontModule {
@@ -95,10 +100,11 @@ export class StorefrontModule {
         return {
             ngModule: StorefrontModule,
             providers: [
+                { provide: STORE_CONFIG, useValue: config },
                 {
                     provide: APOLLO_OPTIONS,
-                    useFactory: apolloOptionsFactory(config.apolloOptions),
-                    deps: [HttpLink],
+                    useFactory: apolloOptionsFactory,
+                    deps: [HttpLink, STORE_CONFIG],
                 },
             ],
         };
@@ -109,14 +115,12 @@ export class StorefrontModule {
     }
 }
 
-export function apolloOptionsFactory(options: Options) {
+export function apolloOptionsFactory(httpLink: HttpLink, config: StorefrontConfig) {
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
-    const fn = (httpLink: HttpLink) => {
-        return {
-            cache: new InMemoryCache(),
-            link: httpLink.create(options),
-        };
+    const result = {
+        cache: new InMemoryCache(),
+        link: httpLink.create(config.apolloOptions),
     };
-    return fn;
+    return result;
 }

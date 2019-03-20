@@ -1,0 +1,12 @@
+vsf-collections-menu {
+    display: block;
+    border-bottom: 1px solid $gray-200;
+}
+
+.collections-menu-sub-collections {
+    .depth-1 { padding-left: calc(1.5rem + 0); }
+    .depth-2 { padding-left: calc(1.5rem + 12px); }
+    .depth-3 { padding-left: calc(1.5rem + 24px); }
+    .depth-4 { padding-left: calc(1.5rem + 36px); }
+}
+

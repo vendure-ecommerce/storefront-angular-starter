@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-19T09:46:48+01:00
+// Generated in 2019-03-19T16:56:18+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1142,6 +1142,52 @@ export namespace TransitionToArrangingPayment {
     };
 
     export type TransitionOrderToState = Cart.Fragment;
+}
+
+export namespace GetCollections {
+    export type Variables = {
+        options?: Maybe<CollectionListOptions>;
+    };
+
+    export type Query = {
+        __typename?: "Query";
+
+        collections: Collections;
+    };
+
+    export type Collections = {
+        __typename?: "CollectionList";
+
+        items: Items[];
+    };
+
+    export type Items = {
+        __typename?: "Collection";
+
+        id: string;
+
+        name: string;
+
+        parent: Parent;
+
+        featuredAsset: Maybe<FeaturedAsset>;
+    };
+
+    export type Parent = {
+        __typename?: "Collection";
+
+        id: string;
+
+        name: string;
+    };
+
+    export type FeaturedAsset = {
+        __typename?: "Asset";
+
+        id: string;
+
+        preview: string;
+    };
 }
 
 export namespace GetProductDetail {

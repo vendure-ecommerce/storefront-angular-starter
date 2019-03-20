@@ -1,0 +1,28 @@
+<ul class="nav" *ngIf="collectionTree$ | async as tree">
+    <li class="nav-item" *ngFor="let collection of tree.children">
+        <vsf-dropdown #dropdown
+                      [openOnHover]="true"
+                      [minWidth]="150"
+                      [position]="['bottom', 'bottom-left', 'bottom-right']">
+            <a class="nav-link"
+               [routerLink]="['/category', collection.id]"
+               vsfDropdownTrigger>{{ collection.name }}</a>
+            <div class="collections-menu-sub-collections" vsfDropdownContent>
+                <ng-container *ngFor="let child of collection.children">
+                    <ng-template [ngTemplateOutlet]="childItem" [ngTemplateOutletContext]="{ $implicit: child, depth: 1, close: dropdown.close.bind(dropdown) }"></ng-template>
+                </ng-container>
+            </div>
+        </vsf-dropdown>
+    </li>
+</ul>
+
+<ng-template #childItem let-collection let-depth="depth" let-close="close">
+    <a class="dropdown-item depth-{{ depth }}"
+       [routerLink]="['/category', collection.id]"
+       (click)="close()">
+        {{ collection.name }}
+    </a>
+    <ng-container *ngFor="let child of collection.children">
+        <ng-template [ngTemplateOutlet]="childItem" [ngTemplateOutletContext]="{ $implicit: child, depth: depth + 1, close: close }"></ng-template>
+    </ng-container>
+</ng-template>

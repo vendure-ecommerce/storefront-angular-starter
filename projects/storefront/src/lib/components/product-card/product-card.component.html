@@ -2,7 +2,7 @@
     <img class="card-img-top" [src]="product.productPreview + '?preset=thumb'">
     <div class="card-body">
         <h5 class="card-title">
-            <a [routerLink]="['/catalog', product.productId]">
+            <a [routerLink]="['/product', product.productId]">
                 {{ product.productName }}
             </a>
         </h5>

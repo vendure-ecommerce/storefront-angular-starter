@@ -1,4 +1,4 @@
-import { Overlay, OverlayConfig, PositionStrategy } from '@angular/cdk/overlay';
+import { ConnectedPosition, Overlay, OverlayConfig, PositionStrategy } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
     ChangeDetectionStrategy,
@@ -15,6 +15,7 @@ import { debounceTime, filter, take } from 'rxjs/operators';
 
 import { DropdownTriggerDirective } from './dropdown-trigger.directive';
 
+export type DropdownPosition = 'top' | 'right' | 'bottom' | 'left' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 /**
  * A generic dropdown component.
  *
@@ -43,7 +44,8 @@ export class DropdownComponent {
     /** If true, the dropdown will open when the trigger element is hovered with the mouse */
     @Input() openOnHover = false;
     /** Sets the preferred position of the dropdown. Actual position depends on available space */
-    @Input() position: 'top' | 'right' | 'bottom' | 'left' = 'bottom';
+    @Input() position: DropdownPosition[] = ['bottom'];
+    @Input() minWidth = 0;
 
     @ContentChild(DropdownTriggerDirective, { read: ElementRef }) trigger: ElementRef;
     @ViewChild('contentTemplate', { read: TemplateRef }) contentTemplate: TemplateRef<any>;
@@ -84,6 +86,7 @@ export class DropdownComponent {
         const overlayRef = this.overlay.create(new OverlayConfig({
             scrollStrategy,
             positionStrategy,
+            minWidth: this.minWidth,
         }));
         this.closeFn = () => {
             overlayRef.dispose();
@@ -129,18 +132,22 @@ export class DropdownComponent {
             .pipe(
                 debounceTime(200),
                 filter(e => {
-                    return !this.contentElement.nativeElement.contains(e.target) &&
-                        !this.trigger.nativeElement.contains(e.target);
+                    const contentEl = this.contentElement.nativeElement;
+                    const triggerEl = this.trigger.nativeElement;
+                    // In a server context, the .contains method would not exist.
+                    if (contentEl && typeof contentEl.contains === 'function') {
+                        return !(contentEl.contains(e.target) || triggerEl.contains(e.target));
+                    }
+                    return true;
                 }),
                 take(1),
             ).subscribe((e) => {
-                console.log((e.target as any).tagName);
                 this.close();
             });
     }
 
     private getPositionStrategy(): PositionStrategy {
-        const position = {
+        const position: { [K in DropdownPosition]: ConnectedPosition; } = {
             top: {
                 originX : 'center',
                 originY : 'top',
@@ -165,10 +172,37 @@ export class DropdownComponent {
                 overlayX: 'end',
                 overlayY: 'center',
             },
+            ['top-left']: {
+                originX : 'start',
+                originY : 'top',
+                overlayX: 'start',
+                overlayY: 'bottom',
+            },
+            ['top-right']: {
+                originX : 'end',
+                originY : 'top',
+                overlayX: 'end',
+                overlayY: 'bottom',
+            },
+            ['bottom-left']: {
+                originX : 'start',
+                originY : 'bottom',
+                overlayX: 'start',
+                overlayY: 'top',
+            },
+            ['bottom-right']: {
+                originX : 'end',
+                originY : 'bottom',
+                overlayX: 'end',
+                overlayY: 'top',
+            },
         };
 
         return this.overlay.position().flexibleConnectedTo(this.trigger)
-            .withPositions([position[this.position], ...Object.values(position)] as any[])
+            .withPositions([
+                ...this.position.map(p => position[p]),
+                ...Object.values(position),
+            ])
             .withPush(false);
     }
 }
