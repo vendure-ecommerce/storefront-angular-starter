@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 import { GetCollection, SearchProducts } from '../../generated-types';
@@ -8,6 +8,7 @@ import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
+import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 
 @Component({
     selector: 'vsf-product-list',
@@ -17,6 +18,7 @@ export class ProductListComponent implements OnInit {
 
     products$: Observable<SearchProducts.Items[]>;
     collection$: Observable<GetCollection.Collection | null>;
+    facetValues$: Observable<SearchProducts.FacetValues[]>;
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
@@ -26,6 +28,9 @@ export class ProductListComponent implements OnInit {
         const collectionId$ = this.route.paramMap.pipe(
             map(pm => pm.get('collectionId')),
             tap(collectionId => this.stateService.setState('lastCollectionId', collectionId)),
+        );
+        const facetValueIds$ = this.route.paramMap.pipe(
+            map(pm => getRouteArrayParam(pm, 'facets')),
         );
 
         this.collection$ = collectionId$.pipe(
@@ -41,17 +46,19 @@ export class ProductListComponent implements OnInit {
                 }
             }),
         );
-        this.products$ = collectionId$.pipe(
-            switchMap(collectionId => {
+        const queryResult$ = combineLatest(collectionId$, facetValueIds$).pipe(
+            switchMap(([collectionId, facetIds]) => {
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
                         groupByProduct: true,
                         collectionId,
+                        facetIds,
                     },
                 });
             }),
-        )
-            .pipe(map(data => data.search.items));
+        );
+        this.products$ = queryResult$.pipe(map(data => data.search.items));
+        this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
     }
 
 }

@@ -1,4 +1,5 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
+<vsf-product-list-controls [facetValues]="facetValues$ | async"></vsf-product-list-controls>
 <div class="product-list container">
     <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
 </div>

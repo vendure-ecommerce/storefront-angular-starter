@@ -1,0 +1,13 @@
+<div *ngFor="let facet of facets">
+    <span class="facet-name">{{ facet.name | titlecase }}:</span>
+    <a *ngFor="let value of facet.values"
+       [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+       class="badge facet-value"
+        [ngClass]="{
+            'badge-primary': facetValueIsSelected(value.id),
+            'badge-secondary': !facetValueIsSelected(value.id)
+         }"
+    >
+        {{ value.name }}
+    </a>
+</div>

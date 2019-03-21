@@ -12,6 +12,14 @@ export const SEARCH_PRODUCTS = gql`
                 productPreview
             }
             totalItems
+            facetValues {
+                id
+                name
+                facet {
+                    id
+                    name
+                }
+            }
         }
     }
 `;

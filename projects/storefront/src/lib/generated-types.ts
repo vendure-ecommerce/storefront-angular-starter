@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-21T11:10:19+01:00
+// Generated in 2019-03-21T12:24:16+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1316,6 +1316,8 @@ export namespace SearchProducts {
         items: Items[];
 
         totalItems: number;
+
+        facetValues: FacetValues[];
     };
 
     export type Items = {
@@ -1332,6 +1334,24 @@ export namespace SearchProducts {
         price: number;
 
         productPreview: string;
+    };
+
+    export type FacetValues = {
+        __typename?: "FacetValue";
+
+        id: string;
+
+        name: string;
+
+        facet: Facet;
+    };
+
+    export type Facet = {
+        __typename?: "Facet";
+
+        id: string;
+
+        name: string;
     };
 }
 

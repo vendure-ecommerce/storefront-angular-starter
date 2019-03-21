@@ -21,6 +21,7 @@ export * from './lib/components/collections-menu/collections-menu.component';
 export * from './lib/components/dropdown/dropdown.component';
 export * from './lib/components/product-detail/product-detail.component';
 export * from './lib/components/product-list/product-list.component';
+export * from './lib/components/product-list-controls/product-list-controls.component';
 export * from './lib/components/register/register.component';
 export * from './lib/components/layout/layout.component';
 export * from './lib/components/layout/layout-header.component';
