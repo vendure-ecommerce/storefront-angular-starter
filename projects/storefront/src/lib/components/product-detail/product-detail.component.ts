@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, map, switchMap } from 'rxjs/operators';
+import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { AddToCart, GetProductDetail } from '../../generated-types';
@@ -20,6 +20,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     selectedAsset: { id: string; preview: string; };
     selectedVariant: GetProductDetail.Variants;
     qty = 1;
+    breadcrumbs: GetProductDetail.Breadcrumbs[] | null = null;
     private sub: Subscription;
 
     constructor(private dataService: DataService,
@@ -27,9 +28,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.sub = this.route.paramMap.pipe(
+        const lastCollectionId$ = this.stateService.select(state => state.lastCollectionId);
+        const productId$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('id')),
             filter(notNullOrUndefined),
+        );
+
+        this.sub = productId$.pipe(
             switchMap(id => {
                 return this.dataService.query<GetProductDetail.Query, GetProductDetail.Variables>(GET_PRODUCT_DETAIL, {
                         id,
@@ -38,12 +43,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             }),
             map(data => data.product),
             filter(notNullOrUndefined),
-        ).subscribe(product => {
+            withLatestFrom(lastCollectionId$),
+        ).subscribe(([product, lastCollectionId]) => {
             this.product = product;
             if (this.product.featuredAsset) {
                 this.selectedAsset = this.product.featuredAsset;
             }
             this.selectedVariant = product.variants[0];
+            this.breadcrumbs = this.getMostRelevantCollection(product.collections, lastCollectionId).breadcrumbs;
         });
     }
 
@@ -60,6 +67,26 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }).subscribe((data) => {
             this.stateService.setState('activeOrderId', data.addItemToOrder ? data.addItemToOrder.id : null);
         });
+    }
+
+    /**
+     * If there is a collection matching the `lastCollectionId`, return that. Otherwise return the collection
+     * with the longest `breadcrumbs` array, which corresponds to the most specific collection.
+     */
+    private getMostRelevantCollection(collections: GetProductDetail.Collections[], lastCollectionId: string | null) {
+        const lastCollection = collections.find(c => c.id === lastCollectionId);
+        if (lastCollection) {
+            return lastCollection;
+        }
+        return collections.sort((a, b) => {
+            if (a.breadcrumbs.length < b.breadcrumbs.length) {
+                return 1;
+            }
+            if (a.breadcrumbs.length > b.breadcrumbs.length) {
+                return -1;
+            }
+            return 0;
+        })[0];
     }
 
 }

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 
 import { GetCollection, SearchProducts } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
+import { StateService } from '../../providers/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
 
@@ -17,10 +18,15 @@ export class ProductListComponent implements OnInit {
     products$: Observable<SearchProducts.Items[]>;
     collection$: Observable<GetCollection.Collection | null>;
 
-    constructor(private dataService: DataService, private route: ActivatedRoute) { }
+    constructor(private dataService: DataService,
+                private route: ActivatedRoute,
+                private stateService: StateService) { }
 
     ngOnInit() {
-        const collectionId$ = this.route.paramMap.pipe(map(pm => pm.get('collectionId')));
+        const collectionId$ = this.route.paramMap.pipe(
+            map(pm => pm.get('collectionId')),
+            tap(collectionId => this.stateService.setState('lastCollectionId', collectionId)),
+        );
 
         this.collection$ = collectionId$.pipe(
             switchMap(collectionId => {

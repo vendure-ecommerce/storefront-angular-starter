@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
 export const GET_PRODUCT_DETAIL = gql`
@@ -29,6 +30,13 @@ export const GET_PRODUCT_DETAIL = gql`
                 name
                 preview
                 type
+            }
+            collections {
+                id
+                breadcrumbs {
+                    id
+                    name
+                }
             }
         }
     }

@@ -6,7 +6,7 @@
         <li class="breadcrumb-item"
             *ngFor="let breadcrumb of tail(breadcrumbs); last as isLast; first as isFirst"
             [attr.aria-current]="isLast">
-            <ng-container *ngIf="isLast; else link">{{ breadcrumb.name }}</ng-container>
+            <ng-container *ngIf="isLast && !linkLast; else link">{{ breadcrumb.name }}</ng-container>
             <ng-template #link>
                 <a [routerLink]="['/category', breadcrumb.id]">{{ breadcrumb.name }}</a>
             </ng-template>

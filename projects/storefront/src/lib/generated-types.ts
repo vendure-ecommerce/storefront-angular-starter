@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-20T15:31:34+01:00
+// Generated in 2019-03-21T11:10:19+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1168,7 +1168,7 @@ export namespace GetCollections {
 
         name: string;
 
-        parent: Parent;
+        parent: Maybe<Parent>;
 
         featuredAsset: Maybe<FeaturedAsset>;
     };
@@ -1215,6 +1215,8 @@ export namespace GetProductDetail {
         featuredAsset: Maybe<FeaturedAsset>;
 
         assets: Assets[];
+
+        collections: Collections[];
     };
 
     export type Variants = {
@@ -1263,6 +1265,22 @@ export namespace GetProductDetail {
         preview: string;
 
         type: AssetType;
+    };
+
+    export type Collections = {
+        __typename?: "Collection";
+
+        id: string;
+
+        breadcrumbs: Breadcrumbs[];
+    };
+
+    export type Breadcrumbs = {
+        __typename?: "CollectionBreadcrumb";
+
+        id: string;
+
+        name: string;
     };
 }
 

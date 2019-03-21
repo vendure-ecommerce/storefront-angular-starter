@@ -9,6 +9,7 @@ import { GetCollection } from 'projects/storefront/src/lib/generated-types';
 export class CollectionBreadcrumbsComponent {
 
     @Input() breadcrumbs: GetCollection.Breadcrumbs[] = [];
+    @Input() linkLast = false;
 
     tail<T>(arr: T[] | null): T[] {
         return arr ? arr.slice(1) : [];
