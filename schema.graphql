@@ -1,4 +1,4 @@
-# This file was generated based on ".graphqlconfig" at Tue Mar 12 17:20:24 CET 2019. Do not edit manually.
+# This file was generated based on ".graphqlconfig" at Wed Mar 20 15:30:24 CET 2019. Do not edit manually.
 
 schema {
     query: Query
@@ -89,6 +89,7 @@ type Channel implements Node {
 
 type Collection implements Node {
     assets: [Asset!]!
+    breadcrumbs: [CollectionBreadcrumb!]!
     children: [Collection!]
     createdAt: DateTime!
     customFields: JSON
@@ -103,6 +104,11 @@ type Collection implements Node {
     productVariants(options: ProductVariantListOptions): ProductVariantList!
     translations: [CollectionTranslation!]!
     updatedAt: DateTime!
+}
+
+type CollectionBreadcrumb {
+    id: ID!
+    name: String!
 }
 
 type CollectionList implements PaginatedList {

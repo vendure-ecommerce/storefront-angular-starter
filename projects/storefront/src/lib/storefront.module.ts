@@ -22,6 +22,7 @@ import { CheckoutProcessComponent } from './components/checkout-process/checkout
 import { CheckoutShippingComponent } from './components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
+import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
 import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
 import { DropdownContentDirective } from './components/dropdown/dropdown-content.directive';
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
@@ -66,6 +67,7 @@ const COMPONENTS = [
     DropdownComponent,
     DropdownTriggerDirective,
     DropdownContentDirective,
+    CollectionBreadcrumbsComponent,
 ];
 
 export interface StorefrontConfig {

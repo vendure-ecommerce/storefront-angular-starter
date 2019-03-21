@@ -16,6 +16,7 @@ export * from './lib/components/checkout-process/checkout-process.component';
 export * from './lib/components/checkout-shipping/checkout-shipping.component';
 export * from './lib/components/checkout-sign-in/checkout-sign-in.component';
 export * from './lib/components/checkout-stage-indicator/checkout-stage-indicator.component';
+export * from './lib/components/collection-breadcrumbs/collection-breadcrumbs.component';
 export * from './lib/components/collections-menu/collections-menu.component';
 export * from './lib/components/dropdown/dropdown.component';
 export * from './lib/components/product-detail/product-detail.component';

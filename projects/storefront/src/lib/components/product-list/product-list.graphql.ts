@@ -15,3 +15,21 @@ export const SEARCH_PRODUCTS = gql`
         }
     }
 `;
+
+export const GET_COLLECTION = gql`
+    query GetCollection($id: ID!) {
+        collection(id: $id) {
+            id
+            name
+            description
+            featuredAsset {
+                id
+                preview
+            }
+            breadcrumbs {
+                id
+                name
+            }
+        }
+    }
+`;

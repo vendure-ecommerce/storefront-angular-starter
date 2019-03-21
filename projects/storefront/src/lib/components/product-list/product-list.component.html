@@ -1,4 +1,4 @@
-<h1 class="title is-1">Products</h1>
+<vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
 <div class="product-list container">
     <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
 </div>
