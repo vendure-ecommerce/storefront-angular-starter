@@ -13,11 +13,14 @@ export const SEARCH_PRODUCTS = gql`
             }
             totalItems
             facetValues {
-                id
-                name
-                facet {
+                count
+                facetValue {
                     id
                     name
+                    facet {
+                        id
+                        name
+                    }
                 }
             }
         }

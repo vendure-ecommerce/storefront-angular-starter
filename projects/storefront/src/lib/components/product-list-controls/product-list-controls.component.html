@@ -1,13 +1,16 @@
 <div *ngFor="let facet of facets">
     <span class="facet-name">{{ facet.name | titlecase }}:</span>
-    <a *ngFor="let value of facet.values"
-       [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
-       class="badge facet-value"
-        [ngClass]="{
-            'badge-primary': facetValueIsSelected(value.id),
-            'badge-secondary': !facetValueIsSelected(value.id)
+    <ng-container *ngFor="let value of facet.values">
+        <a *ngIf="value.count < totalResults || activeFacetValueIds().includes(value.id)"
+           [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+           class="btn btn-sm facet-value"
+           [ngClass]="{
+            'btn-secondary': facetValueIsSelected(value.id),
+            'btn-outline-secondary': !facetValueIsSelected(value.id)
          }"
-    >
-        {{ value.name }}
-    </a>
+        >
+            {{ value.name }}
+            <span class="badge badge-light">{{ value.count }}</span>
+        </a>
+    </ng-container>
 </div>

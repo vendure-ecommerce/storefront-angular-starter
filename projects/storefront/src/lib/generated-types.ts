@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-21T12:24:16+01:00
+// Generated in 2019-03-22T10:47:31+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1337,6 +1337,14 @@ export namespace SearchProducts {
     };
 
     export type FacetValues = {
+        __typename?: "FacetValueResult";
+
+        count: number;
+
+        facetValue: FacetValue;
+    };
+
+    export type FacetValue = {
         __typename?: "FacetValue";
 
         id: string;

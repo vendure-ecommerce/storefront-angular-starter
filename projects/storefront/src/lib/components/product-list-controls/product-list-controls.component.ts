@@ -10,6 +10,7 @@ export interface FacetWithValues {
     values: Array<{
         id: string;
         name: string;
+        count: number;
     }>;
 }
 
@@ -20,6 +21,7 @@ export interface FacetWithValues {
 })
 export class ProductListControlsComponent implements OnChanges {
     @Input() facetValues: SearchProducts.FacetValues[] | null;
+    @Input() totalResults = 0;
     facets: FacetWithValues[];
 
     constructor(private route: ActivatedRoute, private router: Router) {}
@@ -31,13 +33,16 @@ export class ProductListControlsComponent implements OnChanges {
     }
 
     toggleFacetValueId(id: string): string[] {
-        const existing = getRouteArrayParam(this.route.snapshot.paramMap, 'facets');
+        const existing = this.activeFacetValueIds();
         return existing.includes(id) ? existing.filter(x => x !== id) : existing.concat(id);
     }
 
     facetValueIsSelected(id: string): boolean {
-        const existing = getRouteArrayParam(this.route.snapshot.paramMap, 'facets');
-        return existing.includes(id);
+        return this.activeFacetValueIds().includes(id);
+    }
+
+    activeFacetValueIds(): string[] {
+        return getRouteArrayParam(this.route.snapshot.paramMap, 'facets');
     }
 
     private groupFacetValues(facetValues: SearchProducts.FacetValues[] | null): FacetWithValues[] {
@@ -45,12 +50,17 @@ export class ProductListControlsComponent implements OnChanges {
             return [];
         }
         const facetMap = new Map<string, FacetWithValues>();
-        for (const { id, name, facet } of facetValues) {
+        for (const { count, facetValue: { id, name, facet } } of facetValues) {
+            /*if (count === this.totalResults) {
+                // skip FacetValues that do not ave any effect on the
+                // result set
+                continue;
+            }*/
             const facetFromMap = facetMap.get(facet.id);
             if (facetFromMap) {
-                facetFromMap.values.push({ id, name });
+                facetFromMap.values.push({ id, name, count });
             } else {
-                facetMap.set(facet.id, { id: facet.id, name: facet.name, values: [{ id, name }]});
+                facetMap.set(facet.id, { id: facet.id, name: facet.name, values: [{ id, name, count }]});
             }
         }
         return Array.from(facetMap.values());

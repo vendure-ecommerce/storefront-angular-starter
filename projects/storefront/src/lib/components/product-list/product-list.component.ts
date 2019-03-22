@@ -17,6 +17,7 @@ import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 export class ProductListComponent implements OnInit {
 
     products$: Observable<SearchProducts.Items[]>;
+    totalResults$: Observable<number>;
     collection$: Observable<GetCollection.Collection | null>;
     facetValues$: Observable<SearchProducts.FacetValues[]>;
 
@@ -58,6 +59,7 @@ export class ProductListComponent implements OnInit {
             }),
         );
         this.products$ = queryResult$.pipe(map(data => data.search.items));
+        this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
     }
 
