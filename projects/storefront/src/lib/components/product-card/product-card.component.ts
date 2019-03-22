@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { SearchProducts } from '../../generated-types';
 
@@ -7,12 +7,7 @@ import { SearchProducts } from '../../generated-types';
     templateUrl: './product-card.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent {
 
     @Input() product: SearchProducts.Items;
-    constructor() { }
-
-    ngOnInit() {
-    }
-
 }

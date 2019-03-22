@@ -1,13 +1,23 @@
 <div class="card">
-    <img class="card-img-top" [src]="product.productPreview + '?preset=thumb'">
-    <div class="card-body">
-        <h5 class="card-title">
-            <a [routerLink]="['/product', product.productId]">
-                {{ product.productName }}
-            </a>
-        </h5>
-        <div class="price">
-            {{ product.price }}
+    <ng-template [ngIf]="product" [ngIfElse]="placeholder">
+        <img class="card-img-top" [src]="product.productPreview + '?preset=thumb'">
+
+        <div class="card-body">
+            <h5 class="card-title">
+                <a [routerLink]="['/product', product.productId]">
+                    {{ product.productName }}
+                </a>
+            </h5>
+            <div class="price">
+                {{ product.price / 100 | currency }}
+            </div>
         </div>
-    </div>
+    </ng-template>
+    <ng-template #placeholder>
+        <div class="card-img-top placeholder-image"></div>
+        <div class="card-body">
+            <div class="placeholder-title"></div>
+            <div class="placeholder-body"></div>
+        </div>
+    </ng-template>
 </div>

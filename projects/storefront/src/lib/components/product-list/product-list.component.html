@@ -1,15 +1,18 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
 <vsf-product-search-bar></vsf-product-search-bar>
-<div class="row product-list">
-    <ng-container *ngIf="totalResults$ | async as totalResults; else noResults">
+<div class="row">
+    <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
         <div class="col-12 col-md-2">
             <vsf-product-list-controls [facetValues]="facetValues$ | async"
-                                       [totalResults]="totalResults"></vsf-product-list-controls>
+                                       [totalResults]="totalResults$ | async"></vsf-product-list-controls>
         </div>
-        <div class="col-12 col-md-10 d-flex flex-wrap">
-            <ng-container >
+        <div class="col-12 col-md-10 d-flex flex-wrap product-list">
+            <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
                 <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
             </ng-container>
+            <ng-template #placeholders>
+                <vsf-product-card *ngFor="let product of placeholderProducts" [product]="product"></vsf-product-card>
+            </ng-template>
 
         </div>
     </ng-container>

@@ -21,6 +21,7 @@ export class ProductListComponent implements OnInit {
     collection$: Observable<GetCollection.Collection | null>;
     facetValues$: Observable<SearchProducts.FacetValues[]>;
     searchTerm$: Observable<string>;
+    readonly placeholderProducts = Array.from({ length: 6 }).map(() => null);
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
@@ -68,9 +69,10 @@ export class ProductListComponent implements OnInit {
                     },
                 });
             }),
+            shareReplay(1),
         );
         this.products$ = queryResult$.pipe(map(data => data.search.items));
-        this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
+        this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems), tap(val => console.log('totalResults', val)));
         this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
     }
 

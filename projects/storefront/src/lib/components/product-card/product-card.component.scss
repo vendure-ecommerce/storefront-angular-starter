@@ -2,4 +2,19 @@ vsf-product-card {
     display: block;
     margin: 12px;
     width: 150px;
+
+    .placeholder-image {
+        width: 148px;
+        height: 148px;
+        background-color: $light;
+    }
+
+    .placeholder-title {
+        height: 28px;
+        background-color: $light;
+    }
+
+    .placeholder-body {
+        height: 30px;
+    }
 }
