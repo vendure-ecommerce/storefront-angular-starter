@@ -1,5 +1,5 @@
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCreditCard, faMinus, faPlus, faShoppingCart, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard, faMinus, faPlus, faSadCry, faSearch, faShoppingCart, faTimes, faUser } from '@fortawesome/free-solid-svg-icons';
 
 /**
  * All the icons used in the library are declared here. This allows us to
@@ -13,5 +13,7 @@ export function buildIconLibrary() {
         faShoppingCart,
         faUser,
         faCreditCard,
+        faSearch,
+        faSadCry,
     );
 }

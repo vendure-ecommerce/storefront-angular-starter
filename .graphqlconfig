@@ -2,7 +2,8 @@
     "schemaPath": "./schema.graphql",
     "extensions": {
         "endpoints": {
-            "dev": "https://demo.vendure.io/shop-api"
+            "demo": "https://demo.vendure.io/shop-api",
+            "dev": "http://localhost:3000/shop-api"
         }
     }
 }

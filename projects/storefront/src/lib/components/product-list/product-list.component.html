@@ -1,11 +1,22 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
 <vsf-product-search-bar></vsf-product-search-bar>
-<div class="row">
-    <div class="col-12 col-md-2">
-        <vsf-product-list-controls [facetValues]="facetValues$ | async"
-                                   [totalResults]="totalResults$ | async"></vsf-product-list-controls>
-    </div>
-    <div class="col-12 col-md-10 d-flex flex-wrap">
-        <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
-    </div>
+<div class="row product-list">
+    <ng-container *ngIf="totalResults$ | async as totalResults; else noResults">
+        <div class="col-12 col-md-2">
+            <vsf-product-list-controls [facetValues]="facetValues$ | async"
+                                       [totalResults]="totalResults"></vsf-product-list-controls>
+        </div>
+        <div class="col-12 col-md-10 d-flex flex-wrap">
+            <ng-container >
+                <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
+            </ng-container>
+
+        </div>
+    </ng-container>
+    <ng-template #noResults>
+        <div class="no-results col-12">
+            <p class="h1">No results for "{{ searchTerm$ | async }}"</p>
+            <fa-icon icon="sad-cry" size="10x"></fa-icon>
+        </div>
+    </ng-template>
 </div>

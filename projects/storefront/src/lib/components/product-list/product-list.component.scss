@@ -1,2 +1,13 @@
 vsf-product-list {
+    .product-list {
+        min-height: 100vh;
+    }
+
+    .no-results {
+        text-align: center;
+        margin: 64px 0;
+        font-size: $font-size-lg;
+        color: $gray-500;
+        width: 100%;
+    }
 }

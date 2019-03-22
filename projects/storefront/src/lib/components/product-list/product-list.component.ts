@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, share, shareReplay, switchMap, tap } from 'rxjs/operators';
 
 import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 import { GetCollection, SearchProducts } from '../../generated-types';
@@ -20,6 +20,7 @@ export class ProductListComponent implements OnInit {
     totalResults$: Observable<number>;
     collection$: Observable<GetCollection.Collection | null>;
     facetValues$: Observable<SearchProducts.FacetValues[]>;
+    searchTerm$: Observable<string>;
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
@@ -30,9 +31,17 @@ export class ProductListComponent implements OnInit {
             map(pm => pm.get('collectionId')),
             distinctUntilChanged(),
             tap(collectionId => this.stateService.setState('lastCollectionId', collectionId)),
+            shareReplay(1),
         );
         const facetValueIds$ = this.route.paramMap.pipe(
             map(pm => getRouteArrayParam(pm, 'facets')),
+            distinctUntilChanged((x, y) => x.toString() === y.toString()),
+            shareReplay(1),
+        );
+        this.searchTerm$ = this.route.paramMap.pipe(
+            map(pm => pm.get('search') || ''),
+            distinctUntilChanged(),
+            shareReplay(1),
         );
 
         this.collection$ = collectionId$.pipe(
@@ -48,10 +57,11 @@ export class ProductListComponent implements OnInit {
                 }
             }),
         );
-        const queryResult$ = combineLatest(collectionId$, facetValueIds$).pipe(
-            switchMap(([collectionId, facetIds]) => {
+        const queryResult$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$).pipe(
+            switchMap(([collectionId, facetIds, term]) => {
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
+                        term,
                         groupByProduct: true,
                         collectionId,
                         facetIds,

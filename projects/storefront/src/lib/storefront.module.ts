@@ -39,6 +39,7 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
 import { PriceRangePipe } from './pipes/price-range.pipe';
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
+import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 
 const COMPONENTS = [
     ProductListComponent,
@@ -70,6 +71,7 @@ const COMPONENTS = [
     DropdownContentDirective,
     CollectionBreadcrumbsComponent,
     ProductListControlsComponent,
+    ProductSearchBarComponent,
 ];
 
 export interface StorefrontConfig {
