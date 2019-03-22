@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, switchMap, tap } from 'rxjs/operators';
 
+import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 import { GetCollection, SearchProducts } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
-import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 
 @Component({
     selector: 'vsf-product-list',
@@ -28,6 +28,7 @@ export class ProductListComponent implements OnInit {
     ngOnInit() {
         const collectionId$ = this.route.paramMap.pipe(
             map(pm => pm.get('collectionId')),
+            distinctUntilChanged(),
             tap(collectionId => this.stateService.setState('lastCollectionId', collectionId)),
         );
         const facetValueIds$ = this.route.paramMap.pipe(

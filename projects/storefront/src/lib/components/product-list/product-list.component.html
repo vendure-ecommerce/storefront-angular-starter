@@ -1,6 +1,11 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
-<vsf-product-list-controls [facetValues]="facetValues$ | async"
-                           [totalResults]="totalResults$ | async"></vsf-product-list-controls>
-<div class="product-list container">
-    <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
+
+<div class="row">
+    <div class="col-12 col-md-2">
+        <vsf-product-list-controls [facetValues]="facetValues$ | async"
+                                   [totalResults]="totalResults$ | async"></vsf-product-list-controls>
+    </div>
+    <div class="col-12 col-md-10 d-flex flex-wrap">
+        <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
+    </div>
 </div>
