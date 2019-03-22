@@ -12,10 +12,11 @@
             <vsf-cart-drawer [visible]="cartDrawerVisible" (close)="cartDrawerVisible = false"></vsf-cart-drawer>
         </div>
     </vsf-layout-header>
-
-    <div class="container">
+    <div class="contents">
         <vsf-collections-menu></vsf-collections-menu>
-        <router-outlet></router-outlet>
+        <div class="container">
+            <router-outlet></router-outlet>
+        </div>
     </div>
 
     <vsf-layout-footer>

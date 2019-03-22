@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item">
-            <a [routerLink]="['/catalog']">Home</a>
+        <li class="breadcrumb-item" *ngIf="breadcrumbs?.length > 1">
+            <a [routerLink]="['/catalog']">Products</a>
         </li>
         <li class="breadcrumb-item"
             *ngFor="let breadcrumb of tail(breadcrumbs); last as isLast; first as isFirst"

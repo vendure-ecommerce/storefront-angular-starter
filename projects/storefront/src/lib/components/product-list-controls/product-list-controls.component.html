@@ -1,4 +1,4 @@
-<div *ngFor="let facet of facets">
+<div *ngFor="let facet of facets" class="ml-md-3">
     <span class="facet-name">{{ facet.name | titlecase }}</span>
     <ul class="list-unstyled">
         <li *ngFor="let value of facet.values">

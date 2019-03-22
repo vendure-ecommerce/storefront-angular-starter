@@ -1,6 +1,10 @@
 vsf-layout {
     display: block;
 
+    .header {
+        z-index: $zindex-fixed;
+    }
+
     .content {}
 
     .footer {

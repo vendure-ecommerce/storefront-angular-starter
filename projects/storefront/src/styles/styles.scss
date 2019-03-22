@@ -1,3 +1,8 @@
+// Bootstrap overrides
+$breadcrumb-bg: white !default;
+$breadcrumb-divider: "›" !default;
+$breadcrumb-margin-bottom: 0 !default;
+
 @import "~bootstrap/scss/bootstrap";
 @import "~@angular/cdk/overlay-prebuilt";
 
