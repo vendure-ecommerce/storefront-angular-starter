@@ -1,0 +1,9 @@
+vsf-cart-toggle {
+    .badge {
+        &.cart-changed {
+            background-color: $warning;
+            transition: background-color 0.1s;
+        }
+        transition: background-color 3s;
+    }
+}
