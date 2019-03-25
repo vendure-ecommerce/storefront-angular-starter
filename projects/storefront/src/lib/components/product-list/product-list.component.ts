@@ -72,7 +72,7 @@ export class ProductListComponent implements OnInit {
             shareReplay(1),
         );
         this.products$ = queryResult$.pipe(map(data => data.search.items));
-        this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems), tap(val => console.log('totalResults', val)));
+        this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
     }
 

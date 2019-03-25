@@ -9,7 +9,12 @@
                 </a>
             </h5>
             <div class="price">
-                {{ product.price / 100 | currency }}
+                <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
+                    {{ product.priceWithTax.min | formatPrice }}
+                </ng-template>
+                <ng-template #range>
+                    From {{ product.priceWithTax.min | formatPrice }}
+                </ng-template>
             </div>
         </div>
     </ng-template>

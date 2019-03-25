@@ -8,7 +8,7 @@
                 <div class="details">
                     <div class="name">{{ line.productVariant?.name }}</div>
                     <div class="figures">
-                        <div class="price">{{ (line.unitPriceWithTax / 100) | currency }}</div>
+                        <div class="price">{{ line.unitPriceWithTax | formatPrice }}</div>
                         <div class="qty-controls">
                             <button class="btn btn-sm"
                                     *ngIf="canAdjustQuantities"
@@ -22,14 +22,14 @@
                                 <fa-icon aria-label="Add 1" icon="plus"></fa-icon>
                             </button>
                         </div>
-                        <div class="total">{{ (line.totalPrice / 100) | currency }}</div>
+                        <div class="total">{{ line.totalPrice | formatPrice }}</div>
                     </div>
                 </div>
             </div>
             <div class="line-adjustments">
                 <div class="adjustment" *ngFor="let adjustment of getLinePromotions(line.adjustments)">
                     <div>{{ adjustment.description }}</div>
-                    <div>{{ adjustment.amount / 100 | currency }}</div>
+                    <div>{{ adjustment.amount | formatPrice }}</div>
                 </div>
             </div>
         </ng-container>
@@ -42,13 +42,13 @@
         Order adjustments:
         <div class="adjustment" *ngFor="let adjustment of cart.adjustments">
             <div>{{ adjustment.description }}</div>
-            <div>{{ adjustment.amount / 100 | currency }}</div>
+            <div>{{ adjustment.amount | formatPrice }}</div>
         </div>
     </div>
     <div class="shipping">
         <div class="shipping-price">
             <span>Shipping:</span>
-            <span>{{ (cart.shipping / 100) | currency }}</span>
+            <span>{{ cart.shipping | formatPrice }}</span>
         </div>
         <div class="shipping-method">
             {{ cart.shippingMethod?.description }}
@@ -56,6 +56,6 @@
     </div>
     <div class="totals">
         <span>Total:</span>
-        <span>{{ (cart.total / 100) | currency }}</span>
+        <span>{{ cart.total | formatPrice }}</span>
     </div>
 </div>

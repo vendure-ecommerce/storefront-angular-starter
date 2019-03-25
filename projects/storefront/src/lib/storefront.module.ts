@@ -32,14 +32,14 @@ import { LayoutHeaderComponent } from './components/layout/layout-header.compone
 import { LayoutComponent } from './components/layout/layout.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
+import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
-import { PriceRangePipe } from './pipes/price-range.pipe';
-import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
-import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
+import { FormatPricePipe } from './pipes/format-price.pipe';
 
 const COMPONENTS = [
     ProductListComponent,
@@ -57,7 +57,6 @@ const COMPONENTS = [
     CheckoutPaymentComponent,
     CheckoutStageIndicatorComponent,
     CheckoutConfirmationComponent,
-    PriceRangePipe,
     RegisterComponent,
     VerifyComponent,
     CenteredCardComponent,
@@ -74,6 +73,10 @@ const COMPONENTS = [
     ProductSearchBarComponent,
 ];
 
+const PIPES = [
+    FormatPricePipe,
+];
+
 export interface StorefrontConfig {
     apolloOptions: Options;
 }
@@ -82,7 +85,7 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
 
 @NgModule({
     declarations: [
-        ...COMPONENTS,
+        ...COMPONENTS, ...PIPES,
     ],
     imports: [
         CommonModule,
@@ -96,7 +99,7 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
         OverlayModule,
     ],
     exports: [
-        ...COMPONENTS,
+        ...COMPONENTS, ...PIPES,
     ],
 })
 export class StorefrontModule {

@@ -8,7 +8,12 @@ export const SEARCH_PRODUCTS = gql`
                 slug
                 productName
                 description
-                price
+                priceWithTax {
+                    ... on PriceRange {
+                        min
+                        max
+                    }
+                }
                 productPreview
             }
             totalItems

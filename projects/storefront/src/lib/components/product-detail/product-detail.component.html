@@ -26,7 +26,7 @@
                     </select>
                 </div>
                 <div class="price">
-                    {{ selectedVariant?.priceWithTax / 100 | currency }}
+                    {{ selectedVariant?.priceWithTax | formatPrice }}
                 </div>
                 <div class="qty">
                     <input type="number" min="0" max="99" placeholder="Qty" [(ngModel)]="qty" class="form-control">

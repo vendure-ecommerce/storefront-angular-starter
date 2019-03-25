@@ -47,9 +47,7 @@ export class CartDrawerComponent implements OnInit {
             qty,
         }).pipe(
             take(1),
-        ).subscribe(data => {
-            console.log(data);
-        });
+        ).subscribe();
     }
 
     private removeItem(id: string) {
@@ -57,8 +55,6 @@ export class CartDrawerComponent implements OnInit {
             id,
         }).pipe(
             take(1),
-        ).subscribe(data => {
-            console.log(data);
-        });
+        ).subscribe();
     }
 }
