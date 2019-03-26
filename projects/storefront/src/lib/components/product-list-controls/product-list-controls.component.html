@@ -2,8 +2,7 @@
     <span class="facet-name">{{ facet.name | titlecase }}</span>
     <ul class="list-unstyled">
         <li *ngFor="let value of facet.values">
-            <a *ngIf="value.count < totalResults || activeFacetValueIds().includes(value.id)"
-               [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+            <a [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
                class="facet-value"
                [class.selected]="facetValueIsSelected(value.id)">
                 {{ value.name }}

@@ -49,13 +49,14 @@ export class ProductListControlsComponent implements OnChanges {
         if (!facetValues) {
             return [];
         }
+        const activeFacetValueIds = this.activeFacetValueIds();
         const facetMap = new Map<string, FacetWithValues>();
         for (const { count, facetValue: { id, name, facet } } of facetValues) {
-            /*if (count === this.totalResults) {
+            if (count === this.totalResults && !activeFacetValueIds.includes(id)) {
                 // skip FacetValues that do not ave any effect on the
-                // result set
+                // result set and are not active
                 continue;
-            }*/
+            }
             const facetFromMap = facetMap.get(facet.id);
             if (facetFromMap) {
                 facetFromMap.values.push({ id, name, count });

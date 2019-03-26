@@ -3,7 +3,7 @@ vsf-cart-contents {
 
     .item {
         display: flex;
-        font-size: 14px;
+        margin-bottom: 6px;
 
         .details {
             display: flex;
@@ -11,21 +11,20 @@ vsf-cart-contents {
             padding-left: 12px;
             flex: 1;
         }
-        .name {
-            margin-bottom: 6px;
-        }
+        .name {}
         .figures {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            color: $gray-700;
+            font-size: $font-size-sm;
         }
         .qty-controls {
             display: flex;
             align-items: center;
-
-        }
-        .price {
-            color: $gray-800;
+            fa-icon {
+                color: $gray-600;
+            }
         }
     }
     .adjustment {

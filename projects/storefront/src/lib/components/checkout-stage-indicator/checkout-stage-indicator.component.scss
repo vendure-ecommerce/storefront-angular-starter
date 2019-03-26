@@ -4,7 +4,7 @@ vsf-checkout-stage-indicator {
     display: flex;
     align-items: center;
     max-width: 600px;
-    margin: auto auto 32px;
+    margin: 0 auto 32px;
 
     .stage {
         display: flex;
@@ -41,6 +41,7 @@ vsf-checkout-stage-indicator {
         flex: 1;
         height: 0;
         border-bottom: 1px solid #ccc;
+        margin: 0 6px;
     }
 
 }

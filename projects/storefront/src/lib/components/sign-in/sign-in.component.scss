@@ -1,13 +1,19 @@
-.invalid-credentials {
-    margin-top: 24px;
-    opacity: 0;
-    transition: opacity 0.3s;
-    &.visible {
-        opacity: 1;
+vsf-sign-in {
+    display: block;
+    margin-top: 32px;
+
+    .invalid-credentials {
+        margin-top: 24px;
+        opacity: 0;
+        transition: opacity 0.3s;
+
+        &.visible {
+            opacity: 1;
+        }
     }
-}
 
-.register-link {
-    margin-top: 12px;
-}
+    .register-link {
+        margin-top: 12px;
+    }
 
+}

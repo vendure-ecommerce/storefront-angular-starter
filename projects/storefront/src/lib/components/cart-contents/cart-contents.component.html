@@ -34,10 +34,6 @@
             </div>
         </ng-container>
     </div>
-    <!--<div class="order-tax">
-        <span>Tax:</span>
-        <span>{{ ((cart.total - cart.totalBeforeTax) / 100) | currency }}</span>
-    </div>-->
     <div class="order-adjustments" *ngIf="cart.adjustments.length">
         Order adjustments:
         <div class="adjustment" *ngFor="let adjustment of cart.adjustments">
