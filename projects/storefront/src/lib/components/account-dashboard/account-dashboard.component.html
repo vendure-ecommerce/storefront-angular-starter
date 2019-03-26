@@ -1,5 +1,6 @@
-<div *ngIf="activeCustomer$ | async as customer">
-    {{ customer.firstName }} {{ customer.lastName }}
-</div>
-
-<button class="btn btn-secondary" (click)="signOut()">Sign out</button>
+<ng-container *ngIf="activeCustomer$ | async as customer">
+    <h2>
+        {{ customer.firstName }} {{ customer.lastName }}
+    </h2>
+    <p class="lead">{{ customer.emailAddress }}</p>
+</ng-container>

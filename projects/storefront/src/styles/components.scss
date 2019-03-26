@@ -1,4 +1,10 @@
+@import "../lib/components/account/account.component";
+@import "../lib/components/account-address-book/account-address-book.component";
+@import "../lib/components/account-change-password/account-change-password.component";
+@import "../lib/components/account-customer-details/account-customer-details.component";
 @import "../lib/components/account-dashboard/account-dashboard.component";
+@import "../lib/components/account-order-detail/account-order-detail.component";
+@import "../lib/components/account-order-list/account-order-list.component";
 @import "../lib/components/account-link/account-link.component";
 @import "../lib/components/address-form/address-form.component";
 @import "../lib/components/cart-contents/cart-contents.component";

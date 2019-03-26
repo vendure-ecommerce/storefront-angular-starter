@@ -11,9 +11,3 @@ export const GET_ACCOUNT_OVERVIEW = gql`
         }
     }
 `;
-
-export const SIGN_OUT = gql`
-    mutation SignOut {
-        logout
-    }
-`;

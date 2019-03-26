@@ -9,8 +9,14 @@ import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule, Options } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
+import { AccountAddressBookComponent } from './components/account-address-book/account-address-book.component';
+import { AccountChangePasswordComponent } from './components/account-change-password/account-change-password.component';
+import { AccountCustomerDetailsComponent } from './components/account-customer-details/account-customer-details.component';
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
 import { AccountLinkComponent } from './components/account-link/account-link.component';
+import { AccountOrderDetailComponent } from './components/account-order-detail/account-order-detail.component';
+import { AccountOrderListComponent } from './components/account-order-list/account-order-list.component';
+import { AccountComponent } from './components/account/account.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
@@ -71,6 +77,12 @@ const COMPONENTS = [
     CollectionBreadcrumbsComponent,
     ProductListControlsComponent,
     ProductSearchBarComponent,
+    AccountOrderListComponent,
+    AccountComponent,
+    AccountOrderDetailComponent,
+    AccountAddressBookComponent,
+    AccountCustomerDetailsComponent,
+    AccountChangePasswordComponent,
 ];
 
 const PIPES = [

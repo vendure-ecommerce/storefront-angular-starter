@@ -8,7 +8,7 @@ import { GetAccountOverview, SignOut } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
-import { GET_ACCOUNT_OVERVIEW, SIGN_OUT } from './account-dashboard.graphql';
+import { GET_ACCOUNT_OVERVIEW } from './account-dashboard.graphql';
 
 @Component({
     selector: 'vsf-account-dashboard',
@@ -27,14 +27,5 @@ export class AccountDashboardComponent implements OnInit {
             map(data => data.activeCustomer),
             filter(notNullOrUndefined),
         );
-    }
-
-    signOut() {
-        this.dataService.mutate<SignOut.Mutation>(SIGN_OUT).subscribe({
-            next: () => {
-                this.stateService.setState('signedIn', false);
-                this.router.navigate(['/']);
-            },
-        });
     }
 }

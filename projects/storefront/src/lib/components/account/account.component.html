@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-12 col-md-3">
+        <div class="list-group-flush">
+            <a class="list-group-item list-group-item-action"
+               [routerLink]="['./', 'orders']"
+                routerLinkActive="active">
+                Orders
+            </a>
+            <a class="list-group-item list-group-item-action"
+               [routerLink]="['./', 'address-book']"
+                routerLinkActive="active">
+                Address book
+            </a>
+            <a class="list-group-item list-group-item-action"
+               [routerLink]="['./', 'details']"
+                routerLinkActive="active">
+                Personal details
+            </a>
+            <a class="list-group-item list-group-item-action"
+               [routerLink]="['./', 'change-password']"
+                routerLinkActive="active">
+                Change password
+            </a>
+            <a class="list-group-item">
+                <button class="btn btn-outline-warning btn-sm" (click)="signOut()">Sign out</button>
+            </a>
+        </div>
+    </div>
+    <div class="col-12 col-md-9">
+        <router-outlet></router-outlet>
+    </div>
+</div>
