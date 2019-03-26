@@ -1,15 +1,6 @@
 vsf-product-detail {
     display: block;
 
-    .product-images {
-        max-width: 350px;
-        margin-right: 24px;
-        flex: 1;
-    }
-    .product-details {
-        flex: 1;
-    }
-
     .alt-images {
         display: flex;
         flex-wrap: wrap;
@@ -43,6 +34,11 @@ vsf-product-detail {
         display: inline-block;
         height: 40px;
         width: 200px;
+        margin-bottom: 24px;
+        background-color: $gray-200;
+    }
+    .placeholder-description {
+        height: 80px;
         background-color: $light;
     }
     .placeholder-image {
