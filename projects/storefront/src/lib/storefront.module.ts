@@ -17,6 +17,7 @@ import { AccountLinkComponent } from './components/account-link/account-link.com
 import { AccountOrderDetailComponent } from './components/account-order-detail/account-order-detail.component';
 import { AccountOrderListComponent } from './components/account-order-list/account-order-list.component';
 import { AccountComponent } from './components/account/account.component';
+import { AddressCardComponent } from './components/address-card/address-card.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
@@ -83,6 +84,7 @@ const COMPONENTS = [
     AccountAddressBookComponent,
     AccountCustomerDetailsComponent,
     AccountChangePasswordComponent,
+    AddressCardComponent,
 ];
 
 const PIPES = [

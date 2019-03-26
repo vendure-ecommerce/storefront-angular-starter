@@ -1,8 +1,9 @@
 import { ChangeDetectorRef, Pipe, PipeTransform } from 'node_modules/@angular/core';
-import { GetActiveChannel } from 'projects/storefront/src/lib/generated-types';
-import { GET_ACTIVE_CHANNEL } from 'projects/storefront/src/lib/pipes/get-active-channel.graphql';
-import { DataService } from 'projects/storefront/src/lib/providers/data.service';
-import { map, take, tap } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
+
+import { GetActiveChannel } from '../generated-types';
+import { GET_ACTIVE_CHANNEL } from '../pipes/get-active-channel.graphql';
+import { DataService } from '../providers/data.service';
 
 /**
  * Cache the resolved promise so that the activeChannel only needs

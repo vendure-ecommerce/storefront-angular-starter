@@ -4,6 +4,12 @@
 
 export * from './lib/storefront.module';
 export * from './lib/components/account-dashboard/account-dashboard.component';
+export * from './lib/components/account-address-book/account-address-book.component';
+export * from './lib/components/account-change-password/account-change-password.component';
+export * from './lib/components/account-customer-details/account-customer-details.component';
+export * from './lib/components/account-order-detail/account-order-detail.component';
+export * from './lib/components/account-order-list/account-order-list.component';
+export * from './lib/components/account/account.component';
 export * from './lib/components/account-link/account-link.component';
 export * from './lib/components/address-form/address-form.component';
 export * from './lib/components/cart-contents/cart-contents.component';

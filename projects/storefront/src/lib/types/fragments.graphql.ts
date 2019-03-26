@@ -56,8 +56,8 @@ export const COUNTRY_FRAGMENT = gql`
     }
 `;
 
-export const SHIPPING_ADDRESS_FRAGMENT = gql`
-    fragment ShippingAddress on OrderAddress {
+export const ORDER_ADDRESS_FRAGMENT = gql`
+    fragment OrderAddress on OrderAddress {
         fullName
         company
         streetLine1

@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-25T21:11:19+01:00
+// Generated in 2019-03-26T14:09:07+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -811,16 +811,6 @@ export namespace GetAccountOverview {
     };
 }
 
-export namespace SignOut {
-    export type Variables = {};
-
-    export type Mutation = {
-        __typename?: "Mutation";
-
-        logout: boolean;
-    };
-}
-
 export namespace GetActiveCustomer {
     export type Variables = {};
 
@@ -840,6 +830,84 @@ export namespace GetActiveCustomer {
         lastName: string;
 
         emailAddress: string;
+    };
+}
+
+export namespace GetOrder {
+    export type Variables = {
+        code: string;
+    };
+
+    export type Query = {
+        __typename?: "Query";
+
+        orderByCode: Maybe<OrderByCode>;
+    };
+
+    export type OrderByCode = {
+        __typename?: "Order";
+
+        shippingAddress: Maybe<ShippingAddress>;
+
+        billingAddress: Maybe<BillingAddress>;
+    } & Cart.Fragment;
+
+    export type ShippingAddress = OrderAddress.Fragment;
+
+    export type BillingAddress = OrderAddress.Fragment;
+}
+
+export namespace GetOrderList {
+    export type Variables = {
+        options?: Maybe<OrderListOptions>;
+    };
+
+    export type Query = {
+        __typename?: "Query";
+
+        activeCustomer: Maybe<ActiveCustomer>;
+    };
+
+    export type ActiveCustomer = {
+        __typename?: "Customer";
+
+        id: string;
+
+        orders: Orders;
+    };
+
+    export type Orders = {
+        __typename?: "OrderList";
+
+        items: Items[];
+
+        totalItems: number;
+    };
+
+    export type Items = {
+        __typename?: "Order";
+
+        id: string;
+
+        updatedAt: DateTime;
+
+        code: string;
+
+        state: string;
+
+        currencyCode: CurrencyCode;
+
+        total: number;
+    };
+}
+
+export namespace SignOut {
+    export type Variables = {};
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        logout: boolean;
     };
 }
 
@@ -1023,7 +1091,7 @@ export namespace GetShippingAddress {
         shippingAddress: Maybe<ShippingAddress>;
     };
 
-    export type ShippingAddress = ShippingAddress.Fragment;
+    export type ShippingAddress = OrderAddress.Fragment;
 }
 
 export namespace GetCustomerAddresses {
@@ -1063,7 +1131,7 @@ export namespace SetShippingAddress {
         shippingAddress: Maybe<ShippingAddress>;
     } & Cart.Fragment;
 
-    export type ShippingAddress = ShippingAddress.Fragment;
+    export type ShippingAddress = OrderAddress.Fragment;
 }
 
 export namespace GetEligibleShippingMethods {
@@ -1517,7 +1585,7 @@ export namespace GetOrderForCheckout {
         shippingAddress: Maybe<ShippingAddress>;
     } & Cart.Fragment;
 
-    export type ShippingAddress = ShippingAddress.Fragment;
+    export type ShippingAddress = OrderAddress.Fragment;
 }
 
 export namespace Cart {
@@ -1636,7 +1704,7 @@ export namespace Country {
     };
 }
 
-export namespace ShippingAddress {
+export namespace OrderAddress {
     export type Fragment = {
         __typename?: "OrderAddress";
 

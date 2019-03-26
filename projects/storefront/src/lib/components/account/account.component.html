@@ -2,23 +2,29 @@
     <div class="col-12 col-md-3">
         <div class="list-group-flush">
             <a class="list-group-item list-group-item-action"
+               [routerLink]="['./']"
+               [routerLinkActiveOptions]="{ exact: true }"
+               routerLinkActive="active">
+                Dashboard
+            </a>
+            <a class="list-group-item list-group-item-action"
                [routerLink]="['./', 'orders']"
-                routerLinkActive="active">
+               routerLinkActive="active">
                 Orders
             </a>
             <a class="list-group-item list-group-item-action"
                [routerLink]="['./', 'address-book']"
-                routerLinkActive="active">
+               routerLinkActive="active">
                 Address book
             </a>
             <a class="list-group-item list-group-item-action"
                [routerLink]="['./', 'details']"
-                routerLinkActive="active">
+               routerLinkActive="active">
                 Personal details
             </a>
             <a class="list-group-item list-group-item-action"
                [routerLink]="['./', 'change-password']"
-                routerLinkActive="active">
+               routerLinkActive="active">
                 Change password
             </a>
             <a class="list-group-item">

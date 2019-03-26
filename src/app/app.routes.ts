@@ -1,7 +1,13 @@
 import { Route } from '@angular/router';
 import {
+    AccountAddressBookComponent,
+    AccountChangePasswordComponent,
+    AccountComponent,
+    AccountCustomerDetailsComponent,
     AccountDashboardComponent,
     AccountGuard,
+    AccountOrderDetailComponent,
+    AccountOrderListComponent,
     CheckoutConfirmationComponent,
     CheckoutGuard,
     CheckoutPaymentComponent,
@@ -16,12 +22,6 @@ import {
     SignInGuard,
     VerifyComponent,
 } from '@vendure/storefront';
-
-import { AccountOrderListComponent } from '../../projects/storefront/src/lib/components/account-order-list/account-order-list.component';
-import { AccountComponent } from '../../projects/storefront/src/lib/components/account/account.component';
-import { AccountCustomerDetailsComponent } from '../../projects/storefront/src/lib/components/account-customer-details/account-customer-details.component';
-import { AccountChangePasswordComponent } from '../../projects/storefront/src/lib/components/account-change-password/account-change-password.component';
-import { AccountAddressBookComponent } from '../../projects/storefront/src/lib/components/account-address-book/account-address-book.component';
 
 export const routes: Route[] = [
     {
@@ -71,6 +71,10 @@ export const routes: Route[] = [
             {
                 path: 'orders',
                 component: AccountOrderListComponent,
+            },
+            {
+                path: 'orders/:code',
+                component: AccountOrderDetailComponent,
             },
             {
                 path: 'address-book',
