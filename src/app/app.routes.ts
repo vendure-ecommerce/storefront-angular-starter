@@ -1,6 +1,7 @@
 import { Route } from '@angular/router';
 import {
     AccountAddressBookComponent,
+    AccountAddressDetailComponent,
     AccountChangePasswordComponent,
     AccountComponent,
     AccountCustomerDetailsComponent,
@@ -79,6 +80,10 @@ export const routes: Route[] = [
             {
                 path: 'address-book',
                 component: AccountAddressBookComponent,
+            },
+            {
+                path: 'address-book/:id',
+                component: AccountAddressDetailComponent,
             },
             {
                 path: 'details',

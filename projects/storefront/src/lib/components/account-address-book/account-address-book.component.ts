@@ -1,4 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { GetCustomerAddresses } from '../../generated-types';
+import { DataService } from '../../providers/data.service';
+import { GET_CUSTOMER_ADDRESSES } from '../../types/documents.graphql';
 
 @Component({
     selector: 'vsf-account-address-book',
@@ -7,9 +13,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 })
 export class AccountAddressBookComponent implements OnInit {
 
-    constructor() { }
+    addresses$: Observable<GetCustomerAddresses.Addresses[] | null>;
+    constructor(private dataService: DataService) { }
 
     ngOnInit() {
+        this.addresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
+            map(data => data.activeCustomer && data.activeCustomer.addresses),
+        );
     }
 
 }

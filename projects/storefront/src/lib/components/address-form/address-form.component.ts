@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Country, ShippingAddress } from '../../generated-types';
+import { Address, Country, OrderAddress } from '../../generated-types';
 
 @Component({
     selector: 'vsf-address-form',
@@ -11,7 +11,7 @@ import { Country, ShippingAddress } from '../../generated-types';
 export class AddressFormComponent implements OnChanges {
 
     @Input() availableCountries: Country.Fragment[];
-    @Input() address: ShippingAddress.Fragment;
+    @Input() address: OrderAddress.Fragment | Address.Fragment;
 
     addressForm: FormGroup;
     constructor(private formBuilder: FormBuilder) {
@@ -31,6 +31,21 @@ export class AddressFormComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if ('address' in changes && this.addressForm && this.address) {
             this.addressForm.patchValue(this.address, { });
+        }
+        const country = this.address && this.address.country;
+        if (country && this.availableCountries) {
+            if (country && typeof country !== 'string') {
+                this.addressForm.patchValue({
+                    countryCode: country.code,
+                });
+            } else {
+                const matchingCountry = this.availableCountries.find(c => c.name === country);
+                if (matchingCountry) {
+                    this.addressForm.patchValue({
+                        countryCode: matchingCountry.code,
+                    });
+                }
+            }
         }
     }
 

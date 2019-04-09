@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-03-26T14:09:07+01:00
+// Generated in 2019-04-09T09:58:31+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -787,6 +787,20 @@ export type Upload = any;
 // Documents
 // ====================================================
 
+export namespace UpdateAddress {
+    export type Variables = {
+        input: UpdateAddressInput;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        updateCustomerAddress: UpdateCustomerAddress;
+    };
+
+    export type UpdateCustomerAddress = Address.Fragment;
+}
+
 export namespace GetAccountOverview {
     export type Variables = {};
 
@@ -1062,18 +1076,6 @@ export namespace TransitionToAddingItems {
     export type TransitionOrderToState = Cart.Fragment;
 }
 
-export namespace GetAvailableCountries {
-    export type Variables = {};
-
-    export type Query = {
-        __typename?: "Query";
-
-        availableCountries: AvailableCountries[];
-    };
-
-    export type AvailableCountries = Country.Fragment;
-}
-
 export namespace GetShippingAddress {
     export type Variables = {};
 
@@ -1092,26 +1094,6 @@ export namespace GetShippingAddress {
     };
 
     export type ShippingAddress = OrderAddress.Fragment;
-}
-
-export namespace GetCustomerAddresses {
-    export type Variables = {};
-
-    export type Query = {
-        __typename?: "Query";
-
-        activeCustomer: Maybe<ActiveCustomer>;
-    };
-
-    export type ActiveCustomer = {
-        __typename?: "Customer";
-
-        id: string;
-
-        addresses: Maybe<Addresses[]>;
-    };
-
-    export type Addresses = Address.Fragment;
 }
 
 export namespace SetShippingAddress {
@@ -1586,6 +1568,38 @@ export namespace GetOrderForCheckout {
     } & Cart.Fragment;
 
     export type ShippingAddress = OrderAddress.Fragment;
+}
+
+export namespace GetCustomerAddresses {
+    export type Variables = {};
+
+    export type Query = {
+        __typename?: "Query";
+
+        activeCustomer: Maybe<ActiveCustomer>;
+    };
+
+    export type ActiveCustomer = {
+        __typename?: "Customer";
+
+        id: string;
+
+        addresses: Maybe<Addresses[]>;
+    };
+
+    export type Addresses = Address.Fragment;
+}
+
+export namespace GetAvailableCountries {
+    export type Variables = {};
+
+    export type Query = {
+        __typename?: "Query";
+
+        availableCountries: AvailableCountries[];
+    };
+
+    export type AvailableCountries = Country.Fragment;
 }
 
 export namespace Cart {

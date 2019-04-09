@@ -10,6 +10,7 @@ import { HttpLink, HttpLinkModule, Options } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AccountAddressBookComponent } from './components/account-address-book/account-address-book.component';
+import { AccountAddressDetailComponent } from './components/account-address-detail/account-address-detail.component';
 import { AccountChangePasswordComponent } from './components/account-change-password/account-change-password.component';
 import { AccountCustomerDetailsComponent } from './components/account-customer-details/account-customer-details.component';
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
@@ -99,7 +100,7 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
 
 @NgModule({
     declarations: [
-        ...COMPONENTS, ...PIPES,
+        ...COMPONENTS, ...PIPES, AccountAddressDetailComponent,
     ],
     imports: [
         CommonModule,

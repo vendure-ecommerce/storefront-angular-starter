@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import {
@@ -17,11 +17,10 @@ import {
 } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
+import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../types/documents.graphql';
 import { AddressFormComponent } from '../address-form/address-form.component';
 
 import {
-    GET_AVAILABLE_COUNTRIES,
-    GET_CUSTOMER_ADDRESSES,
     GET_ELIGIBLE_SHIPPING_METHODS,
     GET_SHIPPING_ADDRESS,
     SET_CUSTOMER_FOR_ORDER,
@@ -66,6 +65,7 @@ export class CheckoutShippingComponent implements OnInit {
         );
         this.shippingAddress$ = this.dataService.query<GetShippingAddress.Query>(GET_SHIPPING_ADDRESS).pipe(
             map(data => data.activeOrder && data.activeOrder.shippingAddress),
+            tap(val => console.log(val)),
         );
         this.eligibleShippingMethods$ = this.shippingAddress$.pipe(
             switchMap(() => this.dataService.query<GetEligibleShippingMethods.Query>(GET_ELIGIBLE_SHIPPING_METHODS)),

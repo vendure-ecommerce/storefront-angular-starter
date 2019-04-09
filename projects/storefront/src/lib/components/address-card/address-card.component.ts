@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { OrderAddress } from 'projects/storefront/src/lib/generated-types';
+import { Address, OrderAddress } from 'projects/storefront/src/lib/generated-types';
 
 import { DataService } from '../../providers/data.service';
 
@@ -9,7 +9,7 @@ import { DataService } from '../../providers/data.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressCardComponent {
-    @Input() address: OrderAddress.Fragment;
+    @Input() address: OrderAddress.Fragment | Address.Fragment;
     @Input() title = '';
     foo: DataService;
 }
