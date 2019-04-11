@@ -11,7 +11,7 @@ import { InMemoryCache } from 'apollo-cache-inmemory';
 
 import { AccountAddressBookComponent } from './components/account-address-book/account-address-book.component';
 import { AccountAddressDetailComponent } from './components/account-address-detail/account-address-detail.component';
-import { AccountChangePasswordComponent } from './components/account-change-password/account-change-password.component';
+import { AccountChangeCredentialsComponent } from './components/account-change-credentials/account-change-credentials.component';
 import { AccountCustomerDetailsComponent } from './components/account-customer-details/account-customer-details.component';
 import { AccountDashboardComponent } from './components/account-dashboard/account-dashboard.component';
 import { AccountLinkComponent } from './components/account-link/account-link.component';
@@ -84,7 +84,7 @@ const COMPONENTS = [
     AccountOrderDetailComponent,
     AccountAddressBookComponent,
     AccountCustomerDetailsComponent,
-    AccountChangePasswordComponent,
+    AccountChangeCredentialsComponent,
     AddressCardComponent,
 ];
 

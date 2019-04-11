@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-04-09T11:11:09+02:00
+// Generated in 2019-04-11T10:50:58+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -310,8 +310,6 @@ export interface CreateCustomerInput {
 
 export interface UpdateCustomerInput {
     customFields?: Maybe<Json>;
-
-    emailAddress?: Maybe<string>;
 
     firstName?: Maybe<string>;
 
@@ -799,6 +797,32 @@ export namespace UpdateAddress {
     };
 
     export type UpdateCustomerAddress = Address.Fragment;
+}
+
+export namespace ChangePassword {
+    export type Variables = {
+        old: string;
+        new: string;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        updateCustomerPassword: Maybe<boolean>;
+    };
+}
+
+export namespace ChangeEmailAddress {
+    export type Variables = {
+        password: string;
+        emailAddress: string;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        requestUpdateCustomerEmailAddress: Maybe<boolean>;
+    };
 }
 
 export namespace UpdateCustomerDetails {

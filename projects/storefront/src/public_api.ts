@@ -6,7 +6,7 @@ export * from './lib/storefront.module';
 export * from './lib/components/account-dashboard/account-dashboard.component';
 export * from './lib/components/account-address-book/account-address-book.component';
 export * from './lib/components/account-address-detail/account-address-detail.component';
-export * from './lib/components/account-change-password/account-change-password.component';
+export * from './lib/components/account-change-credentials/account-change-credentials.component';
 export * from './lib/components/account-customer-details/account-customer-details.component';
 export * from './lib/components/account-order-detail/account-order-detail.component';
 export * from './lib/components/account-order-list/account-order-list.component';

@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import {
     AccountAddressBookComponent,
     AccountAddressDetailComponent,
-    AccountChangePasswordComponent,
+    AccountChangeCredentialsComponent,
     AccountComponent,
     AccountCustomerDetailsComponent,
     AccountDashboardComponent,
@@ -90,8 +90,8 @@ export const routes: Route[] = [
                 component: AccountCustomerDetailsComponent,
             },
             {
-                path: 'change-password',
-                component: AccountChangePasswordComponent,
+                path: 'change-credentials',
+                component: AccountChangeCredentialsComponent,
             },
         ],
     },
