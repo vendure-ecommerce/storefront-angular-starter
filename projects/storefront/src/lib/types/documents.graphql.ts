@@ -13,6 +13,7 @@ export const GET_CUSTOMER_ADDRESSES = gql`
     }
     ${ADDRESS_FRAGMENT}
 `;
+
 export const GET_AVAILABLE_COUNTRIES = gql`
     query GetAvailableCountries {
         availableCountries {
@@ -20,4 +21,16 @@ export const GET_AVAILABLE_COUNTRIES = gql`
         }
     }
     ${COUNTRY_FRAGMENT}
+`;
+
+export const GET_ACTIVE_CUSTOMER = gql`
+    query GetActiveCustomer {
+        activeCustomer {
+            id
+            firstName
+            lastName
+            emailAddress
+            phoneNumber
+        }
+    }
 `;

@@ -6,7 +6,7 @@ import { GetActiveCustomer } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
 
-import { GET_ACTIVE_CUSTOMER } from './account-link.graphql';
+import { GET_ACTIVE_CUSTOMER } from '../../types/documents.graphql';
 
 @Component({
     selector: 'vsf-account-link',

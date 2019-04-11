@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-04-09T09:58:31+02:00
+// Generated in 2019-04-09T11:11:09+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -801,6 +801,32 @@ export namespace UpdateAddress {
     export type UpdateCustomerAddress = Address.Fragment;
 }
 
+export namespace UpdateCustomerDetails {
+    export type Variables = {
+        input: UpdateCustomerInput;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        updateCustomer: UpdateCustomer;
+    };
+
+    export type UpdateCustomer = {
+        __typename?: "Customer";
+
+        id: string;
+
+        firstName: string;
+
+        lastName: string;
+
+        emailAddress: string;
+
+        phoneNumber: Maybe<string>;
+    };
+}
+
 export namespace GetAccountOverview {
     export type Variables = {};
 
@@ -816,28 +842,6 @@ export namespace GetAccountOverview {
         id: string;
 
         title: Maybe<string>;
-
-        firstName: string;
-
-        lastName: string;
-
-        emailAddress: string;
-    };
-}
-
-export namespace GetActiveCustomer {
-    export type Variables = {};
-
-    export type Query = {
-        __typename?: "Query";
-
-        activeCustomer: Maybe<ActiveCustomer>;
-    };
-
-    export type ActiveCustomer = {
-        __typename?: "Customer";
-
-        id: string;
 
         firstName: string;
 
@@ -1600,6 +1604,30 @@ export namespace GetAvailableCountries {
     };
 
     export type AvailableCountries = Country.Fragment;
+}
+
+export namespace GetActiveCustomer {
+    export type Variables = {};
+
+    export type Query = {
+        __typename?: "Query";
+
+        activeCustomer: Maybe<ActiveCustomer>;
+    };
+
+    export type ActiveCustomer = {
+        __typename?: "Customer";
+
+        id: string;
+
+        firstName: string;
+
+        lastName: string;
+
+        emailAddress: string;
+
+        phoneNumber: Maybe<string>;
+    };
 }
 
 export namespace Cart {

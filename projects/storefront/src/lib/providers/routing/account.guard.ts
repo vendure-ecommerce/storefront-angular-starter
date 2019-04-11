@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { GET_ACTIVE_CUSTOMER } from '../../components/account-link/account-link.graphql';
+import { GET_ACTIVE_CUSTOMER } from '../../types/documents.graphql';
 import { GetActiveCustomer } from '../../generated-types';
 import { DataService } from '../data.service';
 import { StateService } from '../state.service';
