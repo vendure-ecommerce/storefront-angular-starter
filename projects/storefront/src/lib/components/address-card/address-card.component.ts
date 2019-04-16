@@ -11,5 +11,15 @@ import { DataService } from '../../providers/data.service';
 export class AddressCardComponent {
     @Input() address: OrderAddress.Fragment | Address.Fragment;
     @Input() title = '';
-    foo: DataService;
+
+    getCountryName(): string {
+        if (!this.address.country) {
+            return '';
+        }
+        if (typeof this.address.country === 'string') {
+            return this.address.country;
+        } else {
+            return this.address.country.name;
+        }
+    }
 }

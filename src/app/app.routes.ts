@@ -17,9 +17,11 @@ import {
     CheckoutResolver,
     CheckoutShippingComponent,
     CheckoutSignInComponent,
+    ForgottenPasswordComponent,
     ProductDetailComponent,
     ProductListComponent,
     RegisterComponent,
+    ResetPasswordComponent,
     SignInComponent,
     SignInGuard,
     VerifyComponent,
@@ -59,6 +61,16 @@ export const routes: Route[] = [
         path: 'verify',
         canActivate: [SignInGuard],
         component: VerifyComponent,
+    },
+    {
+        path: 'reset-password',
+        canActivate: [SignInGuard],
+        component: ResetPasswordComponent,
+    },
+    {
+        path: 'forgotten-password',
+        canActivate: [SignInGuard],
+        component: ForgottenPasswordComponent,
     },
     {
         path: 'change-email-address',

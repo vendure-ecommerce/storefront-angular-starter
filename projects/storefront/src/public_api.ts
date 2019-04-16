@@ -27,6 +27,7 @@ export * from './lib/components/checkout-stage-indicator/checkout-stage-indicato
 export * from './lib/components/collection-breadcrumbs/collection-breadcrumbs.component';
 export * from './lib/components/collections-menu/collections-menu.component';
 export * from './lib/components/dropdown/dropdown.component';
+export * from './lib/components/forgotten-password/forgotten-password.component';
 export * from './lib/components/product-detail/product-detail.component';
 export * from './lib/components/product-list/product-list.component';
 export * from './lib/components/product-list-controls/product-list-controls.component';
@@ -37,6 +38,7 @@ export * from './lib/components/layout/layout-header.component';
 export * from './lib/components/layout/layout-footer.component';
 export * from './lib/components/sign-in/sign-in.component';
 export * from './lib/components/verify/verify.component';
+export * from './lib/components/reset-password/reset-password.component';
 export * from './lib/providers/routing/account.guard';
 export * from './lib/providers/routing/checkout.guard';
 export * from './lib/providers/routing/checkout-resolver.graphql';

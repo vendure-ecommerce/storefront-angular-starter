@@ -5,7 +5,7 @@
             <li>{{ address.fullName }}</li>
             <li>{{ address.streetLine1 }}</li>
             <li>{{ address.postalCode }}</li>
-            <li>{{ address.country.name ? address.country.name : address.country }}</li>
+            <li>{{ getCountryName() }}</li>
         </ul>
     </div>
     <div class="card-footer">

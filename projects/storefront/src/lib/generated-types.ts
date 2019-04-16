@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-04-16T13:28:51+02:00
+// Generated in 2019-04-16T14:36:11+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1280,6 +1280,18 @@ export namespace GetCollections {
     };
 }
 
+export namespace RequestPasswordReset {
+    export type Variables = {
+        emailAddress: string;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        requestPasswordReset: Maybe<boolean>;
+    };
+}
+
 export namespace GetProductDetail {
     export type Variables = {
         id: string;
@@ -1514,6 +1526,33 @@ export namespace Register {
         __typename?: "Mutation";
 
         registerCustomerAccount: boolean;
+    };
+}
+
+export namespace ResetPassword {
+    export type Variables = {
+        token: string;
+        password: string;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        resetPassword: ResetPassword;
+    };
+
+    export type ResetPassword = {
+        __typename?: "LoginResult";
+
+        user: User;
+    };
+
+    export type User = {
+        __typename?: "CurrentUser";
+
+        id: string;
+
+        identifier: string;
     };
 }
 

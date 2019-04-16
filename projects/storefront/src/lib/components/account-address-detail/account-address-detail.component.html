@@ -3,4 +3,4 @@
                   [availableCountries]="availableCountries$ | async"></vsf-address-form>
 <button class="btn btn-secondary mt-3"
         [disabled]="addressForm.addressForm.invalid || addressForm.addressForm.pristine"
-        (click)="updateAddress(addressForm.addressForm.value)">Update Address</button>
+        (click)="updateAddress()">Update Address</button>

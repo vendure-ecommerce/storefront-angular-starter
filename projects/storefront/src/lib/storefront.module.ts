@@ -36,6 +36,7 @@ import { CollectionsMenuComponent } from './components/collections-menu/collecti
 import { DropdownContentDirective } from './components/dropdown/dropdown-content.directive';
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
+import { ForgottenPasswordComponent } from './components/forgotten-password/forgotten-password.component';
 import { LayoutFooterComponent } from './components/layout/layout-footer.component';
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
@@ -45,6 +46,7 @@ import { ProductListControlsComponent } from './components/product-list-controls
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
@@ -88,6 +90,9 @@ const COMPONENTS = [
     AccountChangeCredentialsComponent,
     AddressCardComponent,
     ChangeEmailAddressComponent,
+    AccountAddressDetailComponent,
+    ResetPasswordComponent,
+    ForgottenPasswordComponent,
 ];
 
 const PIPES = [
@@ -102,7 +107,7 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
 
 @NgModule({
     declarations: [
-        ...COMPONENTS, ...PIPES, AccountAddressDetailComponent,
+        ...COMPONENTS, ...PIPES,
     ],
     imports: [
         CommonModule,
