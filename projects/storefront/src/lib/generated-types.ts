@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-04-11T10:50:58+02:00
+// Generated in 2019-04-16T13:28:51+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -1021,6 +1021,18 @@ export namespace GetCartTotals {
         id: string;
 
         quantity: number;
+    };
+}
+
+export namespace VerifyChangeEmailAddress {
+    export type Variables = {
+        token: string;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        updateCustomerEmailAddress: Maybe<boolean>;
     };
 }
 

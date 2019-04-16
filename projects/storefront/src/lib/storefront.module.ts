@@ -24,6 +24,7 @@ import { CartContentsComponent } from './components/cart-contents/cart-contents.
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
 import { CenteredCardComponent } from './components/centered-card/centered-card.component';
+import { ChangeEmailAddressComponent } from './components/change-email-address/change-email-address.component';
 import { CheckoutConfirmationComponent } from './components/checkout-confirmation/checkout-confirmation.component';
 import { CheckoutPaymentComponent } from './components/checkout-payment/checkout-payment.component';
 import { CheckoutProcessComponent } from './components/checkout-process/checkout-process.component';
@@ -86,6 +87,7 @@ const COMPONENTS = [
     AccountCustomerDetailsComponent,
     AccountChangeCredentialsComponent,
     AddressCardComponent,
+    ChangeEmailAddressComponent,
 ];
 
 const PIPES = [

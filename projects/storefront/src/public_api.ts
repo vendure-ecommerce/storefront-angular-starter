@@ -17,6 +17,7 @@ export * from './lib/components/cart-contents/cart-contents.component';
 export * from './lib/components/cart-drawer/cart-drawer.component';
 export * from './lib/components/cart-toggle/cart-toggle.component';
 export * from './lib/components/centered-card/centered-card.component';
+export * from './lib/components/change-email-address/change-email-address.component';
 export * from './lib/components/checkout-confirmation/checkout-confirmation.component';
 export * from './lib/components/checkout-payment/checkout-payment.component';
 export * from './lib/components/checkout-process/checkout-process.component';

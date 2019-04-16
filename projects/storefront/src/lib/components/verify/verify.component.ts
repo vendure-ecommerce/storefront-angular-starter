@@ -10,7 +10,7 @@ import { VERIFY } from './verify.graphql';
 @Component({
     selector: 'vsf-verify',
     templateUrl: './verify.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VerifyComponent {
     password = '';

@@ -20,7 +20,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         RouterModule.forRoot(routes),
         StorefrontModule.forRoot({
             apolloOptions: {
-                uri: 'https://demo.vendure.io/shop-api',
+                uri: 'http://localhost:3000/shop-api',
                 withCredentials: true,
             },
         }),

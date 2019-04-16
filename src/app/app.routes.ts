@@ -9,6 +9,7 @@ import {
     AccountGuard,
     AccountOrderDetailComponent,
     AccountOrderListComponent,
+    ChangeEmailAddressComponent,
     CheckoutConfirmationComponent,
     CheckoutGuard,
     CheckoutPaymentComponent,
@@ -58,6 +59,11 @@ export const routes: Route[] = [
         path: 'verify',
         canActivate: [SignInGuard],
         component: VerifyComponent,
+    },
+    {
+        path: 'change-email-address',
+        canActivate: [SignInGuard],
+        component: ChangeEmailAddressComponent,
     },
     {
         path: 'account',
