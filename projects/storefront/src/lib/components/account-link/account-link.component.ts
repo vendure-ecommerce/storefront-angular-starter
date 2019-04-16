@@ -20,7 +20,7 @@ export class AccountLinkComponent implements OnInit {
                 private stateService: StateService) {}
 
     ngOnInit() {
-        const getActiveCustomer$ = this.dataService.query<GetActiveCustomer.Query>(GET_ACTIVE_CUSTOMER);
+        const getActiveCustomer$ = this.dataService.query<GetActiveCustomer.Query>(GET_ACTIVE_CUSTOMER, {}, 'network-only');
 
         getActiveCustomer$.pipe(take(1)).subscribe(data => {
             if (data.activeCustomer) {
