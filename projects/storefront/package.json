@@ -6,18 +6,23 @@
     "@fortawesome/angular-fontawesome": "^0.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.15",
     "@fortawesome/free-solid-svg-icons": "^5.7.2",
+    "@ngx-translate/core": "^11.0.1",
+     "@ngx-translate/http-loader": "^4.0.0",
     "apollo-angular": "^1.5.0",
     "apollo-angular-link-http": "^1.5.0",
     "apollo-cache-inmemory": "^1.5.1",
     "apollo-client": "^2.5.1",
     "apollo-link": "^1.2.11",
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "messageformat": "^2.1.0",
+    "ngx-translate-messageformat-compiler": "^4.4.0"
   },
   "peerDependencies": {
     "@angular/common": "^7.2.0",
     "@angular/core": "^7.2.0"
   },
   "devDependencies": {
+    "@biesbjerg/ngx-translate-extract": "^2.3.4",
     "@types/gulp": "^4.0.6",
     "cross-env": "^5.2.0",
     "gulp": "^4.0.0",

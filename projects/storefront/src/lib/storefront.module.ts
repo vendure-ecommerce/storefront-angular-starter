@@ -1,13 +1,15 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import { CommonModule, PlatformLocation } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateCompiler, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule, Options } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { TranslateMessageFormatCompiler } from 'ngx-translate-messageformat-compiler';
 
 import { AccountAddressBookComponent } from './components/account-address-book/account-address-book.component';
 import { AccountAddressDetailComponent } from './components/account-address-detail/account-address-detail.component';
@@ -51,6 +53,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
 import { FormatPricePipe } from './pipes/format-price.pipe';
+import { CustomHttpTranslationLoader } from './providers/i18n/custom-http-loader';
 
 const COMPONENTS = [
     ProductListComponent,
@@ -105,6 +108,12 @@ export interface StorefrontConfig {
 
 export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
 
+export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) {
+    // Dynamically get the baseHref, which is configured in the angular.json file
+    const baseHref = location.getBaseHrefFromDOM();
+    return new CustomHttpTranslationLoader(http, baseHref + '/i18n/');
+}
+
 @NgModule({
     declarations: [
         ...COMPONENTS, ...PIPES,
@@ -119,6 +128,14 @@ export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
         HttpLinkModule,
         FontAwesomeModule,
         OverlayModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient, PlatformLocation],
+            },
+            compiler: { provide: TranslateCompiler, useClass: TranslateMessageFormatCompiler },
+        }),
     ],
     exports: [
         ...COMPONENTS, ...PIPES,
