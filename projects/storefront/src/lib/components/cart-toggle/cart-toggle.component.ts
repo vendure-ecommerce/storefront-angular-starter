@@ -25,7 +25,7 @@ export class CartToggleComponent implements OnInit {
             this.stateService.select(state => state.activeOrderId),
             this.stateService.select(state => state.signedIn),
         ).pipe(
-            switchMap(() => this.dataService.query<GetCartTotals.Query>(GET_CART_TOTALS)),
+            switchMap(() => this.dataService.query<GetCartTotals.Query>(GET_CART_TOTALS, {}, 'network-only')),
             map(({ activeOrder }) => {
                 return {
                     total: activeOrder ? activeOrder.total : 0,

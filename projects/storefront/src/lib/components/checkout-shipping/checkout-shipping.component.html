@@ -1,7 +1,7 @@
 <div class="accordion">
     <div class="card" *ngIf="(signedIn$ | async) && (customerAddresses$ | async)?.length">
         <div class="card-header">
-            <button class="btn btn-light" (click)="step = 'selectAddress'">Select Address</button>>
+            <button class="btn btn-light" (click)="step = 'selectAddress'">Select Address</button>
         </div>
         <div class="card-body customer-address collapse" [class.show]="step === 'selectAddress'" *ngFor="let address of customerAddresses$ | async"
              (click)="editAddress(address)">
