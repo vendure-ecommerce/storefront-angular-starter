@@ -1,12 +1,19 @@
 <div *ngFor="let facet of facets" class="ml-md-3">
     <span class="facet-name">{{ facet.name | titlecase }}</span>
-    <ul class="list-unstyled">
+    <ul class="list-unstyled facet-values">
         <li *ngFor="let value of facet.values">
             <a [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
                class="facet-value"
                [class.selected]="facetValueIsSelected(value.id)">
                 {{ value.name }}
-                <span class="badge badge-light">{{ value.count }}</span>
+                <span class="badge badge-light">
+                    <ng-container *ngIf="!facetValueIsSelected(value.id); else untoggle">
+                        {{ value.count }}
+                    </ng-container>
+                    <ng-template #untoggle>
+                        <fa-icon icon="times" class=""></fa-icon>
+                    </ng-template>
+                </span>
             </a>
         </li>
     </ul>

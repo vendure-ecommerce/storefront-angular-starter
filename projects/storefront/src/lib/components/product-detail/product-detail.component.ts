@@ -50,7 +50,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 this.selectedAsset = this.product.featuredAsset;
             }
             this.selectedVariant = product.variants[0];
-            this.breadcrumbs = this.getMostRelevantCollection(product.collections, lastCollectionId).breadcrumbs;
+            const collection = this.getMostRelevantCollection(product.collections, lastCollectionId);
+            this.breadcrumbs = collection ? collection.breadcrumbs : [];
         });
     }
 

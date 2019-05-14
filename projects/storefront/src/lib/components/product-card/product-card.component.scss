@@ -1,7 +1,30 @@
 vsf-product-card {
     display: block;
-    margin: 12px;
-    width: 150px;
+    margin: 12px 12px 36px;
+    width: 200px;
+
+    &:hover {
+        .product-name {
+            text-decoration: underline;
+            text-decoration-color: $gray-400;
+        }
+    }
+
+    .product-name {
+        text-align: center;
+        color: $gray-800;
+        display: block;
+        &:hover {
+            text-decoration: none;
+            color: $gray-700;
+        }
+    }
+
+    .price {
+        font-weight: normal;
+        text-align: center;
+        color: $gray-600;
+    }
 
     .placeholder-image {
         width: 148px;

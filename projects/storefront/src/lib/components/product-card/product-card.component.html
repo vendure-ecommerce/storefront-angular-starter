@@ -1,13 +1,12 @@
-<div class="card">
+<div class="product-card">
     <ng-template [ngIf]="product" [ngIfElse]="placeholder">
-        <img class="card-img-top" [src]="product.productPreview + '?preset=thumb'">
-
-        <div class="card-body">
-            <h5 class="card-title">
-                <a [routerLink]="['/product', product.productId]">
-                    {{ product.productName }}
-                </a>
-            </h5>
+        <a [routerLink]="['/product', product.productId]">
+            <img class="card-img-top" [src]="product.productPreview + '?w=200&h=200&mode=crop'">
+        </a>
+        <div class="">
+            <a [routerLink]="['/product', product.productId]" class="product-name">
+                {{ product.productName }}
+            </a>
             <div class="price">
                 <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
                     {{ product.priceWithTax.min | formatPrice }}

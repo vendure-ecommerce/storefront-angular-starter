@@ -6,14 +6,15 @@
             <vsf-product-list-controls [facetValues]="facetValues$ | async"
                                        [totalResults]="totalResults$ | async"></vsf-product-list-controls>
         </div>
-        <div class="col-12 col-md-10 d-flex flex-wrap product-list">
-            <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
-                <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
-            </ng-container>
-            <ng-template #placeholders>
-                <vsf-product-card *ngFor="let product of placeholderProducts" [product]="product"></vsf-product-card>
-            </ng-template>
-
+        <div class="col-12 col-md-10">
+            <div class="d-flex flex-wrap product-list">
+                <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
+                    <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
+                </ng-container>
+                <ng-template #placeholders>
+                    <vsf-product-card *ngFor="let product of placeholderProducts" [product]="product"></vsf-product-card>
+                </ng-template>
+            </div>
         </div>
     </ng-container>
     <ng-template #noResults>

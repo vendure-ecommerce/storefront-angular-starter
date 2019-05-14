@@ -1,15 +1,19 @@
 vsf-product-list-controls {
+    display: block;
     .facet-name {
         font-size: $font-size-sm;
-        color: $gray-800;
+        color: $gray-600;
         margin-right: 6px;
+        text-transform: uppercase;
+    }
+    .facet-values {
+        border-left: 1px solid $gray-300;
+        padding-left: 3px;
     }
     a.facet-value {
         font-size: $font-size-sm;
         display: inline-block;
-        background-color: $light;
-        padding: 3px 6px;
-        margin-bottom: 3px;
+        padding: 0 6px 1px;
         border-radius: $border-radius;
         transition: background-color 0.2s;
         color: $dark;
