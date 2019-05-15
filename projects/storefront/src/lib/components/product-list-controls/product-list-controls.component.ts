@@ -41,6 +41,16 @@ export class ProductListControlsComponent implements OnChanges {
         return this.activeFacetValueIds().includes(id);
     }
 
+    inactiveFacetValues(values: FacetWithValues['values']): FacetWithValues['values'] {
+        const activeIds = this.activeFacetValueIds();
+        return values.filter(v => !activeIds.includes(v.id));
+    }
+
+    activeFacetValues(values: FacetWithValues['values']): FacetWithValues['values'] {
+        const activeIds = this.activeFacetValueIds();
+        return values.filter(v => activeIds.includes(v.id));
+    }
+
     activeFacetValueIds(): string[] {
         return getRouteArrayParam(this.route.snapshot.paramMap, 'facets');
     }

@@ -1,29 +1,56 @@
 vsf-product-list-controls {
-    display: block;
-    .facet-name {
+    display: flex;
+
+    @include media-breakpoint-up(md) {
+        flex-direction: column;
+    }
+
+    .facet-group {
+        margin-bottom: 12px;
+    }
+    button.facet-name {
         font-size: $font-size-sm;
         color: $gray-600;
         margin-right: 6px;
         text-transform: uppercase;
+        transition: color 0.3s;
+        border: none;
+        background: none;
     }
-    .facet-values {
-        border-left: 1px solid $gray-300;
+}
+
+.facet-value-filter-dropdown {
+    min-width: 178px;
+    min-height: 24px;
+    ul.facet-values {
         padding-left: 3px;
+        margin: 12px 0;
     }
+    a.facet-value {
+        margin: 3px 6px;
+    }
+}
+
+vsf-product-list-controls, .facet-value-filter-dropdown {
     a.facet-value {
         font-size: $font-size-sm;
         display: inline-block;
-        padding: 0 6px 1px;
+        padding-left: 7px;
         border-radius: $border-radius;
-        transition: background-color 0.2s;
-        color: $dark;
+        transition: background-color 0.2s, color 0.2s;
+        color: $gray-900;
         &:hover {
             text-decoration: none;
-            background-color: $gray-200;
+            // background-color: $gray-100;
+            color: $gray-900;
         }
         &.selected {
-            background-color: $gray-700;
-            color: $light;
+            // background-color: $gray-300;
+            // color: $light;
+        }
+        .badge {
+            display: inline-block;
+            min-width: 16px;
         }
     }
 }

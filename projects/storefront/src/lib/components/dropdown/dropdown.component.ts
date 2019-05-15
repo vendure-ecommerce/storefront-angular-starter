@@ -21,7 +21,7 @@ export type DropdownPosition = 'top' | 'right' | 'bottom' | 'left' | 'top-left' 
  *
  * @example
  * ```
- * <vsf-dropdown #dropdown [position]="'top'">
+ * <vsf-dropdown #dropdown [position]="['top']">
  *
  *     <button vsfDropdownTrigger class="btn btn-secondary">Open it!</button>
  *
@@ -87,6 +87,7 @@ export class DropdownComponent {
             scrollStrategy,
             positionStrategy,
             minWidth: this.minWidth,
+            maxHeight: 500,
         }));
         this.closeFn = () => {
             overlayRef.dispose();

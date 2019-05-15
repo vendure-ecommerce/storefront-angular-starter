@@ -1,20 +1,25 @@
-<div *ngFor="let facet of facets" class="ml-md-3">
-    <span class="facet-name">{{ facet.name | titlecase }}</span>
-    <ul class="list-unstyled facet-values">
-        <li *ngFor="let value of facet.values">
-            <a [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
-               class="facet-value"
-               [class.selected]="facetValueIsSelected(value.id)">
-                {{ value.name }}
-                <span class="badge badge-light">
-                    <ng-container *ngIf="!facetValueIsSelected(value.id); else untoggle">
-                        {{ value.count }}
-                    </ng-container>
-                    <ng-template #untoggle>
-                        <fa-icon icon="times" class=""></fa-icon>
-                    </ng-template>
-                </span>
-            </a>
-        </li>
-    </ul>
+<div *ngFor="let facet of facets" class="ml-md-3 facet-group">
+    <vsf-dropdown #dropdown [position]="['bottom-left']">
+        <button vsfDropdownTrigger class="dropdown-toggle facet-name">{{ facet.name | titlecase }}</button>
+        <div class="card facet-value-filter-dropdown" vsfDropdownContent>
+            <ul class="list-unstyled facet-values">
+                <li *ngFor="let value of inactiveFacetValues(facet.values)">
+                    <a [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+                       class="facet-value"
+                       (click)="dropdown.close()">
+                        {{ value.name }}
+                        <span class="badge badge-light">{{ value.count }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </vsf-dropdown>
+    <a *ngFor="let value of activeFacetValues(facet.values)"
+       [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+       class="facet-value selected">
+        {{ value.name }}
+        <span class="badge badge-light">
+            <fa-icon icon="times" class=""></fa-icon>
+        </span>
+    </a>
 </div>
