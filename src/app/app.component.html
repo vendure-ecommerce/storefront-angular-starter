@@ -20,7 +20,40 @@
     </div>
 
     <vsf-layout-footer>
-        footer!
+        <div class="row text-muted mt-5 mb-5">
+            <div class="col-md-3 text-center text-md-left">
+                <h3>Orders</h3>
+                <ul class="list-unstyled">
+                    <li>Shipping</li>
+                    <li>Track My Order</li>
+                    <li>Terms & Conditions</li>
+                    <li>Returns Policy</li>
+                </ul>
+            </div>
+            <div class="col-md-3 text-center text-md-left">
+                <h3>About</h3>
+                <ul class="list-unstyled">
+                    <li>About Us</li>
+                    <li>Contact Us</li>
+                    <li>Privacy Notice</li>
+                </ul>
+            </div>
+            <div class="col">
+                <div class="social d-flex justify-content-around">
+                    <fa-icon size="2x" [icon]="['fab', 'twitter']"></fa-icon>
+                    <fa-icon size="2x" [icon]="['fab', 'facebook']"></fa-icon>
+                    <fa-icon size="2x" [icon]="['fab', 'instagram']"></fa-icon>
+                    <fa-icon size="2x" [icon]="['fab', 'youtube']"></fa-icon>
+                </div>
+                <div class="mailist mt-5 d-flex justify-content-around">
+                    <div class="lead">Subscribe to our mailing list for exclusive news and offers!</div>
+                    <button type="button" class="btn btn-outline-secondary btn-lg">Subscribe</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a href="https://github.com/vendure-ecommerce/storefront">@vendure/storefront on GitHub</a>
+        </div>
     </vsf-layout-footer>
 
 </vsf-layout>
