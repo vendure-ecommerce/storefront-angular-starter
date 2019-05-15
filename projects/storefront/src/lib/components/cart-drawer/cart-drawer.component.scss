@@ -35,6 +35,7 @@ vsf-cart-drawer {
         display: flex;
         flex-direction: column;
         height: 100%;
+        width: 100%;
     }
 
     .checkout-button {
@@ -45,6 +46,7 @@ vsf-cart-drawer {
 
     .empty {
         margin-top: $spacer * 2;
+        width: 100%;
         text-align: center;
         font-size: $font-size-lg;
         color: #999;

@@ -7,6 +7,26 @@ vsf-checkout-process {
         margin-right: $spacer;
     }
 
+    .summary {
+        min-width: 300px;
+        margin-left: $spacer;
+    }
+
+    @include media-breakpoint-down(sm) {
+        flex-direction: column;
+        .main {
+            margin-right: 0;
+        }
+
+        .summary {
+            margin-left: 0;
+        }
+    }
+
+    vsf-cart-contents {
+        max-height: 50vh;
+    }
+
     .shipping-address {
         margin-top: $spacer;
         padding: $spacer;

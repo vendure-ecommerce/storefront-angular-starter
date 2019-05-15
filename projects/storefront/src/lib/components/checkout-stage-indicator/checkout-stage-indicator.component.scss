@@ -15,19 +15,20 @@ vsf-checkout-stage-indicator {
             border-radius: 50%;
             width: 24px;
             height: 24px;
-            background-color: #eee;
+            background-color: $light;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.2s;
         }
 
         &.active {
             .number {
-                background-color: #5265ff;
+                background-color: $success;
                 color: white;
             }
 
             .label {
-                color: #111;
+                color: $gray-900;
             }
         }
 
@@ -40,7 +41,7 @@ vsf-checkout-stage-indicator {
     .line {
         flex: 1;
         height: 0;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid $gray-300;
         margin: 0 $spacer / 2;
     }
 

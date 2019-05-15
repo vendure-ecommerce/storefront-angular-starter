@@ -1,7 +1,7 @@
 vsf-cart-contents {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    max-height: 100%;
 
     .cart-contents {
         height: 100%;
@@ -12,6 +12,7 @@ vsf-cart-contents {
     .items {
         height: 100%;
         overflow: auto;
+        padding-right: $spacer / 2;
     }
 
     .item {

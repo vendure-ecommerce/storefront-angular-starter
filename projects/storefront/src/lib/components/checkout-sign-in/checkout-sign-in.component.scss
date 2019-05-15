@@ -12,6 +12,7 @@ vsf-checkout-sign-in {
     }
 
     .guest {
+        margin-top: $spacer * 2;
         display: flex;
         align-items: center;
     }
