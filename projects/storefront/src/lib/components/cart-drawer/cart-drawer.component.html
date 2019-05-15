@@ -1,8 +1,10 @@
-<button class="btn" (click)="close.emit()">
-    <fa-icon icon="times"></fa-icon>
-</button>
-<div *ngIf="cart$ | async as cart; else empty" class="cart-contents">
-    <h3>Cart</h3>
+<div class="cart-drawer-header">
+    <button class="btn" (click)="close.emit()">
+        <fa-icon icon="times"></fa-icon>
+    </button>
+    <h3 class="cart-title">Cart</h3>
+</div>
+<div *ngIf="cart$ | async as cart; else empty" class="cart-drawer-contents">
     <vsf-cart-contents [cart]="cart"
                        [canAdjustQuantities]="true"
                        (setQuantity)="setQuantity($event)"></vsf-cart-contents>

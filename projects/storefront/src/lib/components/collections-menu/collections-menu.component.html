@@ -8,7 +8,7 @@
                 <a class="nav-link"
                    [routerLink]="['/category', collection.id]"
                    vsfDropdownTrigger>{{ collection.name }}</a>
-                <div class="collections-menu-sub-collections" vsfDropdownContent>
+                <div class="collections-menu-sub-collections" vsfDropdownContent *ngIf="collection.children.length">
                     <ng-container *ngFor="let child of collection.children">
                         <ng-template [ngTemplateOutlet]="childItem" [ngTemplateOutletContext]="{ $implicit: child, depth: 1, close: dropdown.close.bind(dropdown) }"></ng-template>
                     </ng-container>
@@ -19,7 +19,7 @@
 </div>
 
 <ng-template #childItem let-collection let-depth="depth" let-close="close">
-    <a class="dropdown-item depth-{{ depth }}"
+    <a class="depth-{{ depth }} nav-link"
        [routerLink]="['/category', collection.id]"
        (click)="close()">
         {{ collection.name }}

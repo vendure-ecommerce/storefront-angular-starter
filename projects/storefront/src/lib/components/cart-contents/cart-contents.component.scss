@@ -1,9 +1,22 @@
 vsf-cart-contents {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+
+    .cart-contents {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .items {
+        height: 100%;
+        overflow: auto;
+    }
 
     .item {
         display: flex;
-        margin-bottom: $spacer / 2;
+        margin-bottom: $spacer;
 
         .details {
             display: flex;
@@ -11,7 +24,9 @@ vsf-cart-contents {
             padding-left: $spacer;
             flex: 1;
         }
-        .name {}
+        .name {
+            font-size: $font-size-sm;
+        }
         .figures {
             display: flex;
             justify-content: space-between;

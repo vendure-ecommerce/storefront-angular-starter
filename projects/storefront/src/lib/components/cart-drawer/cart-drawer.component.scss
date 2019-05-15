@@ -1,7 +1,10 @@
 vsf-cart-drawer {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
     position: fixed;
-    min-width: 400px;
+    min-width: 200px;
+    max-width: 440px;
     padding: $spacer;
     top: 0;
     right: 0;
@@ -11,6 +14,28 @@ vsf-cart-drawer {
     background-color: $gray-100;
     z-index: $zindex-dropdown;
     box-shadow: $box-shadow;
+
+    @include media-breakpoint-up(md) {
+        min-width: 400px;
+    }
+
+    .cart-drawer-header {
+        display: flex;
+        width: 100%;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: $spacer;
+    }
+
+    .cart-title {
+        font-weight: $font-weight-light;
+    }
+
+    .cart-drawer-contents {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
 
     .checkout-button {
         margin-top: $spacer * 3;
