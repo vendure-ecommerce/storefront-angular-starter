@@ -10,4 +10,19 @@ vsf-product-list {
         color: $gray-500;
         width: 100%;
     }
+
+    .load-more {
+        text-align: center;
+        width: 100%;
+    }
+
+    .loading-indicator {
+        width: 0;
+        margin-left: 0;
+        transition: width 0.2s, margin-left 0.2s;
+        &.show {
+            width: 1rem;
+            margin-left: 6px;
+        }
+    }
 }

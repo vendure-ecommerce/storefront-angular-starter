@@ -1,5 +1,4 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
-<vsf-product-search-bar></vsf-product-search-bar>
 <div class="row">
     <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
         <div class="col-12 col-md-2">
@@ -7,6 +6,7 @@
                                        [totalResults]="totalResults$ | async"></vsf-product-list-controls>
         </div>
         <div class="col-12 col-md-10">
+            <vsf-product-search-bar></vsf-product-search-bar>
             <div class="d-flex flex-wrap product-list">
                 <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
                     <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
@@ -14,6 +14,17 @@
                 <ng-template #placeholders>
                     <vsf-product-card *ngFor="let product of placeholderProducts" [product]="product"></vsf-product-card>
                 </ng-template>
+                <div class="load-more flex-fill" *ngIf="displayLoadMore$ | async">
+                    <button class="btn btn-light btn-lg d-inline-flex align-items-center"
+                            (click)="loadMore()"
+                            [disabled]="loading$ | async">
+                        Load more
+                        <span [class.show]="loading$ | async"
+                              class="loading-indicator spinner-grow spinner-grow-sm"
+                              role="status"
+                              aria-hidden="true"></span>
+                    </button>
+                </div>
             </div>
         </div>
     </ng-container>

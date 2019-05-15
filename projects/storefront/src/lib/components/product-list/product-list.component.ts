@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { combineLatest, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, share, shareReplay, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
+import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
 
 import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 import { GetCollection, SearchProducts } from '../../generated-types';
@@ -15,13 +15,16 @@ import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
     templateUrl: './product-list.component.html',
 })
 export class ProductListComponent implements OnInit {
-
     products$: Observable<SearchProducts.Items[]>;
     totalResults$: Observable<number>;
     collection$: Observable<GetCollection.Collection | null>;
     facetValues$: Observable<SearchProducts.FacetValues[]>;
     searchTerm$: Observable<string>;
-    readonly placeholderProducts = Array.from({ length: 6 }).map(() => null);
+    displayLoadMore$: Observable<boolean>;
+    loading$: Observable<boolean>;
+    private currentPage = 0;
+    private refresh = new BehaviorSubject<void>(undefined);
+    readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
@@ -31,12 +34,18 @@ export class ProductListComponent implements OnInit {
         const collectionId$ = this.route.paramMap.pipe(
             map(pm => pm.get('collectionId')),
             distinctUntilChanged(),
-            tap(collectionId => this.stateService.setState('lastCollectionId', collectionId)),
+            tap(collectionId => {
+                this.stateService.setState('lastCollectionId', collectionId);
+                this.currentPage = 0;
+            }),
             shareReplay(1),
         );
         const facetValueIds$ = this.route.paramMap.pipe(
             map(pm => getRouteArrayParam(pm, 'facets')),
             distinctUntilChanged((x, y) => x.toString() === y.toString()),
+            tap(() => {
+                this.currentPage = 0;
+            }),
             shareReplay(1),
         );
         this.searchTerm$ = this.route.paramMap.pipe(
@@ -58,22 +67,61 @@ export class ProductListComponent implements OnInit {
                 }
             }),
         );
-        const queryResult$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$).pipe(
+
+        const triggerFetch$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$, this.refresh);
+        this.loading$ = merge(
+            triggerFetch$.pipe(mapTo(true)),
+        );
+        const queryResult$ = triggerFetch$.pipe(
             switchMap(([collectionId, facetIds, term]) => {
+                const perPage = 24;
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
                         groupByProduct: true,
                         collectionId,
                         facetIds,
+                        take: perPage,
+                        skip: this.currentPage * perPage,
                     },
                 });
             }),
             shareReplay(1),
         );
-        this.products$ = queryResult$.pipe(map(data => data.search.items));
+
+        this.loading$ = merge(
+            triggerFetch$.pipe(mapTo(true)),
+            queryResult$.pipe(mapTo(false)),
+        );
+
+        const RESET = 'RESET';
+        const items$ = this.products$ = queryResult$.pipe(map(data => data.search.items));
+        const reset$ = merge(collectionId$, facetValueIds$, this.searchTerm$).pipe(
+            mapTo(RESET),
+            skip(1),
+            share(),
+        );
+        this.products$ = merge(items$, reset$).pipe(
+            scan<SearchProducts.Items[] | string, SearchProducts.Items[]>((acc, val) => {
+                if (typeof val === 'string') {
+                    return [];
+                } else {
+                    return acc.concat(val);
+                }
+            }, [] as SearchProducts.Items[]),
+        );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
+        this.displayLoadMore$ = combineLatest(this.products$, this.totalResults$).pipe(
+            map(([products, totalResults]) => {
+                return 0 < products.length && products.length < totalResults;
+            }),
+        );
+    }
+
+    loadMore() {
+        this.currentPage ++;
+        this.refresh.next();
     }
 
 }
