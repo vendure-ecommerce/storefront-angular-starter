@@ -38,17 +38,16 @@ vsf-product-card {
     }
 
     .placeholder-image {
-        width: 148px;
-        height: 148px;
-        background-color: $light;
+        height: 200px;
+        width: 200px;
     }
 
     .placeholder-title {
-        height: 28px;
-        background-color: $light;
+        height: $font-size-base;
+        margin-bottom: $spacer / 2;
     }
 
     .placeholder-body {
-        height: 30px;
+        height: $font-size-base;
     }
 }
