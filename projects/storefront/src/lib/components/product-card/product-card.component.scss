@@ -1,6 +1,6 @@
 vsf-product-card {
     display: block;
-    margin: 12px 12px 36px;
+    margin: $spacer $spacer / 2 $spacer * 2;
     width: 200px;
 
     &:hover {

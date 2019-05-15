@@ -1,9 +1,9 @@
 vsf-register {
     display: block;
-    margin-top: 32px;
+    margin-top: $spacer * 2;
 
     .registration-sent {
         text-align: center;
-        padding: 24px;
+        padding: $spacer * 2;
     }
 }

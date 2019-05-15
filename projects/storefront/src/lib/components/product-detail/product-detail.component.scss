@@ -17,24 +17,24 @@ vsf-product-detail {
     .description {
     }
     .variants {
-        margin-top: 36px;
+        margin-top: $spacer * 2;
         display: flex;
         align-items: center;
         justify-content: flex-end;
     }
     .variant-selector {
-        margin-right: 12px;
+        margin-right: $spacer;
     }
     .qty {
         width: 64px;
-        margin: 0 12px;
+        margin: 0 $spacer;
     }
 
     .placeholder-title {
         display: inline-block;
         height: 40px;
         width: 200px;
-        margin-bottom: 24px;
+        margin-bottom: $spacer * 2;
         background-color: $gray-200;
     }
     .placeholder-description {
@@ -45,6 +45,6 @@ vsf-product-detail {
         width: 100%;
         height: 350px;
         background-color: $light;
-        margin-bottom: 60px;
+        margin-bottom: $spacer * 4;
     }
 }

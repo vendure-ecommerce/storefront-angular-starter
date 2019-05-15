@@ -6,12 +6,12 @@ vsf-product-list-controls {
     }
 
     .facet-group {
-        margin-bottom: 12px;
+        margin-bottom: $spacer;
     }
     button.facet-name {
         font-size: $font-size-sm;
         color: $gray-600;
-        margin-right: 6px;
+        margin-right: $spacer / 2;
         text-transform: uppercase;
         transition: color 0.3s;
         border: none;
@@ -23,11 +23,11 @@ vsf-product-list-controls {
     min-width: 178px;
     min-height: 24px;
     ul.facet-values {
-        padding-left: 3px;
-        margin: 12px 0;
+        padding-left: $spacer / 3;
+        margin: $spacer 0;
     }
     a.facet-value {
-        margin: 3px 6px;
+        margin: $spacer / 3 $spacer / 2;
     }
 }
 
@@ -35,7 +35,7 @@ vsf-product-list-controls, .facet-value-filter-dropdown {
     a.facet-value {
         font-size: $font-size-sm;
         display: inline-block;
-        padding-left: 7px;
+        padding-left: $spacer / 2;
         border-radius: $border-radius;
         transition: background-color 0.2s, color 0.2s;
         color: $gray-900;

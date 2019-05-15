@@ -1,19 +1,19 @@
 vsf-checkout-process {
     display: flex;
-    margin-top: 32px;
+    margin-top: $spacer * 2;
 
     .main {
         flex: 1;
-        margin-right: 12px;
+        margin-right: $spacer;
     }
 
     .shipping-address {
-        margin-top: 16px;
-        padding: 12px;
+        margin-top: $spacer;
+        padding: $spacer;
         border: 1px solid #eee;
         border-radius: 3px;
         h3 {
-            margin: 0 0 12px 0;
+            margin: 0 0 $spacer 0;
             font-weight: normal;
             font-size: 14px;
         }

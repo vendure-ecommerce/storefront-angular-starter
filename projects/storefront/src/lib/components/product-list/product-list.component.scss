@@ -6,7 +6,7 @@ vsf-product-list {
 
     .no-results {
         text-align: center;
-        margin: 64px 0;
+        margin: $spacer * 4 0;
         font-size: $font-size-lg;
         color: $gray-500;
         width: 100%;
@@ -23,7 +23,7 @@ vsf-product-list {
         transition: width 0.2s, margin-left 0.2s;
         &.show {
             width: 1rem;
-            margin-left: 6px;
+            margin-left: $spacer / 2;
         }
     }
 }

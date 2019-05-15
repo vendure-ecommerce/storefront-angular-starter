@@ -3,12 +3,12 @@ vsf-cart-contents {
 
     .item {
         display: flex;
-        margin-bottom: 6px;
+        margin-bottom: $spacer / 2;
 
         .details {
             display: flex;
             flex-direction: column;
-            padding-left: 12px;
+            padding-left: $spacer;
             flex: 1;
         }
         .name {}
@@ -31,15 +31,15 @@ vsf-cart-contents {
         display: flex;
         justify-content: space-between;
         font-size: 12px;
-        margin-bottom: 12px;
+        margin-bottom: $spacer;
         color: #555;
-        padding-right: 12px;
+        padding-right: $spacer;
     }
 
     .order-tax, .totals, .order-adjustments, .shipping {
-        margin-top: 12px;
+        margin-top: $spacer;
         border-top: 1px dashed #ddd;
-        padding-top: 12px;
+        padding-top: $spacer;
         display: flex;
         justify-content: space-between;
     }

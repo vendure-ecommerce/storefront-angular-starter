@@ -1,9 +1,9 @@
 vsf-sign-in {
     display: block;
-    margin-top: 32px;
+    margin-top: $spacer * 2;
 
     .invalid-credentials {
-        margin-top: 24px;
+        margin-top: $spacer * 2;
         opacity: 0;
         transition: opacity 0.3s;
 
@@ -13,7 +13,7 @@ vsf-sign-in {
     }
 
     .register-link {
-        margin-top: 12px;
+        margin-top: $spacer;
     }
 
 }

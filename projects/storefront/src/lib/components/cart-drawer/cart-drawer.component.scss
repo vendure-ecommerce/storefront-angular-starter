@@ -2,7 +2,7 @@ vsf-cart-drawer {
     display: block;
     position: fixed;
     min-width: 400px;
-    padding: 12px;
+    padding: $spacer;
     top: 0;
     right: 0;
     bottom: 0;
@@ -13,13 +13,13 @@ vsf-cart-drawer {
     box-shadow: $box-shadow;
 
     .checkout-button {
-        margin-top: 60px;
+        margin-top: $spacer * 3;
         display: flex;
         flex-direction: column;
     }
 
     .empty {
-        margin-top: 32px;
+        margin-top: $spacer * 2;
         text-align: center;
         font-size: $font-size-lg;
         color: #999;

@@ -4,7 +4,7 @@ vsf-checkout-stage-indicator {
     display: flex;
     align-items: center;
     max-width: 600px;
-    margin: 0 auto 32px;
+    margin: 0 auto $spacer * 2;
 
     .stage {
         display: flex;
@@ -32,7 +32,7 @@ vsf-checkout-stage-indicator {
         }
 
         .label {
-            margin-left: 6px;
+            margin-left: $spacer / 2;
             color: $gray-600;
         }
     }
@@ -41,7 +41,7 @@ vsf-checkout-stage-indicator {
         flex: 1;
         height: 0;
         border-bottom: 1px solid #ccc;
-        margin: 0 6px;
+        margin: 0 $spacer / 2;
     }
 
 }

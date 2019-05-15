@@ -1,9 +1,9 @@
 vsf-checkout-shipping {
     display: block;
-    margin-bottom: 48px;
+    margin-bottom: $spacer * 3;
     .customer-address {
         display: inline-block;
-        padding: 12px;
+        padding: $spacer;
         cursor: pointer;
         transition: background-color 0.2s;
 
@@ -15,7 +15,7 @@ vsf-checkout-shipping {
     .shipping-method {
         display: flex;
         .price {
-            margin-left: 12px;
+            margin-left: $spacer;
         }
     }
 }
