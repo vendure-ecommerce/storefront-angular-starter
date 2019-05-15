@@ -82,7 +82,7 @@ export class DropdownComponent {
     open() {
         this.close();
         const positionStrategy = this.getPositionStrategy();
-        const scrollStrategy = this.overlay.scrollStrategies.block();
+        const scrollStrategy = this.overlay.scrollStrategies.reposition();
         const overlayRef = this.overlay.create(new OverlayConfig({
             scrollStrategy,
             positionStrategy,

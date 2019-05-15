@@ -1,7 +1,7 @@
 <div class="product-card">
     <ng-template [ngIf]="product" [ngIfElse]="placeholder">
-        <a [routerLink]="['/product', product.productId]">
-            <img class="card-img-top" [src]="product.productPreview + '?w=200&h=200&mode=crop'">
+        <a [routerLink]="['/product', product.productId]" class="image-wrapper">
+            <img class="product-image" [src]="product.productPreview + '?w=200&h=200&mode=crop'">
         </a>
         <div class="">
             <a [routerLink]="['/product', product.productId]" class="product-name">
@@ -18,7 +18,7 @@
         </div>
     </ng-template>
     <ng-template #placeholder>
-        <div class="card-img-top placeholder-image"></div>
+        <div class="placeholder-image"></div>
         <div class="card-body">
             <div class="placeholder-title"></div>
             <div class="placeholder-body"></div>

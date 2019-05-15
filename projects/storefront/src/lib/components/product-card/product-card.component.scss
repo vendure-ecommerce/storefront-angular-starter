@@ -4,10 +4,20 @@ vsf-product-card {
     width: 200px;
 
     &:hover {
-        .product-name {
-            text-decoration: underline;
-            text-decoration-color: $gray-400;
+        .product-image {
+            transform: scale(1.05);
+            opacity: 1;
         }
+    }
+
+    .image-wrapper {
+        display: block;
+        overflow: hidden;
+    }
+
+    .product-image {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        opacity: 0.8;
     }
 
     .product-name {
@@ -15,8 +25,9 @@ vsf-product-card {
         color: $gray-800;
         display: block;
         &:hover {
-            text-decoration: none;
             color: $gray-700;
+            text-decoration: underline;
+            text-decoration-color: $gray-400;
         }
     }
 
