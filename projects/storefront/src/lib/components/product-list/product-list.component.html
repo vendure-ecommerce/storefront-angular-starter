@@ -1,12 +1,22 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
 <div class="row">
-    <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
-        <div class="col-12 col-md-2">
-            <vsf-product-list-controls [facetValues]="facetValues$ | async"
-                                       [totalResults]="totalResults$ | async"></vsf-product-list-controls>
+    <div class="col-12 col-md-2">
+        <vsf-product-list-controls [facetValues]="facetValues$ | async"
+                                   [totalResults]="totalResults$ | async"></vsf-product-list-controls>
+    </div>
+    <div class="col-12 col-md-10">
+        <vsf-product-search-bar></vsf-product-search-bar>
+        <div class="h1 text-muted text-center" *ngIf="searchTerm$ | async as term">
+            <small>
+                Results for <span class="text-dark">"{{ term }}"</span>
+                <a routerLink="./"
+                   [queryParams]="{ search: null }"
+                   queryParamsHandling="merge">
+                    <span class="badge badge-light"><fa-icon icon="times" class=""></fa-icon></span>
+                </a>
+            </small>
         </div>
-        <div class="col-12 col-md-10">
-            <vsf-product-search-bar></vsf-product-search-bar>
+        <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
             <div class="d-flex flex-wrap product-list">
                 <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
                     <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
@@ -26,12 +36,13 @@
                     </button>
                 </div>
             </div>
-        </div>
-    </ng-container>
-    <ng-template #noResults>
-        <div class="no-results col-12">
-            <p class="h1">No results for "{{ searchTerm$ | async }}"</p>
-            <fa-icon icon="sad-cry" size="10x"></fa-icon>
-        </div>
-    </ng-template>
+        </ng-container>
+    </div>
 </div>
+
+<ng-template #noResults>
+    <div class="no-results col-12">
+        <p class="h1">No results</p>
+        <fa-icon icon="sad-cry" size="10x"></fa-icon>
+    </div>
+</ng-template>

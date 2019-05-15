@@ -23,16 +23,15 @@ export class ProductSearchBarComponent implements OnInit, OnDestroy {
                 debounceTime(250),
             ).subscribe(term => this.doSearch(term));
         }
-        this.searchTerm.setValue(this.route.snapshot.paramMap.get('search') || '');
     }
 
     doSearch(term: string) {
-        this.router.navigate(['./', {search: term}], {relativeTo: this.route});
-    }
-
-    clearSearch() {
-        this.searchTerm.setValue('');
-        this.doSearch('');
+        this.router.navigate(['./'], {
+            queryParams: { search: term },
+            relativeTo: this.route,
+            queryParamsHandling: 'merge',
+        });
+        this.searchTerm.setValue('', { emitEvent: false });
     }
 
     ngOnDestroy(): void {

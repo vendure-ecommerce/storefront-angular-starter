@@ -40,7 +40,7 @@ export class ProductListComponent implements OnInit {
             }),
             shareReplay(1),
         );
-        const facetValueIds$ = this.route.paramMap.pipe(
+        const facetValueIds$ = this.route.queryParamMap.pipe(
             map(pm => getRouteArrayParam(pm, 'facets')),
             distinctUntilChanged((x, y) => x.toString() === y.toString()),
             tap(() => {
@@ -48,7 +48,7 @@ export class ProductListComponent implements OnInit {
             }),
             shareReplay(1),
         );
-        this.searchTerm$ = this.route.paramMap.pipe(
+        this.searchTerm$ = this.route.queryParamMap.pipe(
             map(pm => pm.get('search') || ''),
             distinctUntilChanged(),
             shareReplay(1),

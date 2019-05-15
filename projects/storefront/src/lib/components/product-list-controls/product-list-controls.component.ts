@@ -52,7 +52,7 @@ export class ProductListControlsComponent implements OnChanges {
     }
 
     activeFacetValueIds(): string[] {
-        return getRouteArrayParam(this.route.snapshot.paramMap, 'facets');
+        return getRouteArrayParam(this.route.snapshot.queryParamMap, 'facets');
     }
 
     private groupFacetValues(facetValues: SearchProducts.FacetValues[] | null): FacetWithValues[] {

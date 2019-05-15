@@ -1,10 +1,15 @@
+<div class="ml-md-3 filters-title">
+    <fa-icon icon="filter" class="mr-2"></fa-icon>Filters
+</div>
 <div *ngFor="let facet of facets" class="ml-md-3 facet-group">
     <vsf-dropdown #dropdown [position]="['bottom-left']">
         <button vsfDropdownTrigger class="dropdown-toggle facet-name">{{ facet.name | titlecase }}</button>
         <div class="card facet-value-filter-dropdown" vsfDropdownContent>
             <ul class="list-unstyled facet-values">
                 <li *ngFor="let value of inactiveFacetValues(facet.values)">
-                    <a [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+                    <a [routerLink]="['./']"
+                       [queryParams]="{ facets: toggleFacetValueId(value.id) }"
+                       [queryParamsHandling]="'merge'"
                        class="facet-value"
                        (click)="dropdown.close()">
                         {{ value.name }}
@@ -15,7 +20,9 @@
         </div>
     </vsf-dropdown>
     <a *ngFor="let value of activeFacetValues(facet.values)"
-       [routerLink]="['./', { facets: toggleFacetValueId(value.id) }]"
+       [routerLink]="['./']"
+       [queryParams]="{ facets: toggleFacetValueId(value.id) }"
+       [queryParamsHandling]="'merge'"
        class="facet-value selected">
         {{ value.name }}
         <span class="badge badge-light">
