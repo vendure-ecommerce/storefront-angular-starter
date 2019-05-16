@@ -4,8 +4,8 @@
     </button>
     <h3 class="cart-title">Cart</h3>
 </div>
-<div *ngIf="cart$ | async as cart; else empty" class="cart-drawer-contents">
-    <vsf-cart-contents [cart]="cart"
+<div *ngIf="!(isEmpty$ | async); else empty" class="cart-drawer-contents">
+    <vsf-cart-contents [cart]="cart$ | async"
                        [canAdjustQuantities]="true"
                        (setQuantity)="setQuantity($event)"></vsf-cart-contents>
     <div class="checkout-button">

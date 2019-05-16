@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
 import { merge, Observable } from 'rxjs';
-import { map, switchMap, take } from 'rxjs/operators';
+import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 
 import { AdjustItemQuantity, GetActiveOrder, RemoveItemFromCart } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
@@ -19,6 +19,7 @@ export class CartDrawerComponent implements OnInit {
     @Output() close = new EventEmitter<void>();
 
     cart$: Observable<GetActiveOrder.ActiveOrder | null | undefined>;
+    isEmpty$: Observable<boolean>;
 
     constructor(private dataService: DataService,
                 private stateService: StateService) {}
@@ -30,6 +31,10 @@ export class CartDrawerComponent implements OnInit {
         ).pipe(
             switchMap(() => this.dataService.query<GetActiveOrder.Query, GetActiveOrder.Variables>(GET_ACTIVE_ORDER)),
             map(data => data.activeOrder),
+            shareReplay(1),
+        );
+        this.isEmpty$ = this.cart$.pipe(
+            map(cart => !cart || cart.lines.length === 0),
         );
     }
 

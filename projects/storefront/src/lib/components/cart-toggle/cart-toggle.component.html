@@ -1,9 +1,9 @@
 <div *ngIf="cart$ | async as cart;">
-    <button class="btn btn-primary"
-            (click)="toggle.emit()">
+    <button class="btn btn-light position-relative"
+            (click)="toggle.emit()"
+            title="cart">
         <fa-icon icon="shopping-cart" class="mr-1"></fa-icon>
-        <span class="d-none d-md-inline-block">{{ 'cart' | translate }}</span>
-        <span class="badge badge-pill badge-light ml-1"
+        <span class="badge badge-pill badge-primary qty-indicator"
               [class.cart-changed]="cartChangeIndication$ | async">{{ cart.quantity }}</span>
     </button>
 </div>
