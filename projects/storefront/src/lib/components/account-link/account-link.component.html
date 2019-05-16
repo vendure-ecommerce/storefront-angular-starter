@@ -1,6 +1,6 @@
 <div *ngIf="activeCustomer$ | async as customer; else notLoggedIn">
     <a class="btn btn-light" [routerLink]="['/account']">
-        <fa-icon icon="user"></fa-icon>
+        <fa-icon icon="user-circle"></fa-icon>
         {{ userName(customer) }}
     </a>
 </div>

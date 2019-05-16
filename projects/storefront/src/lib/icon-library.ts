@@ -8,7 +8,7 @@ import {
     faSearch,
     faShoppingCart,
     faTimes,
-    faUser,
+    faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
 
 /**
@@ -21,7 +21,7 @@ export function buildIconLibrary() {
         faMinus,
         faPlus,
         faShoppingCart,
-        faUser,
+        faUserCircle,
         faCreditCard,
         faSearch,
         faSadCry,
