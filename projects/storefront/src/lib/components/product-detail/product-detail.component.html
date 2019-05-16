@@ -3,7 +3,7 @@
 <ng-template [ngIf]="product" [ngIfElse]="placeholder">
     <div class="row">
         <div class="col-12 col-md-6 text-center">
-            <div class="card product-image">
+            <div class="product-image">
                 <img *ngIf="selectedAsset" [src]="selectedAsset?.preview + '?preset=medium'"
                      class="img-fluid main-preview">
                 <div class="alt-images" *ngIf="1 < product.assets.length">
@@ -31,7 +31,7 @@
                     <div class="price">
                         {{ selectedVariant?.priceWithTax | formatPrice }}
                     </div>
-                    <div class="qty">
+                    <div class="qty mr-md-2 ml-2">
                         <input type="number" min="0" max="99" placeholder="Qty" [(ngModel)]="qty"
                                class="form-control form-control-lg">
                     </div>
@@ -48,7 +48,7 @@
 <ng-template #placeholder>
     <div class="row">
         <div class="col-12 col-md-6 text-center">
-            <div class="card product-image">
+            <div class="product-image">
                 <div class="placeholder-image loading-placeholder"></div>
             </div>
         </div>

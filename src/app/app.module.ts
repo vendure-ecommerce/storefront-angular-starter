@@ -20,7 +20,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
         BrowserAnimationsModule,
-        RouterModule.forRoot(routes),
+        RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
         StorefrontModule.forRoot({
             apolloOptions: {
                 uri: 'http://localhost:3000/shop-api',

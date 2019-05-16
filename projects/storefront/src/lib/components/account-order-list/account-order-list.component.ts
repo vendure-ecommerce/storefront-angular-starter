@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { map } from 'node_modules/rxjs/internal/operators';
 import { GET_ORDER_LIST } from 'projects/storefront/src/lib/components/account-order-list/account-order-list.graphql';
-import { GetOrderList } from 'projects/storefront/src/lib/generated-types';
+import { GetOrderList, SortOrder } from 'projects/storefront/src/lib/generated-types';
 import { Observable } from 'rxjs';
 
 import { DataService } from '../../providers/data.service';
@@ -23,6 +23,9 @@ export class AccountOrderListComponent implements OnInit {
                     active: {
                         eq: false,
                     },
+                },
+                sort: {
+                    createdAt: SortOrder.DESC,
                 },
             },
         }).pipe(

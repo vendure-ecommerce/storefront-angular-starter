@@ -65,7 +65,6 @@ export class CheckoutShippingComponent implements OnInit {
         );
         this.shippingAddress$ = this.dataService.query<GetShippingAddress.Query>(GET_SHIPPING_ADDRESS).pipe(
             map(data => data.activeOrder && data.activeOrder.shippingAddress),
-            tap(val => console.log(val)),
         );
         this.eligibleShippingMethods$ = this.shippingAddress$.pipe(
             switchMap(() => this.dataService.query<GetEligibleShippingMethods.Query>(GET_ELIGIBLE_SHIPPING_METHODS)),
@@ -91,7 +90,7 @@ export class CheckoutShippingComponent implements OnInit {
     }
 
     editAddress(address: Address.Fragment) {
-        this.addressForm.addressForm.patchValue(address);
+        this.addressForm.addressForm.patchValue({ ...address, countryCode: address.country.code });
         this.step = 'editAddress';
     }
 

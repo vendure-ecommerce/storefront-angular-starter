@@ -1,13 +1,15 @@
 <div *ngIf="order$ | async as order; else notFound">
-    <h2>Thank you for your order!</h2>
-    <ul class="order-details">
-        <li>Order code: {{ order.code }}</li>
-        <li>Placed: {{ order.updatedAt | date: 'medium' }}</li>
-    </ul>
+    <div class="text-center mb-4">
+        <h2 class="display-4">Thank you for your order!</h2>
+        <ul class="order-details list-unstyled">
+            <li class="lead"><span class="text-muted">Order code:</span> {{ order.code }}</li>
+            <li class="lead"><span class="text-muted">Placed:</span> {{ order.updatedAt | date: 'medium' }}</li>
+        </ul>
+    </div>
 
     <div *ngIf="!order.customer.user" class="account-signup card">
         <div class="card-header">
-                <h3>Create an account</h3>
+            <h3>Create an account</h3>
         </div>
         <div class="card-body">
             <p>
@@ -23,9 +25,13 @@
             </div>
         </div>
     </div>
-    <vsf-cart-contents [cart]="order"
-                       [canAdjustQuantities]="false"></vsf-cart-contents>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <vsf-cart-contents [cart]="order"
+                               [canAdjustQuantities]="false"></vsf-cart-contents>
+        </div>
+    </div>
 </div>
 <ng-template #notFound>
-    <h2>Page not found</h2>
+    <h2 class="display-4">Page not found</h2>
 </ng-template>
