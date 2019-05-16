@@ -12,13 +12,11 @@
             <h3>Create an account</h3>
         </div>
         <div class="card-body">
-            <p>
-                (List account benefits)
-            </p>
-            <button class="btn btn-primary"
+            <p class="lead">Create an account to enjoy faster checkouts, order tracking, order history and more!</p>
+            <button class="btn btn-primary btn-block"
                     (click)="register()"
                     [disabled]="registrationSent">
-                Create an account!
+                Create account
             </button>
             <div *ngIf="registrationSent" class="registration-sent">
                 Great! Now check your email ({{ order.customer.emailAddress }}) to complete registration.

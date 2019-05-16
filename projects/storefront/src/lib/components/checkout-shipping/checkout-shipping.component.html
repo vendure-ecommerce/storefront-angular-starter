@@ -4,7 +4,7 @@
             <button class="btn btn-light" (click)="step = 'selectAddress'">Select Address</button>
         </div>
         <div class="card-body customer-address collapse" [class.show]="step === 'selectAddress'" *ngFor="let address of customerAddresses$ | async"
-             (click)="editAddress(address)">
+             (click)="setShippingAddress(address)">
             <div class="address-line" *ngFor="let line of getLines(address)">
                 {{ line }}
             </div>
@@ -42,7 +42,7 @@
         </div>
 
     </div>
-    <div class="card">
+    <div class="card" *ngIf="!(signedIn$ | async) || (customerAddresses$ | async)?.length === 0">
         <div class="card-header">
             <button class="btn btn-light"
                     [disabled]="step === 'customerDetails'"

@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, take } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import {
     Address,
+    CreateAddressInput,
     GetAvailableCountries,
     GetCustomerAddresses,
     GetEligibleShippingMethods,
@@ -29,6 +30,8 @@ import {
     TRANSITION_TO_ARRANGING_PAYMENT,
 } from './checkout-shipping.graphql';
 import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMethods;
+
+export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Fragment, 'country'>> & { countryCode: string; };
 
 @Component({
     selector: 'vsf-checkout-shipping',
@@ -101,9 +104,10 @@ export class CheckoutShippingComponent implements OnInit {
         this.step = 'editAddress';
     }
 
-    setShippingAddress(value: any) {
+    setShippingAddress(value: AddressFormValue | Address.Fragment) {
+        const input = this.valueToAddressInput(value);
         this.dataService.mutate<SetShippingAddress.Mutation, SetShippingAddress.Variables>(SET_SHIPPING_ADDRESS, {
-            input: value,
+            input,
         }).subscribe(data => {
             this.step = 'selectMethod';
             this.changeDetector.markForCheck();
@@ -137,5 +141,25 @@ export class CheckoutShippingComponent implements OnInit {
                 },
             });
         }
+    }
+
+    private valueToAddressInput(value: AddressFormValue | Address.Fragment): CreateAddressInput {
+        return {
+            city: value.city,
+            company: value.company,
+            countryCode: this.isFormValue(value) ? value.countryCode : value.country.code,
+            defaultBillingAddress: value.defaultBillingAddress,
+            defaultShippingAddress: value.defaultShippingAddress,
+            fullName: value.fullName,
+            phoneNumber: value.phoneNumber,
+            postalCode: value.postalCode,
+            province: value.province,
+            streetLine1: value.streetLine1,
+            streetLine2: value.streetLine2,
+        };
+    }
+
+    private isFormValue(input: AddressFormValue | Address.Fragment): input is AddressFormValue {
+        return typeof (input as any).countryCode === 'string';
     }
 }
