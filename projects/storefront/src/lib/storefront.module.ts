@@ -42,6 +42,10 @@ import { ForgottenPasswordComponent } from './components/forgotten-password/forg
 import { LayoutFooterComponent } from './components/layout/layout-footer.component';
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
+import { DialogButtonsDirective } from './components/modal-dialog/dialog-buttons.directive';
+import { DialogComponentOutletComponent } from './components/modal-dialog/dialog-component-outlet.component';
+import { DialogTitleDirective } from './components/modal-dialog/dialog-title.directive';
+import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
@@ -96,6 +100,10 @@ const COMPONENTS = [
     AccountAddressDetailComponent,
     ResetPasswordComponent,
     ForgottenPasswordComponent,
+    DialogButtonsDirective,
+    DialogTitleDirective,
+    DialogComponentOutletComponent,
+    ModalDialogComponent,
 ];
 
 const PIPES = [
@@ -117,6 +125,9 @@ export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) 
 @NgModule({
     declarations: [
         ...COMPONENTS, ...PIPES,
+    ],
+    entryComponents: [
+        ModalDialogComponent,
     ],
     imports: [
         CommonModule,
