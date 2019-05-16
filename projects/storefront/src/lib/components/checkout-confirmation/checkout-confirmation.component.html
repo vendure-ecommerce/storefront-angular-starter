@@ -1,4 +1,4 @@
-<div *ngIf="order$ | async as order; else notFound">
+<div *ngIf="order$ | async as order">
     <div class="text-center mb-4">
         <h2 class="display-4">Thank you for your order!</h2>
         <ul class="order-details list-unstyled">
@@ -30,6 +30,6 @@
         </div>
     </div>
 </div>
-<ng-template #notFound>
+<ng-container *ngIf="notFound$ | async">
     <h2 class="display-4">Page not found</h2>
-</ng-template>
+</ng-container>

@@ -40,10 +40,13 @@ export class CheckoutPaymentComponent {
                 },
             },
         })
-            .subscribe(result => {
+            .subscribe(async result => {
                 const order = result.addPaymentToOrder;
                 if (order && order.state === 'PaymentSettled') {
-                    this.stateService.setState('activeOrderId', null);
+                    await new Promise(resolve => setTimeout(() => {
+                        this.stateService.setState('activeOrderId', null);
+                        resolve();
+                    }, 100));
                     this.router.navigate(['../confirmation', order.code], { relativeTo: this.route });
                 }
             });

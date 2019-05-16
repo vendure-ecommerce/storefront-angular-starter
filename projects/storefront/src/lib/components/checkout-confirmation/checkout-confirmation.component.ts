@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { filter, map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { filter, map, mergeMap, shareReplay, switchMap, take } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetOrderByCode, Register } from '../../generated-types';
@@ -19,6 +19,7 @@ import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
 export class CheckoutConfirmationComponent implements OnInit {
     registrationSent = false;
     order$: Observable<GetOrderByCode.OrderByCode>;
+    notFound$: Observable<boolean>;
 
     constructor(private stateService: StateService,
                 private dataService: DataService,
@@ -26,7 +27,7 @@ export class CheckoutConfirmationComponent implements OnInit {
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.order$ = this.route.paramMap.pipe(
+        const orderRequest$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('code')),
             filter(notNullOrUndefined),
             switchMap(code => this.dataService.query<GetOrderByCode.Query, GetOrderByCode.Variables>(
@@ -34,7 +35,13 @@ export class CheckoutConfirmationComponent implements OnInit {
                 { code },
             )),
             map(data => data.orderByCode),
+            shareReplay(1),
+        );
+        this.order$ = orderRequest$.pipe(
             filter(notNullOrUndefined),
+        );
+        this.notFound$ = orderRequest$.pipe(
+            map(res => !res),
         );
     }
 
