@@ -17,9 +17,12 @@ import {
     TransitionToArrangingPayment,
 } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
+import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMethods;
+import { ModalService } from '../../providers/modal/modal.service';
 import { StateService } from '../../providers/state.service';
 import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../types/documents.graphql';
 import { AddressFormComponent } from '../address-form/address-form.component';
+import { AddressModalComponent } from '../address-modal/address-modal.component';
 
 import {
     GET_ELIGIBLE_SHIPPING_METHODS,
@@ -29,7 +32,6 @@ import {
     SET_SHIPPING_METHOD,
     TRANSITION_TO_ARRANGING_PAYMENT,
 } from './checkout-shipping.graphql';
-import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMethods;
 
 export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Fragment, 'country'>> & { countryCode: string; };
 
@@ -55,6 +57,7 @@ export class CheckoutShippingComponent implements OnInit {
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private changeDetector: ChangeDetectorRef,
+                private modalService: ModalService,
                 private route: ActivatedRoute,
                 private router: Router) { }
 
@@ -90,6 +93,18 @@ export class CheckoutShippingComponent implements OnInit {
             address.postalCode,
             address.country.name,
         ].filter(notNullOrUndefined);
+    }
+
+    createAddress() {
+        this.modalService.fromComponent(AddressModalComponent, {
+            locals: {
+                title: 'Create new address',
+            },
+            closable: true,
+        }).pipe(
+            switchMap(() => this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
+        )
+            .subscribe();
     }
 
     editAddress(address: Address.Fragment) {

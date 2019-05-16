@@ -22,6 +22,7 @@ import { AccountOrderListComponent } from './components/account-order-list/accou
 import { AccountComponent } from './components/account/account.component';
 import { AddressCardComponent } from './components/address-card/address-card.component';
 import { AddressFormComponent } from './components/address-form/address-form.component';
+import { AddressModalComponent } from './components/address-modal/address-modal.component';
 import { CartContentsComponent } from './components/cart-contents/cart-contents.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
@@ -104,6 +105,7 @@ const COMPONENTS = [
     DialogTitleDirective,
     DialogComponentOutletComponent,
     ModalDialogComponent,
+    AddressModalComponent,
 ];
 
 const PIPES = [
@@ -127,6 +129,7 @@ export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) 
         ...COMPONENTS, ...PIPES,
     ],
     entryComponents: [
+        AddressModalComponent,
         ModalDialogComponent,
     ],
     imports: [

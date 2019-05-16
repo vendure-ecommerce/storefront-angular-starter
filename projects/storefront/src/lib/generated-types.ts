@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-04-16T14:36:11+02:00
+// Generated in 2019-05-16T16:54:50+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -951,6 +951,20 @@ export namespace SignOut {
 
         logout: boolean;
     };
+}
+
+export namespace CreateAddress {
+    export type Variables = {
+        input: CreateAddressInput;
+    };
+
+    export type Mutation = {
+        __typename?: "Mutation";
+
+        createCustomerAddress: CreateCustomerAddress;
+    };
+
+    export type CreateCustomerAddress = Address.Fragment;
 }
 
 export namespace GetActiveOrder {

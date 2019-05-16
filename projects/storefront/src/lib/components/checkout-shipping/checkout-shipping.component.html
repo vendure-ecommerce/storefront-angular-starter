@@ -3,10 +3,18 @@
         <div class="card-header">
             <button class="btn btn-light" (click)="step = 'selectAddress'">Select Address</button>
         </div>
-        <div class="card-body customer-address collapse" [class.show]="step === 'selectAddress'" *ngFor="let address of customerAddresses$ | async"
-             (click)="setShippingAddress(address)">
-            <div class="address-line" *ngFor="let line of getLines(address)">
-                {{ line }}
+        <div class="card-body collapse" [class.show]="step === 'selectAddress'">
+            <div class="d-flex flex-wrap">
+                <div class="customer-address"
+                     *ngFor="let address of customerAddresses$ | async"
+                     (click)="setShippingAddress(address)">
+                    <div class="address-line" *ngFor="let line of getLines(address)">
+                        {{ line }}
+                    </div>
+                </div>
+                <div class="d-flex align-items-end ml-3 mb-3">
+                    <button class="btn btn-secondary" (click)="createAddress()">Add new address</button>
+                </div>
             </div>
         </div>
     </div>
@@ -75,9 +83,9 @@
                     <div class="price">{{ method.price / 100 | currency }}</div>
                 </label>
             </div>
-                <button class="btn btn-secondary mt-3"
-                        [disabled]="!shippingMethodId"
-                        (click)="proceedToPayment()">Proceed to payment</button>
+            <button class="btn btn-secondary mt-3"
+                    [disabled]="!shippingMethodId"
+                    (click)="proceedToPayment()">Proceed to payment</button>
         </div>
     </div>
 </div>
