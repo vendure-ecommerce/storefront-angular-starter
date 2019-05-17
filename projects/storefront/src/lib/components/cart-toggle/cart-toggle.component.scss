@@ -8,6 +8,10 @@ vsf-cart-toggle {
             animation: 0.5s cubic-bezier(.17,.67,.26,1.54) pulse;
         }
         transition: background-color 3s;
+        &.empty {
+            background-color: $gray-500;
+        }
+        opacity: 0.8;
     }
 }
 
