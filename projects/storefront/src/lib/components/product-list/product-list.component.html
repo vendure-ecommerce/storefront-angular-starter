@@ -5,7 +5,16 @@
                                    [totalResults]="totalResults$ | async"></vsf-product-list-controls>
     </div>
     <div class="col-12 col-md-10">
+        <ng-container *ngIf="collection$ | async as collection">
+            <div *ngIf="collection.children.length" class="child-categories d-flex flex-column flex-md-row">
+                <vsf-collection-card *ngFor="let child of collection.children"
+                                     [collection]="child">
+                </vsf-collection-card>
+            </div>
+        </ng-container>
+
         <vsf-product-search-bar></vsf-product-search-bar>
+
         <div class="h1 text-muted text-center" *ngIf="searchTerm$ | async as term">
             <small>
                 Results for <span class="text-dark">"{{ term }}"</span>
@@ -17,7 +26,7 @@
             </small>
         </div>
         <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
-            <div class="d-flex flex-wrap product-list">
+            <div class="product-list">
                 <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
                     <vsf-product-card *ngFor="let product of products$ | async" [product]="product"></vsf-product-card>
                 </ng-container>

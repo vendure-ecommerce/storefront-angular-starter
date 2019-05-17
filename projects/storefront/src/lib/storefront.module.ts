@@ -35,6 +35,7 @@ import { CheckoutShippingComponent } from './components/checkout-shipping/checko
 import { CheckoutSignInComponent } from './components/checkout-sign-in/checkout-sign-in.component';
 import { CheckoutStageIndicatorComponent } from './components/checkout-stage-indicator/checkout-stage-indicator.component';
 import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
+import { CollectionCardComponent } from './components/collection-card/collection-card.component';
 import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
 import { DropdownContentDirective } from './components/dropdown/dropdown-content.directive';
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
@@ -106,6 +107,7 @@ const COMPONENTS = [
     DialogComponentOutletComponent,
     ModalDialogComponent,
     AddressModalComponent,
+    CollectionCardComponent,
 ];
 
 const PIPES = [

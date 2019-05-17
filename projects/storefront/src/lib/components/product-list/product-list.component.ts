@@ -66,6 +66,7 @@ export class ProductListComponent implements OnInit {
                     return of(null);
                 }
             }),
+            shareReplay(1),
         );
 
         const triggerFetch$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$, this.refresh);

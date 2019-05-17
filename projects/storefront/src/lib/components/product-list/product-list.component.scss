@@ -2,7 +2,20 @@ vsf-product-list {
     display: block;
     min-height: 80vh;
 
+    .child-categories {
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin-bottom: $spacer;
+        vsf-collection-card {
+            flex: 1;
+        }
+    }
+
     .product-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 220px);
+        grid-row-gap: $spacer;
+        justify-content: space-around;
     }
 
     .no-results {
