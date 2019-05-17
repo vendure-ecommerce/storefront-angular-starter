@@ -27,17 +27,9 @@ import {
     VerifyComponent,
 } from '@vendure/storefront';
 
+import { HomePageComponent } from './components/home-page/home-page.component';
+
 export const routes: Route[] = [
-    {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'catalog',
-    },
-    {
-        path: 'catalog',
-        component: ProductListComponent,
-        pathMatch: 'full',
-    },
     {
         path: 'category/:collectionId',
         component: ProductListComponent,

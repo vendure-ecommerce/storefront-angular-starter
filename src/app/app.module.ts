@@ -9,12 +9,14 @@ import { StorefrontModule } from '@vendure/storefront';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
+import { HomePageComponent } from './components/home-page/home-page.component';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
 
 @NgModule({
     declarations: [
         AppComponent,
+        HomePageComponent,
     ],
     imports: [
         BrowserModule.withServerTransition({appId: 'serverApp'}),

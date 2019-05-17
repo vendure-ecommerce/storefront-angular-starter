@@ -58,10 +58,10 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
-import { FormatPricePipe } from './pipes/format-price.pipe';
-import { CustomHttpTranslationLoader } from './providers/i18n/custom-http-loader';
 import { CollectionUrlPipe } from './pipes/collection-url.pipe';
+import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
+import { CustomHttpTranslationLoader } from './providers/i18n/custom-http-loader';
 
 const COMPONENTS = [
     ProductListComponent,

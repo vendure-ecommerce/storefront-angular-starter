@@ -2,21 +2,26 @@
 
     <vsf-layout-header>
         <div class="header">
-            <a [routerLink]="['/']" class="logo-link">
-                <img src="/assets/cube-logo-75px.png" class="logo">
-                <div class="logo-type d-none d-md-inline-block">Vendure Storefront</div>
-            </a>
-            <div class="flex-grow-1"></div>
-            <vsf-account-link></vsf-account-link>
-            <vsf-cart-toggle (toggle)="cartDrawerVisible = !cartDrawerVisible"></vsf-cart-toggle>
-            <vsf-cart-drawer [visible]="cartDrawerVisible" (close)="cartDrawerVisible = false"></vsf-cart-drawer>
+            <div class="container">
+                <a [routerLink]="['/']" class="logo-link">
+                    <img src="/assets/cube-logo-75px.png" class="logo">
+                    <div class="logo-type d-none d-md-inline-block text-muted">Vendure Storefront</div>
+                </a>
+                <div class="flex-grow-1"></div>
+                <vsf-account-link class="mr-2"></vsf-account-link>
+                <vsf-cart-toggle (toggle)="cartDrawerVisible = !cartDrawerVisible"></vsf-cart-toggle>
+                <vsf-cart-drawer [visible]="cartDrawerVisible" (close)="cartDrawerVisible = false"></vsf-cart-drawer>
+            </div>
         </div>
     </vsf-layout-header>
     <div class="contents">
         <vsf-collections-menu></vsf-collections-menu>
-        <div class="container">
-            <router-outlet></router-outlet>
-        </div>
+        <sf-home-page *ngIf="isHomePage$ | async; else main"></sf-home-page>
+        <ng-template #main>
+            <div class="container" >
+                <router-outlet></router-outlet>
+            </div>
+        </ng-template>
     </div>
 
     <vsf-layout-footer>

@@ -1,0 +1,46 @@
+<div class="hero">
+    <div class="scene scene-0">
+        <div class="cube cube1">
+            <div class="cube__face cube__face--front"></div>
+            <div class="cube__face cube__face--back"></div>
+            <div class="cube__face cube__face--right"></div>
+            <div class="cube__face cube__face--left"></div>
+            <div class="cube__face cube__face--top"></div>
+            <div class="cube__face cube__face--bottom"></div>
+        </div>
+        <div class="cube cube2">
+            <div class="cube__face cube__face--front"></div>
+            <div class="cube__face cube__face--back"></div>
+            <div class="cube__face cube__face--right"></div>
+            <div class="cube__face cube__face--left"></div>
+            <div class="cube__face cube__face--top"></div>
+            <div class="cube__facecube__face--bottom"></div>
+        </div>
+        <div class="cube cube3">
+            <div class="cube__face cube__face--front"></div>
+            <div class="cube__face cube__face--back"></div>
+            <div class="cube__face cube__face--right"></div>
+            <div class="cube__face cube__face--left"></div>
+            <div class="cube__face cube__face--top"></div>
+            <div class="cube__face cube__face--bottom"></div>
+        </div>
+    </div>
+    <h1 class="display-1 title text-center text-lg-left">Vendure Storefront</h1>
+</div>
+
+<div class="container">
+    <div class="top-categories">
+        <vsf-collection-card *ngFor="let collection of collections$ | async"
+                             [collection]="collection">
+        </vsf-collection-card>
+    </div>
+    <h3 class="display-4 mt-5">Top Sellers</h3>
+    <div class="product-list">
+        <ng-container *ngIf="topSellersLoaded$ | async; else placeholders">
+            <vsf-product-card *ngFor="let product of topSellers$ | async" [product]="product"></vsf-product-card>
+        </ng-container>
+        <ng-template #placeholders>
+            <vsf-product-card *ngFor="let product of placeholderProducts" [product]="product"></vsf-product-card>
+        </ng-template>
+    </div>
+</div>

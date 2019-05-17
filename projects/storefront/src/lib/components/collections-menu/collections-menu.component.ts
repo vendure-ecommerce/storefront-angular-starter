@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { GetCollections } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 
-import { GET_COLLECTIONS } from './collections-menu.graphql';
+import { GET_COLLECTIONS } from '../../types/documents.graphql';
 
 @Component({
     selector: 'vsf-collections-menu',
