@@ -1,4 +1,4 @@
-<a [routerLink]="['/category', collection.id]">
+<a [routerLink]="['/category', collection | collectionUrl]">
     <div class="card-background" [style.background-image]="'url(' + backgroundImage + ')'"></div>
 
     <h3 class="display-4 collection-name">{{ collection.name }}</h3>

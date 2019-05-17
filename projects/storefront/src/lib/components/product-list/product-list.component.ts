@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
 
 import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
+import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetCollection, SearchProducts } from '../../generated-types';
 import { DataService } from '../../providers/data.service';
 import { StateService } from '../../providers/state.service';
@@ -34,8 +35,14 @@ export class ProductListComponent implements OnInit {
         const collectionId$ = this.route.paramMap.pipe(
             map(pm => pm.get('collectionId')),
             distinctUntilChanged(),
+            map(id => {
+                if (id) {
+                    const parts = id.split('-');
+                    return parts[parts.length - 1];
+                }
+            }),
             tap(collectionId => {
-                this.stateService.setState('lastCollectionId', collectionId);
+                this.stateService.setState('lastCollectionId', collectionId || null);
                 this.currentPage = 0;
             }),
             shareReplay(1),

@@ -32,6 +32,10 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         const productId$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('id')),
             filter(notNullOrUndefined),
+            map(id => {
+                const parts = id.split('-');
+                return parts[parts.length - 1];
+            }),
         );
 
         this.sub = productId$.pipe(

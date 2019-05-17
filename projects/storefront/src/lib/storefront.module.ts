@@ -60,6 +60,8 @@ import { VerifyComponent } from './components/verify/verify.component';
 import { buildIconLibrary } from './icon-library';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { CustomHttpTranslationLoader } from './providers/i18n/custom-http-loader';
+import { CollectionUrlPipe } from './pipes/collection-url.pipe';
+import { ProductUrlPipe } from './pipes/product-url.pipe';
 
 const COMPONENTS = [
     ProductListComponent,
@@ -112,6 +114,8 @@ const COMPONENTS = [
 
 const PIPES = [
     FormatPricePipe,
+    CollectionUrlPipe,
+    ProductUrlPipe,
 ];
 
 export interface StorefrontConfig {

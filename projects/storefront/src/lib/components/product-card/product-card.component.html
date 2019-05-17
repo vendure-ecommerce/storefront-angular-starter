@@ -1,10 +1,10 @@
 <div class="product-card">
     <ng-template [ngIf]="product" [ngIfElse]="placeholder">
-        <a [routerLink]="['/product', product.productId]" class="image-wrapper">
+        <a [routerLink]="['/product', product | productUrl]" class="image-wrapper">
             <img class="product-image" [src]="product.productPreview + '?w=200&h=200&mode=crop'">
         </a>
         <div class="">
-            <a [routerLink]="['/product', product.productId]" class="product-name">
+            <a [routerLink]="['/product', product | productUrl]" class="product-name">
                 {{ product.productName }}
             </a>
             <div class="price">
