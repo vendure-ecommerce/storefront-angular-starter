@@ -5,6 +5,8 @@
         <div class="col-12 col-md-6 text-center">
             <div class="product-image">
                 <img *ngIf="selectedAsset" [src]="selectedAsset?.preview + '?preset=medium'"
+                     [vsfImageZoom]="selectedAsset?.preview"
+                     [vsfImageZoomContainer]="zoomPreviewArea"
                      class="img-fluid main-preview">
                 <div class="alt-images" *ngIf="1 < product.assets.length">
                     <div *ngFor="let asset of product.assets"
@@ -16,7 +18,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-6" #zoomPreviewArea>
             <h2 class="display-4">{{ product.name }}</h2>
             <div class="purchase-options">
                 <div class="variant-selector" *ngIf="product.variants.length > 1">

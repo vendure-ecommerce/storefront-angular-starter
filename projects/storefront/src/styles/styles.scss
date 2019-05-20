@@ -5,6 +5,7 @@ $breadcrumb-margin-bottom: 0 !default;
 
 @import "~bootstrap/scss/bootstrap";
 @import "~@angular/cdk/overlay-prebuilt";
+@import "~drift-zoom/dist/drift-basic.css";
 
 @import "variables";
 @import "components";
@@ -35,4 +36,11 @@ $breadcrumb-margin-bottom: 0 !default;
     100% {
         transform: translateX(100%);
     }
+}
+
+img[data-zoom] {
+    cursor: crosshair;
+}
+.vsf-zoom-zoom-pane {
+    box-shadow: $box-shadow-lg;
 }

@@ -41,6 +41,7 @@ import { DropdownContentDirective } from './components/dropdown/dropdown-content
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { ForgottenPasswordComponent } from './components/forgotten-password/forgotten-password.component';
+import { ImageZoomDirective } from './components/image-zoom/image-zoom.directive';
 import { LayoutFooterComponent } from './components/layout/layout-footer.component';
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
@@ -113,6 +114,7 @@ const COMPONENTS = [
     AddressModalComponent,
     CollectionCardComponent,
     NotificationComponent,
+    ImageZoomDirective,
 ];
 
 const PIPES = [
