@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { GetCollections } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 import { GET_COLLECTIONS } from '../../types/documents.graphql';
 

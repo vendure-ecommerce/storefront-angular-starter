@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Address, Country, CreateAddress, GetAvailableCountries } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { Dialog } from '../../providers/modal/modal-types';
 import { GET_AVAILABLE_COUNTRIES } from '../../types/documents.graphql';
 

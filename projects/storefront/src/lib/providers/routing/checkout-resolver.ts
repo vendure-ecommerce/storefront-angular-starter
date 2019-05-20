@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay, take } from 'rxjs/operators';
 
 import { GetOrderForCheckout } from '../../generated-types';
-import { DataService } from '../data.service';
+import { DataService } from '../data/data.service';
 
 import { GET_ORDER_FOR_CHECKOUT } from './checkout-resolver.graphql';
 

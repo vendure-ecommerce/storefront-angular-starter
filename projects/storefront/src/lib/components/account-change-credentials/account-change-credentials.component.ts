@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { ChangeEmailAddress, ChangePassword } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 import { CHANGE_EMAIL_ADDRESS, CHANGE_PASSWORD } from './account-change-credentials.graphql';
 

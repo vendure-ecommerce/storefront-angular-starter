@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { Register } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 import { REGISTER } from './register.graphql';
 

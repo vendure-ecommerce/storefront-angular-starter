@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AddPayment } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { ADD_PAYMENT } from './checkout-payment.graphql';

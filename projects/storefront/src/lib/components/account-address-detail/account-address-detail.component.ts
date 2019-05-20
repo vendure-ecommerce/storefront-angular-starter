@@ -5,7 +5,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetAvailableCountries, GetCustomerAddresses, UpdateAddress, UpdateAddressInput } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../types/documents.graphql';
 import { AddressFormComponent } from '../address-form/address-form.component';
 

@@ -4,7 +4,7 @@ import { filter, map } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetActiveCustomer, UpdateCustomerDetails, UpdateCustomerInput } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { GET_ACTIVE_CUSTOMER } from '../../types/documents.graphql';
 
 import { UPDATE_CUSTOMER_DETAILS } from './account-customer-details.graphql';

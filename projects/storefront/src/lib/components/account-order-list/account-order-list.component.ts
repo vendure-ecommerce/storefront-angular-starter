@@ -4,7 +4,7 @@ import { GET_ORDER_LIST } from 'projects/storefront/src/lib/components/account-o
 import { GetOrderList, SortOrder } from 'projects/storefront/src/lib/generated-types';
 import { Observable } from 'rxjs';
 
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 @Component({
     selector: 'vsf-account-order-list',

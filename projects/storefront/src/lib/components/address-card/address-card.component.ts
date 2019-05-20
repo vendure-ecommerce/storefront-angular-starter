@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Address, OrderAddress } from 'projects/storefront/src/lib/generated-types';
 
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 @Component({
     selector: 'vsf-address-card',

@@ -6,7 +6,7 @@ import { distinctUntilChanged, filter, map, mapTo, scan, share, shareReplay, ski
 import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetCollection, SearchProducts } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';

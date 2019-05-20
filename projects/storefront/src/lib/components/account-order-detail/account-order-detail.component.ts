@@ -5,7 +5,7 @@ import { filter, map, switchMap } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetOrder } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 
 import { GET_ORDER } from './account-order-detail.graphql';
 

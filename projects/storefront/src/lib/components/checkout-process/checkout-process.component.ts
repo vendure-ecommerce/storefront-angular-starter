@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { filter, map, startWith, switchMap } from 'rxjs/operators';
 
 import { GetNextOrderStates, GetOrderForCheckout, TransitionToAddingItems } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_NEXT_ORDER_STATES, TRANSITION_TO_ADDING_ITEMS } from './checkout-process.graphql';

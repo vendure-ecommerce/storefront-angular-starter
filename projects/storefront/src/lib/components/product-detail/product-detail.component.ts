@@ -5,7 +5,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { AddToCart, GetProductDetail } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';

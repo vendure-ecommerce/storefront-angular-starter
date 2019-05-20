@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { map, switchMap, take } from 'rxjs/operators';
 
 import { GetActiveCustomer } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_ACTIVE_CUSTOMER } from '../../types/documents.graphql';

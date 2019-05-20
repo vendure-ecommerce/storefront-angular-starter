@@ -5,7 +5,7 @@ import { filter, map, mergeMap, shareReplay, switchMap, take } from 'rxjs/operat
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetOrderByCode, Register } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 import { REGISTER } from '../register/register.graphql';
 

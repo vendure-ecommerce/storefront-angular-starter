@@ -3,7 +3,7 @@ import { from, interval, merge, Observable, timer, zip } from 'rxjs';
 import { delay, distinctUntilChanged, map, share, switchMap } from 'rxjs/operators';
 
 import { GetCartTotals } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_CART_TOTALS } from './cart-toggle.graphql';

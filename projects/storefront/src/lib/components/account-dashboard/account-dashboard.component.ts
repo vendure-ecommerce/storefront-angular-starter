@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs/operators';
 
 import { notNullOrUndefined } from '../../common/utils/not-null-or-undefined';
 import { GetAccountOverview, SignOut } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state.service';
 
 import { GET_ACCOUNT_OVERVIEW } from './account-dashboard.graphql';

@@ -16,7 +16,7 @@ import {
     SetShippingMethod,
     TransitionToArrangingPayment,
 } from '../../generated-types';
-import { DataService } from '../../providers/data.service';
+import { DataService } from '../../providers/data/data.service';
 import EligibleShippingMethods = GetEligibleShippingMethods.EligibleShippingMethods;
 import { ModalService } from '../../providers/modal/modal.service';
 import { StateService } from '../../providers/state.service';

@@ -8,7 +8,7 @@ import { CheckoutConfirmationComponent } from '../../components/checkout-confirm
 import { CheckoutPaymentComponent } from '../../components/checkout-payment/checkout-payment.component';
 import { CheckoutShippingComponent } from '../../components/checkout-shipping/checkout-shipping.component';
 import { CheckoutSignInComponent } from '../../components/checkout-sign-in/checkout-sign-in.component';
-import { DataService } from '../data.service';
+import { DataService } from '../data/data.service';
 import { StateService } from '../state.service';
 
 import { GET_ORDER_FOR_CHECKOUT } from './checkout-resolver.graphql';

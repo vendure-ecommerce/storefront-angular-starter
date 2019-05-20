@@ -3,7 +3,7 @@ import { map, take } from 'rxjs/operators';
 
 import { GetActiveChannel } from '../generated-types';
 import { GET_ACTIVE_CHANNEL } from '../pipes/get-active-channel.graphql';
-import { DataService } from '../providers/data.service';
+import { DataService } from '../providers/data/data.service';
 
 /**
  * Cache the resolved promise so that the activeChannel only needs

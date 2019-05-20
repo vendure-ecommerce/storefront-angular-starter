@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule, PlatformLocation } from '@angular/common';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { InjectionToken, ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -62,6 +62,7 @@ import { buildIconLibrary } from './icon-library';
 import { CollectionUrlPipe } from './pipes/collection-url.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
+import { DefaultInterceptor } from './providers/data/interceptor';
 import { CustomHttpTranslationLoader } from './providers/i18n/custom-http-loader';
 
 const COMPONENTS = [
@@ -159,6 +160,9 @@ export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) 
             },
             compiler: { provide: TranslateCompiler, useClass: TranslateMessageFormatCompiler },
         }),
+    ],
+    providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
     ],
     exports: [
         ...COMPONENTS, ...PIPES,
