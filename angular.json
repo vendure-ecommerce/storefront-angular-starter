@@ -136,7 +136,7 @@
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
             "tsConfig": "projects/storefront/tsconfig.lib.json",
-            "project": "projects/storefront/ng-package.json",
+            "project": "projects/storefront/ng-package.json"
           }
         },
         "test": {

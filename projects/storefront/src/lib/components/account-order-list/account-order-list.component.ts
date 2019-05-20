@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { map } from 'node_modules/rxjs/internal/operators';
-import { GET_ORDER_LIST } from 'projects/storefront/src/lib/components/account-order-list/account-order-list.graphql';
-import { GetOrderList, SortOrder } from 'projects/storefront/src/lib/generated-types';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
+import { GET_ORDER_LIST } from '../../components/account-order-list/account-order-list.graphql';
+import { GetOrderList, SortOrder } from '../../generated-types';
 import { DataService } from '../../providers/data/data.service';
 
 @Component({

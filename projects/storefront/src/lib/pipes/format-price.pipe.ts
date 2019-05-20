@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Pipe, PipeTransform } from 'node_modules/@angular/core';
+import { ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
 import { map, take } from 'rxjs/operators';
 
 import { GetActiveChannel } from '../generated-types';

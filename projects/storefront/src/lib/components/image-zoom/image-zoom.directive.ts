@@ -1,5 +1,7 @@
-import { Directive, ElementRef, HostBinding, Input, OnDestroy, OnInit } from '@angular/core';
-import Drift from 'drift-zoom';
+// tslint:disable-next-line:no-reference
+/// <reference path="../../types/typings.d.ts" />
+import { isPlatformBrowser } from '@angular/common';
+import { Directive, ElementRef, HostBinding, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 
 /**
  * This directive makes an image element zoomable on mouse hover. It uses the
@@ -14,22 +16,27 @@ export class ImageZoomDirective implements OnInit, OnDestroy {
     @HostBinding('attr.data-zoom') get sourceAttr(): string {
         return this.sourceUrl;
     }
-    private driftInstance: Drift;
+    private driftInstance: any;
 
-    constructor(private elementRef: ElementRef) {}
+    constructor(private elementRef: ElementRef,
+                @Inject(PLATFORM_ID) private platformId: any) {}
 
     ngOnInit(): void {
-        const containerEl = this.container || null;
-        this.driftInstance = new Drift(this.elementRef.nativeElement, {
-            namespace: 'vsf-zoom',
-            inlinePane: !containerEl || 768,
-            inlineOffsetY: -85,
-            hoverDelay: 500,
-            paneContainer: containerEl,
-            containInline: true,
-            hoverBoundingBox: true,
-            touchBoundingBox: false,
-        });
+        if (isPlatformBrowser(this.platformId)) {
+            /*import('drift-zoom').then((module) => {
+                const containerEl = this.container || null;
+                this.driftInstance = new module.default(this.elementRef.nativeElement, {
+                    namespace: 'vsf-zoom',
+                    inlinePane: !containerEl || 768,
+                    inlineOffsetY: -85,
+                    hoverDelay: 500,
+                    paneContainer: containerEl,
+                    containInline: true,
+                    hoverBoundingBox: true,
+                    touchBoundingBox: false,
+                });
+            });*/
+        }
     }
 
     ngOnDestroy(): void {

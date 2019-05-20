@@ -2,7 +2,16 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app-server",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@vendure/storefront": [
+        "../dist/storefront"
+      ],
+      "*": [
+        "*",
+        "../projects/storefront/node_modules/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "entryModule": "app/app.server.module#AppServerModule"

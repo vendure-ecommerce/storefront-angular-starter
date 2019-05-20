@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { Address, OrderAddress } from 'projects/storefront/src/lib/generated-types';
 
+import { Address, OrderAddress } from '../../generated-types';
 import { DataService } from '../../providers/data/data.service';
 
 @Component({

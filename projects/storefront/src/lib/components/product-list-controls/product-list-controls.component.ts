@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { ActivatedRoute, Router } from 'node_modules/@angular/router';
-import { SearchProducts } from 'projects/storefront/src/lib/generated-types';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { getRouteArrayParam } from '../../common/utils/get-route-array-param';
+import { SearchProducts } from '../../generated-types';
 
 export interface FacetWithValues {
     id: string;

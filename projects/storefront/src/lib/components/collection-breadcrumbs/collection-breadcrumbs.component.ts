@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { GetCollection } from 'projects/storefront/src/lib/generated-types';
+
+import { GetCollection } from '../../generated-types';
 
 @Component({
     selector: 'vsf-collection-breadcrumbs',
