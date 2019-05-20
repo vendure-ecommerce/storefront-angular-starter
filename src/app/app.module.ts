@@ -2,14 +2,17 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faFacebook, faInstagram, faTwitter, faYoutube } from '@fortawesome/fontawesome-free-brands';
+// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
+import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
+import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
+import faYoutube from '@fortawesome/fontawesome-free-brands/faYoutube';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { StorefrontModule } from '@vendure/storefront';
+import { StorefrontModule, StorefrontSharedModule } from '@vendure/storefront';
 
 import { AppComponent } from './app.component';
-import { routes } from './app.routes';
 import { HomePageComponent } from './components/home-page/home-page.component';
+import { routes } from './routing/app.routes';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
 
@@ -29,7 +32,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
                 withCredentials: true,
             },
         }),
-        FontAwesomeModule,
+        StorefrontSharedModule,
     ],
     bootstrap: [AppComponent],
 })

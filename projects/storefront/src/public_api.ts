@@ -3,6 +3,9 @@
  */
 
 export * from './lib/storefront.module';
+export * from './lib/storefront-shared.module';
+export * from './lib/storefront-checkout.module';
+export * from './lib/storefront-account.module';
 export * from './lib/components/account-dashboard/account-dashboard.component';
 export * from './lib/components/account-address-book/account-address-book.component';
 export * from './lib/components/account-address-detail/account-address-detail.component';
