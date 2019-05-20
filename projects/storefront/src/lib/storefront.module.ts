@@ -135,6 +135,9 @@ export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) 
     return new CustomHttpTranslationLoader(http, baseHref + '/i18n/');
 }
 
+let apolloCache: InMemoryCache;
+let providedCacheState: any | undefined;
+
 @NgModule({
     declarations: [
         ...COMPONENTS, ...PIPES,
@@ -189,13 +192,28 @@ export class StorefrontModule {
     constructor() {
         buildIconLibrary();
     }
+
+    extractState() {
+        return apolloCache.extract();
+    }
+
+    restoreState(state: any) {
+        if (apolloCache) {
+            apolloCache.restore(state);
+        }
+        providedCacheState = state;
+    }
 }
 
 export function apolloOptionsFactory(httpLink: HttpLink, config: StorefrontConfig) {
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
+    apolloCache = new InMemoryCache();
+    if (providedCacheState) {
+        apolloCache.restore(providedCacheState);
+    }
     const result = {
-        cache: new InMemoryCache(),
+        cache: apolloCache,
         link: httpLink.create(config.apolloOptions),
     };
     return result;

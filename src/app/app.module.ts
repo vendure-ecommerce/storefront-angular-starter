@@ -36,20 +36,28 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
 export class AppModule {
 
     constructor(
+        private storefrontModule: StorefrontModule,
         private readonly transferState: TransferState,
     ) {
         library.add(faTwitter, faFacebook, faInstagram, faYoutube);
+        const isBrowser = this.transferState.hasKey<any>(STATE_KEY);
+
+        if (isBrowser) {
+            this.onBrowser();
+        } else {
+            this.onServer();
+        }
     }
 
     onServer() {
         this.transferState.onSerialize(STATE_KEY, () => {
-            // const state = this.cache.extract();
-            //  return state;
+            const state = this.storefrontModule.extractState();
+            return state;
         });
     }
 
     onBrowser() {
         const state = this.transferState.get<any>(STATE_KEY, null);
-        // this.cache.restore(state);
+        this.storefrontModule.restoreState(state);
     }
 }
