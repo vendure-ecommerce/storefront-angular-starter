@@ -48,6 +48,7 @@ import { DialogButtonsDirective } from './components/modal-dialog/dialog-buttons
 import { DialogComponentOutletComponent } from './components/modal-dialog/dialog-component-outlet.component';
 import { DialogTitleDirective } from './components/modal-dialog/dialog-title.directive';
 import { ModalDialogComponent } from './components/modal-dialog/modal-dialog.component';
+import { NotificationComponent } from './components/notification/notification.component';
 import { ProductCardComponent } from './components/product-card/product-card.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
@@ -110,6 +111,7 @@ const COMPONENTS = [
     ModalDialogComponent,
     AddressModalComponent,
     CollectionCardComponent,
+    NotificationComponent,
 ];
 
 const PIPES = [
@@ -137,6 +139,7 @@ export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) 
     entryComponents: [
         AddressModalComponent,
         ModalDialogComponent,
+        NotificationComponent,
     ],
     imports: [
         CommonModule,
