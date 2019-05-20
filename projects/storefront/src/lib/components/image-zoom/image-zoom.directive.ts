@@ -3,6 +3,8 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Directive, ElementRef, HostBinding, Inject, Input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 
+declare const require: any;
+
 /**
  * This directive makes an image element zoomable on mouse hover. It uses the
  * [Drift](https://github.com/imgix/drift) library.
@@ -16,26 +18,25 @@ export class ImageZoomDirective implements OnInit, OnDestroy {
     @HostBinding('attr.data-zoom') get sourceAttr(): string {
         return this.sourceUrl;
     }
-    private driftInstance: any;
+    private driftInstance: import ('drift-zoom');
 
     constructor(private elementRef: ElementRef,
                 @Inject(PLATFORM_ID) private platformId: any) {}
 
     ngOnInit(): void {
         if (isPlatformBrowser(this.platformId)) {
-            /*import('drift-zoom').then((module) => {
-                const containerEl = this.container || null;
-                this.driftInstance = new module.default(this.elementRef.nativeElement, {
-                    namespace: 'vsf-zoom',
-                    inlinePane: !containerEl || 768,
-                    inlineOffsetY: -85,
-                    hoverDelay: 500,
-                    paneContainer: containerEl,
-                    containInline: true,
-                    hoverBoundingBox: true,
-                    touchBoundingBox: false,
-                });
-            });*/
+            const module = require('drift-zoom');
+            const containerEl = this.container || null;
+            this.driftInstance = new module.default(this.elementRef.nativeElement, {
+                namespace: 'vsf-zoom',
+                inlinePane: !containerEl || 768,
+                inlineOffsetY: -85,
+                hoverDelay: 250,
+                paneContainer: containerEl,
+                containInline: true,
+                hoverBoundingBox: true,
+                touchBoundingBox: false,
+            });
         }
     }
 
