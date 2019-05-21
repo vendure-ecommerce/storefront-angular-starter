@@ -25,6 +25,11 @@ declare class DriftZoom {
     enable(): void;
     disable(): void;
     setZoomImageURL(imageURL: string): void;
+    trigger: {
+        boundingBox: {
+            hide(): void;
+        };
+    };
 }
 
 declare module 'drift-zoom' {

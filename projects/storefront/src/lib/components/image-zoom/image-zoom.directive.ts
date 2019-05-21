@@ -43,6 +43,7 @@ export class ImageZoomDirective implements OnInit, OnDestroy {
     ngOnDestroy(): void {
         if (this.driftInstance) {
             this.driftInstance.destroy();
+            this.driftInstance.trigger.boundingBox.hide();
         }
     }
 
