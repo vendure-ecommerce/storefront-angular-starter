@@ -1,12 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
 import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
 import faYoutube from '@fortawesome/fontawesome-free-brands/faYoutube';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { StorefrontModule, StorefrontSharedModule } from '@vendure/storefront';
+
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -30,6 +33,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
             },
         }),
         StorefrontSharedModule,
+        ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     bootstrap: [AppComponent],
 })
