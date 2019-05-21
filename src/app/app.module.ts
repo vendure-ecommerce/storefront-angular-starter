@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-// import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
 import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
 import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
@@ -24,7 +22,6 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
     imports: [
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
-        BrowserAnimationsModule,
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
         StorefrontModule.forRoot({
             apolloOptions: {
