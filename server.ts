@@ -5,6 +5,7 @@ import {ngExpressEngine} from '@nguniversal/express-engine';
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
 import 'zone.js/dist/zone-node';
 
+import compression from 'compression';
 import * as express from 'express';
 import {join} from 'path';
 
@@ -28,7 +29,7 @@ app.engine('html', ngExpressEngine({
     provideModuleMap(LAZY_MODULE_MAP),
   ],
 }));
-
+app.use(compression());
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
 
