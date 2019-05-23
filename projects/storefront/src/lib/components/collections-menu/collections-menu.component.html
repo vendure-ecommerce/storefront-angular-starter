@@ -1,4 +1,4 @@
-<div class="container">
+<div class="nav-wrapper">
     <ul class="nav" *ngIf="collectionTree$ | async as tree">
         <li class="nav-item" *ngFor="let collection of tree.children">
             <vsf-dropdown #dropdown
