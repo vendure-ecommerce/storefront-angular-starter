@@ -3,12 +3,13 @@ import {enableProdMode} from '@angular/core';
 import {ngExpressEngine} from '@nguniversal/express-engine';
 // Import module map for lazy loading
 import {provideModuleMap} from '@nguniversal/module-map-ngfactory-loader';
-import 'zone.js/dist/zone-node';
-
 import compression from 'compression';
 import * as express from 'express';
 import fs from 'fs';
 import {join} from 'path';
+import 'zone.js/dist/zone-node';
+
+import { GLOBAL_APP_CONFIG_KEY } from './src/app/app.config';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
@@ -23,7 +24,7 @@ const configPath = join(__dirname, 'browser/storefront-config.json');
 try {
     console.log('Reading app config from:', configPath);
     const configText = fs.readFileSync(configPath, 'utf-8');
-    (global as any).serverConfig = JSON.parse(configText);
+    (global as any)[GLOBAL_APP_CONFIG_KEY] = JSON.parse(configText);
 } catch (e) {
     console.error(`Could not read app config!`);
     console.error(e);

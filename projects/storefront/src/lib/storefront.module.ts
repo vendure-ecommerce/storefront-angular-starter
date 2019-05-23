@@ -104,7 +104,6 @@ export class StorefrontModule {
                 },
                 {
                     provide: STORE_CONFIG,
-                    // useValue: {},
                     useFactory: configFactory,
                     deps: [STORE_CONFIG_ARG],
                 },
