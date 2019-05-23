@@ -17,7 +17,9 @@ enableProdMode();
 // Express server
 const app = express();
 
-const PORT = process.env.PORT || 4000;
+const portArgIndex = process.argv.indexOf('--port');
+const portArg = (-1 < portArgIndex) ? process.argv[portArgIndex + 1] : null;
+const PORT = portArg || 4000;
 const DIST_FOLDER = join(__dirname, 'browser');
 
 const configPath = join(__dirname, 'browser/storefront-config.json');
