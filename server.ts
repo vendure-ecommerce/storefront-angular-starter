@@ -17,9 +17,9 @@ enableProdMode();
 const app = express();
 
 const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist/browser');
+const DIST_FOLDER = join(__dirname, 'browser');
 
-const configPath = join(process.cwd(), 'dist/browser/storefront-config.json');
+const configPath = join(__dirname, 'browser/storefront-config.json');
 try {
     console.log('Reading app config from:', configPath);
     const configText = fs.readFileSync(configPath, 'utf-8');
