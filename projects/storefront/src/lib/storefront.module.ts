@@ -55,6 +55,7 @@ export interface StorefrontConfig {
 }
 
 export const STORE_CONFIG = new InjectionToken('STORE_CONFIG');
+export const STORE_CONFIG_ARG = new InjectionToken('STORE_CONFIG_ARG');
 
 export function HttpLoaderFactory(http: HttpClient, location: PlatformLocation) {
     // Dynamically get the baseHref, which is configured in the angular.json file
@@ -93,11 +94,20 @@ let providedCacheState: any | undefined;
 })
 export class StorefrontModule {
 
-    static forRoot(config: StorefrontConfig): ModuleWithProviders {
+    static forRoot(config: StorefrontConfig | (() => StorefrontConfig)): ModuleWithProviders {
         return {
             ngModule: StorefrontModule,
             providers: [
-                { provide: STORE_CONFIG, useValue: config },
+                {
+                    provide: STORE_CONFIG_ARG,
+                    useValue: config,
+                },
+                {
+                    provide: STORE_CONFIG,
+                    // useValue: {},
+                    useFactory: configFactory,
+                    deps: [STORE_CONFIG_ARG],
+                },
                 {
                     provide: APOLLO_OPTIONS,
                     useFactory: apolloOptionsFactory,
@@ -135,4 +145,8 @@ export function apolloOptionsFactory(httpLink: HttpLink, config: StorefrontConfi
         link: httpLink.create(config.apolloOptions),
     };
     return result;
+}
+
+export function configFactory(config: StorefrontConfig | (() => StorefrontConfig)) {
+    return typeof config === 'function' ? config() : config;
 }

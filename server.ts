@@ -7,6 +7,7 @@ import 'zone.js/dist/zone-node';
 
 import compression from 'compression';
 import * as express from 'express';
+import fs from 'fs';
 import {join} from 'path';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
@@ -18,16 +19,27 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist/browser');
 
+const configPath = join(process.cwd(), 'dist/browser/storefront-config.json');
+try {
+    console.log('Reading app config from:', configPath);
+    const configText = fs.readFileSync(configPath, 'utf-8');
+    (global as any).serverConfig = JSON.parse(configText);
+} catch (e) {
+    console.error(`Could not read app config!`);
+    console.error(e);
+    process.exit(1);
+}
+
 // * NOTE :: leave this as require() since this file is built Dynamically from webpack
 // tslint:disable-next-line:no-var-requires
 const {AppServerModuleNgFactory, LAZY_MODULE_MAP} = require('./dist/server/main');
 
 // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
 app.engine('html', ngExpressEngine({
-  bootstrap: AppServerModuleNgFactory,
-  providers: [
-    provideModuleMap(LAZY_MODULE_MAP),
-  ],
+    bootstrap: AppServerModuleNgFactory,
+    providers: [
+        provideModuleMap(LAZY_MODULE_MAP),
+    ],
 }));
 app.use(compression());
 app.set('view engine', 'html');
@@ -37,15 +49,15 @@ app.set('views', DIST_FOLDER);
 // app.get('/api/**', (req, res) => { });
 // Serve static files from /browser
 app.get('*.*', express.static(DIST_FOLDER, {
-  maxAge: '1y',
+    maxAge: '1y',
 }));
 
 // All regular routes use the Universal engine
 app.get('*', (req: any, res: any) => {
-  res.render('index', { req });
+    res.render('index', { req });
 });
 
 // Start up the Node server
 app.listen(PORT, () => {
-  console.log(`Node Express server listening on http://localhost:${PORT}`);
+    console.log(`Node Express server listening on http://localhost:${PORT}`);
 });

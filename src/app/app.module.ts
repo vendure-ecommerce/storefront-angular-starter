@@ -12,6 +12,7 @@ import { StorefrontModule, StorefrontSharedModule } from '@vendure/storefront';
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
+import { getAppConfig } from './app.config';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { routes } from './routing/app.routes';
 
@@ -26,12 +27,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
-        StorefrontModule.forRoot({
-            apolloOptions: {
-                uri: 'http://localhost:3000/shop-api',
-                withCredentials: true,
-            },
-        }),
+        StorefrontModule.forRoot(getStorefrontConfig),
         StorefrontSharedModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
@@ -64,4 +60,14 @@ export class AppModule {
         const state = this.transferState.get<any>(STATE_KEY, null);
         this.storefrontModule.restoreState(state);
     }
+}
+
+export function getStorefrontConfig() {
+    const { apiHost, apiPort, shopApiPath } = getAppConfig();
+    return {
+        apolloOptions: {
+            uri: `${apiHost}:${apiPort}/${shopApiPath}`,
+            withCredentials: true,
+        },
+    };
 }

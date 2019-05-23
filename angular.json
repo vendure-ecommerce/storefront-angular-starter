@@ -21,6 +21,7 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
+              "src/storefront-config.json",
               "src/manifest.json"
             ],
             "styles": [
