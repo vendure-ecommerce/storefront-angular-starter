@@ -2,6 +2,7 @@
 
 vsf-checkout-stage-indicator {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     max-width: 600px;
     margin: 0 auto $spacer * 2;

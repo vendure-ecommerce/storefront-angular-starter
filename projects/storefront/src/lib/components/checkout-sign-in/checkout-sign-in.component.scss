@@ -1,7 +1,15 @@
 vsf-checkout-sign-in {
     .sign-in-row {
         display: flex;
+        flex-direction: column;
         justify-content: space-evenly;
+        align-items: center;
+        margin-bottom: $spacer;
+
+        @include media-breakpoint-up(lg) {
+            flex-direction: row;
+            align-items: inherit;
+        }
     }
 
     .or {

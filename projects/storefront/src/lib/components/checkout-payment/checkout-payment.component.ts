@@ -46,7 +46,7 @@ export class CheckoutPaymentComponent {
                     await new Promise(resolve => setTimeout(() => {
                         this.stateService.setState('activeOrderId', null);
                         resolve();
-                    }, 100));
+                    }, 500));
                     this.router.navigate(['../confirmation', order.code], { relativeTo: this.route });
                 }
             });
