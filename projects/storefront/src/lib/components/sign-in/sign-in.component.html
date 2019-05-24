@@ -28,11 +28,11 @@
         </button>
         <div class="alert alert-warning invalid-credentials" role="alert"  [class.visible]="invalidCredentials">
             Invalid credentials. Please try again.<br>
-            <a [routerLink]="['/forgotten-password', { email: this.emailAddress }]">I've forgotten my password</a>
+            <a [routerLink]="['/account/forgotten-password', { email: this.emailAddress }]">I've forgotten my password</a>
         </div>
 
         <div *ngIf="displayRegisterLink" class="register-link">
-            <a [routerLink]="['/register']">No account? Register here</a>
+            <a [routerLink]="['/account/register']">No account? Register here</a>
         </div>
     </vsf-centered-card>
 </form>
