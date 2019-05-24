@@ -1,6 +1,6 @@
 {
   "name": "@vendure/storefront",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "dependencies": {
     "@angular/cdk": "^7.3.5",
     "@fortawesome/angular-fontawesome": "^0.3.0",

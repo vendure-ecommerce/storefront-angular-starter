@@ -1,24 +1,11 @@
-# Storefront
+# Vendure Storefront
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.2.0.
+This library provides pre-built Angular components and services for creating a storefront application for [Vendure](https://vendure.io).
 
-## Code scaffolding
+To get an idea of how to use these components in your application, see the [reference application implementation](https://github.com/vendure-ecommerce/storefront/tree/master/src/app). This demonstrates a sample Angular CLI app with universal, PWA, and lazy-loaded routes, and is the source of the [Vendure Storefront Demo](https://demo.vendure.io/storefront/)
 
-Run `ng generate component component-name --project storefront` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project storefront`.
-> Note: Don't forget to add `--project storefront` or else it will be added to the default project in your `angular.json` file. 
+### Status - experimental
 
-## Build
+The current API and method of consuming this library is a work-in-progress and need improvement, specifically better separation between the components and the routing defined by the consuming application.
 
-Run `ng build storefront` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Publishing
-
-After building your library with `ng build storefront`, go to the dist folder `cd dist/storefront` and run `npm publish`.
-
-## Running unit tests
-
-Run `ng test storefront` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Also a method of overriding default components would be useful to have, if possible.

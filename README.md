@@ -8,7 +8,7 @@ The app is built with the [Angular CLI](https://github.com/angular/angular-cli),
 
 The `@vendure/storefront` library source is located in the [`projects/storefront`](./projects/storefront) directory.
 
-There is also an example shop app located in the [`src`](./src) directory.
+There is also an example shop app located in the [`src`](./src) directory. This is the source of the [Vendure Storefront Demo](https://demo.vendure.io/storefront/)
 
 ## Concept
 
@@ -16,7 +16,7 @@ The idea of this library is to provide an out-of-the box complete storefront for
 
 1. Start a new Angular CLI project in the usual way.
 2. `npm install @vendure/storefront`
-3. Consume the storefront lib in your app (see example below). The storefront lib is almost totally self-contained - it handles all data fetching and provides all the necessary UI components. The app itself (currently) just defines the app shell component and the routing. Routing may somehow be provided by the lib with the option to extend.
+3. Consume the storefront lib in your app (see example below). The storefront lib is almost totally self-contained - it handles all data fetching and provides all the necessary UI components. The app itself (currently) just defines the app shell component, home page and the routing. Routing may somehow be provided by the lib with the option to extend.
 
 ```ts
 import { StorefrontModule } from '@vendure/storefront';
@@ -34,12 +34,10 @@ import { StorefrontModule } from '@vendure/storefront';
                 withCredentials: true,
             },
         }),
+        StorefrontSharedModule
     ],
     bootstrap: [AppComponent],
 })
 export class AppModule {}
 ```
 
-## Status
-
-This project is under active development and not yet published to npm. There will be an initial release in the coming weeks.
