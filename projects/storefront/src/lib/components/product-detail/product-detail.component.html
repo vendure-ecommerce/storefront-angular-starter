@@ -1,4 +1,5 @@
 <vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs"
+                            *ngIf="product"
                             [linkLast]="true"></vsf-collection-breadcrumbs>
 <ng-template [ngIf]="product" [ngIfElse]="placeholder">
     <div class="row">
@@ -48,6 +49,7 @@
     </div>
 </ng-template>
 <ng-template #placeholder>
+    <div class="placeholder-breadcrumb loading-placeholder"></div>
     <div class="row">
         <div class="col-12 col-md-6 text-center">
             <div class="product-image">
