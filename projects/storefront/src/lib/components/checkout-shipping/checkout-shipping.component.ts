@@ -41,7 +41,7 @@ export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Frag
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutShippingComponent implements OnInit {
-    @ViewChild('addressForm') addressForm: AddressFormComponent;
+    @ViewChild('addressForm', { static: true }) addressForm: AddressFormComponent;
 
     customerAddresses$: Observable<Address.Fragment[]>;
     availableCountries$: Observable<GetAvailableCountries.AvailableCountries[]>;

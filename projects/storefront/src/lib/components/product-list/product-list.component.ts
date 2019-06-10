@@ -81,14 +81,14 @@ export class ProductListComponent implements OnInit {
             triggerFetch$.pipe(mapTo(true)),
         );
         const queryResult$ = triggerFetch$.pipe(
-            switchMap(([collectionId, facetIds, term]) => {
+            switchMap(([collectionId, facetValueIds, term]) => {
                 const perPage = 24;
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
                         groupByProduct: true,
                         collectionId,
-                        facetIds,
+                        facetValueIds,
                         take: perPage,
                         skip: this.currentPage * perPage,
                     },

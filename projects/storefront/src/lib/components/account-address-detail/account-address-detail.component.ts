@@ -20,7 +20,7 @@ export class AccountAddressDetailComponent implements OnInit {
 
     address$: Observable<GetCustomerAddresses.Addresses | undefined>;
     availableCountries$: Observable<GetAvailableCountries.AvailableCountries[]>;
-    @ViewChild('addressForm') private addressForm: AddressFormComponent;
+    @ViewChild('addressForm', { static: true }) private addressForm: AddressFormComponent;
 
     constructor(private route: ActivatedRoute, private dataService: DataService) { }
 

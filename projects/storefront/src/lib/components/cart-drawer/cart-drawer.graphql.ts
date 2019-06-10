@@ -13,7 +13,7 @@ export const GET_ACTIVE_ORDER = gql`
 
 export const ADJUST_ITEM_QUANTITY = gql`
     mutation AdjustItemQuantity($id: ID!, $qty: Int!) {
-        adjustItemQuantity(orderItemId: $id, quantity: $qty){
+        adjustOrderLine(orderLineId: $id, quantity: $qty){
             ...Cart
         }
     }
@@ -22,7 +22,7 @@ export const ADJUST_ITEM_QUANTITY = gql`
 
 export const REMOVE_ITEM_FROM_CART = gql`
     mutation RemoveItemFromCart($id: ID!) {
-        removeItemFromOrder(orderItemId: $id){
+        removeOrderLine(orderLineId: $id){
             ...Cart
         }
     }
