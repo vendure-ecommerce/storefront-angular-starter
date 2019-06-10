@@ -1,4 +1,4 @@
-# This file was generated based on ".graphqlconfig" at Thu Apr 11 10:50:37 CEST 2019. Do not edit manually.
+# This file was generated based on ".graphqlconfig". Do not edit manually.
 
 schema {
     query: Query
@@ -14,8 +14,19 @@ interface PaginatedList {
     totalItems: Int!
 }
 
+interface StockMovement {
+    createdAt: DateTime!
+    id: ID!
+    productVariant: ProductVariant!
+    quantity: Int!
+    type: StockMovementType!
+    updatedAt: DateTime!
+}
+
 "The price of a search result product, either as a range or as a single price"
 union SearchResultPrice = PriceRange | SinglePrice
+
+union StockMovementItem = Cancellation | Return | Sale | StockAdjustment
 
 type Address implements Node {
     city: String
@@ -63,6 +74,7 @@ type AdministratorList implements PaginatedList {
 }
 
 type Asset implements Node {
+    createdAt: DateTime!
     fileSize: Int!
     id: ID!
     mimeType: String!
@@ -70,11 +82,22 @@ type Asset implements Node {
     preview: String!
     source: String!
     type: AssetType!
+    updatedAt: DateTime!
 }
 
 type AssetList implements PaginatedList {
     items: [Asset!]!
     totalItems: Int!
+}
+
+type Cancellation implements Node & StockMovement {
+    createdAt: DateTime!
+    id: ID!
+    orderLine: OrderLine!
+    productVariant: ProductVariant!
+    quantity: Int!
+    type: StockMovementType!
+    updatedAt: DateTime!
 }
 
 type Channel implements Node {
@@ -260,6 +283,7 @@ type GlobalSettings {
     customFields: JSON
     id: ID!
     serverConfig: ServerConfig!
+    trackInventory: Boolean!
     updatedAt: DateTime!
 }
 
@@ -274,9 +298,17 @@ type LoginResult {
 }
 
 type Mutation {
-    addItemToOrder(productVariantId: ID!, quantity: Int!): Order
+    """
+    Adds an item to the order. If custom fields are defined on the OrderLine
+    entity, a third argument 'customFields' will be available.
+    """
+    addItemToOrder(customFields: OrderLineCustomFieldsInput, productVariantId: ID!, quantity: Int!): Order
     addPaymentToOrder(input: PaymentInput!): Order
-    adjustItemQuantity(orderItemId: ID!, quantity: Int!): Order
+    """
+    Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a
+    third argument 'customFields' will be available.
+    """
+    adjustOrderLine(customFields: OrderLineCustomFieldsInput, orderLineId: ID!, quantity: Int): Order
     "Create a new Customer Address"
     createCustomerAddress(input: CreateAddressInput!): Address!
     "Delete an existing Address"
@@ -290,7 +322,7 @@ type Mutation {
     refreshCustomerVerification(emailAddress: String!): Boolean!
     "Register a Customer account with the given credentials"
     registerCustomerAccount(input: RegisterCustomerInput!): Boolean!
-    removeItemFromOrder(orderItemId: ID!): Order
+    removeOrderLine(orderLineId: ID!): Order
     "Requests a password reset email to be sent"
     requestPasswordReset(emailAddress: String!): Boolean
     """
@@ -338,6 +370,7 @@ type Order implements Node {
     shipping: Int!
     shippingAddress: OrderAddress
     shippingMethod: ShippingMethod
+    shippingWithTax: Int!
     state: String!
     subTotal: Int!
     subTotalBeforeTax: Int!
@@ -373,6 +406,7 @@ type OrderItem implements Node {
 type OrderLine implements Node {
     adjustments: [Adjustment!]!
     createdAt: DateTime!
+    customFields: OrderLineCustomFields
     featuredAsset: Asset
     id: ID!
     items: [OrderItem!]!
@@ -383,6 +417,10 @@ type OrderLine implements Node {
     unitPrice: Int!
     unitPriceWithTax: Int!
     updatedAt: DateTime!
+}
+
+type OrderLineCustomFields {
+    message: String
 }
 
 type OrderList implements PaginatedList {
@@ -550,10 +588,21 @@ type Query {
     nextOrderStates: [String!]!
     order(id: ID!): Order
     orderByCode(code: String!): Order
-    product(id: ID!, languageCode: LanguageCode): Product
+    "Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result."
+    product(id: ID, languageCode: LanguageCode, slug: String): Product
     products(languageCode: LanguageCode, options: ProductListOptions): ProductList!
     search(input: SearchInput!): SearchResponse!
     temp__: Boolean
+}
+
+type Return implements Node & StockMovement {
+    createdAt: DateTime!
+    id: ID!
+    orderItem: OrderItem!
+    productVariant: ProductVariant!
+    quantity: Int!
+    type: StockMovementType!
+    updatedAt: DateTime!
 }
 
 type Role implements Node {
@@ -569,6 +618,16 @@ type Role implements Node {
 type RoleList implements PaginatedList {
     items: [Role!]!
     totalItems: Int!
+}
+
+type Sale implements Node & StockMovement {
+    createdAt: DateTime!
+    id: ID!
+    orderLine: OrderLine!
+    productVariant: ProductVariant!
+    quantity: Int!
+    type: StockMovementType!
+    updatedAt: DateTime!
 }
 
 type SearchReindexResponse {
@@ -627,11 +686,26 @@ type ShippingMethodQuote {
     description: String!
     id: ID!
     price: Int!
+    priceWithTax: Int!
 }
 
 "The price value where the result has a single price"
 type SinglePrice {
     value: Int!
+}
+
+type StockAdjustment implements Node & StockMovement {
+    createdAt: DateTime!
+    id: ID!
+    productVariant: ProductVariant!
+    quantity: Int!
+    type: StockMovementType!
+    updatedAt: DateTime!
+}
+
+type StockMovementList {
+    items: [StockMovementItem!]!
+    totalItems: Int!
 }
 
 type TaxCategory implements Node {
@@ -709,6 +783,7 @@ enum ConfigArgType {
     MONEY
     PERCENTAGE
     STRING
+    STRING_OPERATOR
 }
 
 "ISO 4217 currency code"
@@ -1445,6 +1520,13 @@ enum SortOrder {
     DESC
 }
 
+enum StockMovementType {
+    ADJUSTMENT
+    CANCELLATION
+    RETURN
+    SALE
+}
+
 input BooleanOperators {
     eq: Boolean
 }
@@ -1541,12 +1623,17 @@ input OrderFilterParameter {
     createdAt: DateOperators
     currencyCode: StringOperators
     shipping: NumberOperators
+    shippingWithTax: NumberOperators
     state: StringOperators
     subTotal: NumberOperators
     subTotalBeforeTax: NumberOperators
     total: NumberOperators
     totalBeforeTax: NumberOperators
     updatedAt: DateOperators
+}
+
+input OrderLineCustomFieldsInput {
+    message: String
 }
 
 input OrderListOptions {
@@ -1561,6 +1648,7 @@ input OrderSortParameter {
     createdAt: SortOrder
     id: SortOrder
     shipping: SortOrder
+    shippingWithTax: SortOrder
     state: SortOrder
     subTotal: SortOrder
     subTotalBeforeTax: SortOrder
@@ -1639,7 +1727,7 @@ input RegisterCustomerInput {
 
 input SearchInput {
     collectionId: String
-    facetIds: [String!]
+    facetValueIds: [String!]
     groupByProduct: Boolean
     skip: Int
     sort: SearchResultSortParameter

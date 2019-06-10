@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-05-17T11:00:15+02:00
+// Generated in 2019-05-31T20:46:33+02:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -22,6 +22,8 @@ export interface OrderFilterParameter {
     currencyCode?: Maybe<StringOperators>;
 
     shipping?: Maybe<NumberOperators>;
+
+    shippingWithTax?: Maybe<NumberOperators>;
 
     state?: Maybe<StringOperators>;
 
@@ -90,6 +92,8 @@ export interface OrderSortParameter {
     id?: Maybe<SortOrder>;
 
     shipping?: Maybe<SortOrder>;
+
+    shippingWithTax?: Maybe<SortOrder>;
 
     state?: Maybe<SortOrder>;
 
@@ -231,7 +235,7 @@ export interface ProductSortParameter {
 export interface SearchInput {
     collectionId?: Maybe<string>;
 
-    facetIds?: Maybe<string[]>;
+    facetValueIds?: Maybe<string[]>;
 
     groupByProduct?: Maybe<boolean>;
 
@@ -248,6 +252,10 @@ export interface SearchResultSortParameter {
     name?: Maybe<SortOrder>;
 
     price?: Maybe<SortOrder>;
+}
+
+export interface OrderLineCustomFieldsInput {
+    message?: Maybe<string>;
 }
 
 export interface PaymentInput {
@@ -737,7 +745,8 @@ export enum ConfigArgType {
     INT = "INT",
     MONEY = "MONEY",
     PERCENTAGE = "PERCENTAGE",
-    STRING = "STRING"
+    STRING = "STRING",
+    STRING_OPERATOR = "STRING_OPERATOR"
 }
 /** Permissions for administrators and customers */
 export enum Permission {
@@ -765,6 +774,13 @@ export enum Permission {
     UpdateCustomer = "UpdateCustomer",
     UpdateOrder = "UpdateOrder",
     UpdateSettings = "UpdateSettings"
+}
+
+export enum StockMovementType {
+    ADJUSTMENT = "ADJUSTMENT",
+    CANCELLATION = "CANCELLATION",
+    RETURN = "RETURN",
+    SALE = "SALE"
 }
 
 export enum DeletionResult {
@@ -988,10 +1004,10 @@ export namespace AdjustItemQuantity {
     export type Mutation = {
         __typename?: "Mutation";
 
-        adjustItemQuantity: Maybe<AdjustItemQuantity>;
+        adjustOrderLine: Maybe<AdjustOrderLine>;
     };
 
-    export type AdjustItemQuantity = Cart.Fragment;
+    export type AdjustOrderLine = Cart.Fragment;
 }
 
 export namespace RemoveItemFromCart {
@@ -1002,10 +1018,10 @@ export namespace RemoveItemFromCart {
     export type Mutation = {
         __typename?: "Mutation";
 
-        removeItemFromOrder: Maybe<RemoveItemFromOrder>;
+        removeOrderLine: Maybe<RemoveOrderLine>;
     };
 
-    export type RemoveItemFromOrder = Cart.Fragment;
+    export type RemoveOrderLine = Cart.Fragment;
 }
 
 export namespace GetCartTotals {
@@ -1246,52 +1262,6 @@ export namespace TransitionToArrangingPayment {
     };
 
     export type TransitionOrderToState = Cart.Fragment;
-}
-
-export namespace GetCollections {
-    export type Variables = {
-        options?: Maybe<CollectionListOptions>;
-    };
-
-    export type Query = {
-        __typename?: "Query";
-
-        collections: Collections;
-    };
-
-    export type Collections = {
-        __typename?: "CollectionList";
-
-        items: Items[];
-    };
-
-    export type Items = {
-        __typename?: "Collection";
-
-        id: string;
-
-        name: string;
-
-        parent: Maybe<Parent>;
-
-        featuredAsset: Maybe<FeaturedAsset>;
-    };
-
-    export type Parent = {
-        __typename?: "Collection";
-
-        id: string;
-
-        name: string;
-    };
-
-    export type FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
-    };
 }
 
 export namespace RequestPasswordReset {
@@ -1736,6 +1706,52 @@ export namespace GetActiveCustomer {
         emailAddress: string;
 
         phoneNumber: Maybe<string>;
+    };
+}
+
+export namespace GetCollections {
+    export type Variables = {
+        options?: Maybe<CollectionListOptions>;
+    };
+
+    export type Query = {
+        __typename?: "Query";
+
+        collections: Collections;
+    };
+
+    export type Collections = {
+        __typename?: "CollectionList";
+
+        items: Items[];
+    };
+
+    export type Items = {
+        __typename?: "Collection";
+
+        id: string;
+
+        name: string;
+
+        parent: Maybe<Parent>;
+
+        featuredAsset: Maybe<FeaturedAsset>;
+    };
+
+    export type Parent = {
+        __typename?: "Collection";
+
+        id: string;
+
+        name: string;
+    };
+
+    export type FeaturedAsset = {
+        __typename?: "Asset";
+
+        id: string;
+
+        preview: string;
     };
 }
 
