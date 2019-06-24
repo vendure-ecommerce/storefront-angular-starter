@@ -42,7 +42,7 @@ export class CheckoutPaymentComponent {
         })
             .subscribe(async result => {
                 const order = result.addPaymentToOrder;
-                if (order && order.state === 'PaymentSettled') {
+                if (order && (order.state === 'PaymentSettled' || order.state === 'PaymentAuthorized')) {
                     await new Promise(resolve => setTimeout(() => {
                         this.stateService.setState('activeOrderId', null);
                         resolve();
