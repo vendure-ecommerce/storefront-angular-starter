@@ -160,17 +160,17 @@ export class CheckoutShippingComponent implements OnInit {
 
     private valueToAddressInput(value: AddressFormValue | Address.Fragment): CreateAddressInput {
         return {
-            city: value.city,
-            company: value.company,
+            city: value.city || '',
+            company: value.company || '',
             countryCode: this.isFormValue(value) ? value.countryCode : value.country.code,
             defaultBillingAddress: value.defaultBillingAddress,
             defaultShippingAddress: value.defaultShippingAddress,
-            fullName: value.fullName,
-            phoneNumber: value.phoneNumber,
-            postalCode: value.postalCode,
-            province: value.province,
-            streetLine1: value.streetLine1,
-            streetLine2: value.streetLine2,
+            fullName: value.fullName || '',
+            phoneNumber: value.phoneNumber || '',
+            postalCode: value.postalCode || '',
+            province: value.province || '',
+            streetLine1: value.streetLine1 || '',
+            streetLine2: value.streetLine2 || '',
         };
     }
 
