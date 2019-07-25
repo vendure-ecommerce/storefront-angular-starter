@@ -48,6 +48,7 @@ export * from './lib/providers/routing/checkout-resolver.graphql';
 export * from './lib/providers/routing/checkout-resolver';
 export * from './lib/providers/routing/sign-in.guard';
 export * from './lib/providers/data/data.service';
+export * from './lib/providers/state.service';
 export * from './lib/providers/notification/notification.service';
 export * from './lib/components/dropdown/dropdown-trigger.directive';
 export * from './lib/components/dropdown/dropdown-content.directive';
