@@ -10,6 +10,12 @@ The `@vendure/storefront` library source is located in the [`projects/storefront
 
 There is also an example shop app located in the [`src`](./src) directory. This is the source of the [Vendure Storefront Demo](https://demo.vendure.io/storefront/)
 
+## Building
+
+1. Run `npm install` or `yarn` in the root dir and in `projects/storefront` to install dependencies.
+2. Build the library: `npm run lib:build` or `yarn lib:build`
+3. Serve the storefront app: `npm start` or `yarn start`. Make sure you have a local Vendure instance running a `http://localhost:3000`.
+
 ## Concept
 
 The idea of this library is to provide an out-of-the box complete storefront for Angular applications. The workflow would be:
