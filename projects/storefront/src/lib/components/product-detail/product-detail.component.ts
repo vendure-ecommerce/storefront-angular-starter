@@ -29,19 +29,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         const lastCollectionId$ = this.stateService.select(state => state.lastCollectionId);
-        const productId$ = this.route.paramMap.pipe(
+        const productSlug$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('id')),
             filter(notNullOrUndefined),
-            map(id => {
-                const parts = id.split('-');
-                return parts[parts.length - 1];
-            }),
         );
 
-        this.sub = productId$.pipe(
-            switchMap(id => {
+        this.sub = productSlug$.pipe(
+            switchMap(slug => {
                 return this.dataService.query<GetProductDetail.Query, GetProductDetail.Variables>(GET_PRODUCT_DETAIL, {
-                        id,
+                        slug,
                     },
                 );
             }),

@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 import { CART_FRAGMENT } from '../../types/fragments.graphql';
 
 export const GET_PRODUCT_DETAIL = gql`
-    query GetProductDetail($id: ID!) {
-        product(id: $id) {
+    query GetProductDetail($slug: String!) {
+        product(slug: $slug) {
             id
             name
             description

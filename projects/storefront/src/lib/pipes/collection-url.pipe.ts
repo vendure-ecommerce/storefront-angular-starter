@@ -7,7 +7,7 @@ export class CollectionUrlPipe implements PipeTransform {
 
     transform(value: { id: string; name: string; }): string {
         const { id, name } = value;
-        return name.replace(/\s+/g, '-').toLowerCase() + '-' + id;
+        return name.replace(/\s+/g, '-').toLowerCase() + '_' + id;
     }
 
 }

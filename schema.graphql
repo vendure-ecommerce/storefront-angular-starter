@@ -5,6 +5,13 @@ schema {
     mutation: Mutation
 }
 
+interface CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    name: String!
+    type: String!
+}
+
 interface Node {
     id: ID!
 }
@@ -22,6 +29,8 @@ interface StockMovement {
     type: StockMovementType!
     updatedAt: DateTime!
 }
+
+union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | StringCustomFieldConfig
 
 "The price of a search result product, either as a range or as a single price"
 union SearchResultPrice = PriceRange | SinglePrice
@@ -51,11 +60,6 @@ type Adjustment {
     amount: Int!
     description: String!
     type: AdjustmentType!
-}
-
-type AdjustmentOperations {
-    actions: [ConfigurableOperation!]!
-    conditions: [ConfigurableOperation!]!
 }
 
 type Administrator implements Node {
@@ -88,6 +92,13 @@ type Asset implements Node {
 type AssetList implements PaginatedList {
     items: [Asset!]!
     totalItems: Int!
+}
+
+type BooleanCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    name: String!
+    type: String!
 }
 
 type Cancellation implements Node & StockMovement {
@@ -153,12 +164,25 @@ type CollectionTranslation {
 
 type ConfigArg {
     name: String!
-    type: ConfigArgType!
-    value: String
+    type: String!
+    value: String!
+}
+
+type ConfigArgDefinition {
+    config: JSON
+    description: String
+    label: String
+    name: String!
+    type: String!
 }
 
 type ConfigurableOperation {
     args: [ConfigArg!]!
+    code: String!
+}
+
+type ConfigurableOperationDefinition {
+    args: [ConfigArgDefinition!]!
     code: String!
     description: String!
 }
@@ -191,6 +215,21 @@ type CurrentUser {
     identifier: String!
 }
 
+type CustomFields {
+    Address: [CustomFieldConfig!]!
+    Collection: [CustomFieldConfig!]!
+    Customer: [CustomFieldConfig!]!
+    Facet: [CustomFieldConfig!]!
+    FacetValue: [CustomFieldConfig!]!
+    GlobalSettings: [CustomFieldConfig!]!
+    OrderLine: [CustomFieldConfig!]!
+    Product: [CustomFieldConfig!]!
+    ProductOption: [CustomFieldConfig!]!
+    ProductOptionGroup: [CustomFieldConfig!]!
+    ProductVariant: [CustomFieldConfig!]!
+    User: [CustomFieldConfig!]!
+}
+
 type Customer implements Node {
     addresses: [Address!]
     createdAt: DateTime!
@@ -216,6 +255,20 @@ type CustomerGroup implements Node {
 type CustomerList implements PaginatedList {
     items: [Customer!]!
     totalItems: Int!
+}
+
+"""
+Expects the same validation formats as the <input type=\"datetime-local\"> HTML element.
+See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-local#Additional_attributes
+"""
+type DateTimeCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    max: String
+    min: String
+    name: String!
+    step: Int
+    type: String!
 }
 
 type DeletionResponse {
@@ -277,6 +330,25 @@ type FacetValueTranslation {
     updatedAt: DateTime!
 }
 
+type FloatCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    max: Float
+    min: Float
+    name: String!
+    step: Float
+    type: String!
+}
+
+type Fulfillment implements Node {
+    createdAt: DateTime!
+    id: ID!
+    method: String!
+    orderItems: [OrderItem!]!
+    trackingCode: String
+    updatedAt: DateTime!
+}
+
 type GlobalSettings {
     availableLanguages: [LanguageCode!]!
     createdAt: DateTime!
@@ -287,10 +359,47 @@ type GlobalSettings {
     updatedAt: DateTime!
 }
 
+type HistoryEntry implements Node {
+    administrator: Administrator
+    createdAt: DateTime!
+    data: JSON!
+    id: ID!
+    type: HistoryEntryType!
+    updatedAt: DateTime!
+}
+
+type HistoryEntryList implements PaginatedList {
+    items: [HistoryEntry!]!
+    totalItems: Int!
+}
+
 type ImportInfo {
     errors: [String!]
     imported: Int!
     processed: Int!
+}
+
+type IntCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    max: Int
+    min: Int
+    name: String!
+    step: Int
+    type: String!
+}
+
+type LocaleStringCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    name: String!
+    pattern: String
+    type: String!
+}
+
+type LocalizedString {
+    languageCode: LanguageCode!
+    value: String!
 }
 
 type LoginResult {
@@ -302,13 +411,13 @@ type Mutation {
     Adds an item to the order. If custom fields are defined on the OrderLine
     entity, a third argument 'customFields' will be available.
     """
-    addItemToOrder(customFields: OrderLineCustomFieldsInput, productVariantId: ID!, quantity: Int!): Order
+    addItemToOrder(productVariantId: ID!, quantity: Int!): Order
     addPaymentToOrder(input: PaymentInput!): Order
     """
     Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a
     third argument 'customFields' will be available.
     """
-    adjustOrderLine(customFields: OrderLineCustomFieldsInput, orderLineId: ID!, quantity: Int): Order
+    adjustOrderLine(orderLineId: ID!, quantity: Int): Order
     "Create a new Customer Address"
     createCustomerAddress(input: CreateAddressInput!): Address!
     "Delete an existing Address"
@@ -364,6 +473,8 @@ type Order implements Node {
     createdAt: DateTime!
     currencyCode: CurrencyCode!
     customer: Customer
+    fulfillments: [Fulfillment!]
+    history(options: HistoryEntryListOptions): HistoryEntryList!
     id: ID!
     lines: [OrderLine!]!
     payments: [Payment!]
@@ -394,8 +505,11 @@ type OrderAddress {
 
 type OrderItem implements Node {
     adjustments: [Adjustment!]!
+    cancelled: Boolean!
     createdAt: DateTime!
+    fulfillment: Fulfillment
     id: ID!
+    refundId: ID
     taxRate: Float!
     unitPrice: Int!
     unitPriceIncludesTax: Boolean!
@@ -406,7 +520,7 @@ type OrderItem implements Node {
 type OrderLine implements Node {
     adjustments: [Adjustment!]!
     createdAt: DateTime!
-    customFields: OrderLineCustomFields
+    customFields: JSON
     featuredAsset: Asset
     id: ID!
     items: [OrderItem!]!
@@ -419,10 +533,6 @@ type OrderLine implements Node {
     updatedAt: DateTime!
 }
 
-type OrderLineCustomFields {
-    message: String
-}
-
 type OrderList implements PaginatedList {
     items: [Order!]!
     totalItems: Int!
@@ -431,9 +541,11 @@ type OrderList implements PaginatedList {
 type Payment implements Node {
     amount: Int!
     createdAt: DateTime!
+    errorMessage: String
     id: ID!
     metadata: JSON
     method: String!
+    refunds: [Refund!]!
     state: String!
     transactionId: String
     updatedAt: DateTime!
@@ -478,12 +590,13 @@ type ProductList implements PaginatedList {
 }
 
 type ProductOption implements Node {
-    code: String
+    code: String!
     createdAt: DateTime!
     customFields: JSON
+    groupId: ID!
     id: ID!
-    languageCode: LanguageCode
-    name: String
+    languageCode: LanguageCode!
+    name: String!
     translations: [ProductOptionTranslation!]!
     updatedAt: DateTime!
 }
@@ -530,7 +643,7 @@ type ProductVariant implements Node {
     assets: [Asset!]!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
-    customFields: JSON
+    customFields: ProductVariantCustomFields
     facetValues: [FacetValue!]!
     featuredAsset: Asset
     id: ID!
@@ -546,6 +659,10 @@ type ProductVariant implements Node {
     taxRateApplied: TaxRate!
     translations: [ProductVariantTranslation!]!
     updatedAt: DateTime!
+}
+
+type ProductVariantCustomFields {
+    weight: Int
 }
 
 type ProductVariantList implements PaginatedList {
@@ -581,18 +698,34 @@ type Query {
     activeCustomer: Customer
     activeOrder: Order
     availableCountries: [Country!]!
-    collection(id: ID!, languageCode: LanguageCode): Collection
-    collections(languageCode: LanguageCode, options: CollectionListOptions): CollectionList!
+    collection(id: ID!): Collection
+    collections(options: CollectionListOptions): CollectionList!
     eligibleShippingMethods: [ShippingMethodQuote!]!
     me: CurrentUser
     nextOrderStates: [String!]!
     order(id: ID!): Order
     orderByCode(code: String!): Order
     "Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result."
-    product(id: ID, languageCode: LanguageCode, slug: String): Product
-    products(languageCode: LanguageCode, options: ProductListOptions): ProductList!
+    product(id: ID, slug: String): Product
+    products(options: ProductListOptions): ProductList!
     search(input: SearchInput!): SearchResponse!
-    temp__: Boolean
+}
+
+type Refund implements Node {
+    adjustment: Int!
+    createdAt: DateTime!
+    id: ID!
+    items: Int!
+    metadata: JSON
+    method: String
+    orderItems: [OrderItem!]!
+    paymentId: ID!
+    reason: String
+    shipping: Int!
+    state: String!
+    total: Int!
+    transactionId: String
+    updatedAt: DateTime!
 }
 
 type Return implements Node & StockMovement {
@@ -631,9 +764,7 @@ type Sale implements Node & StockMovement {
 }
 
 type SearchReindexResponse {
-    indexedItemCount: Int!
     success: Boolean!
-    timeTaken: Int!
 }
 
 type SearchResponse {
@@ -644,11 +775,11 @@ type SearchResponse {
 
 type SearchResult {
     "An array of ids of the Collections in which this result appears"
-    collectionIds: [String!]!
+    collectionIds: [ID!]!
     currencyCode: CurrencyCode!
     description: String!
-    facetIds: [String!]!
-    facetValueIds: [String!]!
+    facetIds: [ID!]!
+    facetValueIds: [ID!]!
     price: SearchResultPrice!
     priceWithTax: SearchResultPrice!
     productId: ID!
@@ -664,7 +795,7 @@ type SearchResult {
 }
 
 type ServerConfig {
-    customFields: JSON
+    customFieldConfig: CustomFields!
 }
 
 type ShippingMethod implements Node {
@@ -685,6 +816,7 @@ type ShippingMethodList implements PaginatedList {
 type ShippingMethodQuote {
     description: String!
     id: ID!
+    metadata: JSON
     price: Int!
     priceWithTax: Int!
 }
@@ -706,6 +838,20 @@ type StockAdjustment implements Node & StockMovement {
 type StockMovementList {
     items: [StockMovementItem!]!
     totalItems: Int!
+}
+
+type StringCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    label: [LocalizedString!]
+    name: String!
+    options: [StringFieldOption!]
+    pattern: String
+    type: String!
+}
+
+type StringFieldOption {
+    label: [LocalizedString!]
+    value: String!
 }
 
 type TaxCategory implements Node {
@@ -768,25 +914,11 @@ enum AssetType {
 }
 
 """
-Certain entities allow arbitrary configuration arguments to be specified which can then
-be set in the admin-ui and used in the business logic of the app. These are the valid
-data types of such arguments. The data type influences:
+@description
+ISO 4217 currency code
 
-1. How the argument form field is rendered in the admin-ui
-2. The JavaScript type into which the value is coerced before being passed to the business logic.
+@docsCategory common
 """
-enum ConfigArgType {
-    BOOLEAN
-    DATETIME
-    FACET_VALUE_IDS
-    INT
-    MONEY
-    PERCENTAGE
-    STRING
-    STRING_OPERATOR
-}
-
-"ISO 4217 currency code"
 enum CurrencyCode {
     #United Arab Emirates dirham
     AED
@@ -1111,7 +1243,21 @@ enum DeletionResult {
     NOT_DELETED
 }
 
-"ISO 639-1 language code"
+enum HistoryEntryType {
+    ORDER_CANCELLATION
+    ORDER_FULLFILLMENT
+    ORDER_NOTE
+    ORDER_PAYMENT_TRANSITION
+    ORDER_REFUND_TRANSITION
+    ORDER_STATE_TRANSITION
+}
+
+"""
+@description
+ISO 639-1 language code
+
+@docsCategory common
+"""
 enum LanguageCode {
     #Afar
     aa
@@ -1483,7 +1629,14 @@ enum LanguageCode {
     zu
 }
 
-" Permissions for administrators and customers "
+"""
+\"
+@description
+Permissions for administrators and customers. Used to control access to
+GraphQL resolvers via the {@link Allow} decorator.
+
+@docsCategory common
+"""
 enum Permission {
     # The Authenticated role means simply that the user is logged in
     Authenticated
@@ -1558,8 +1711,8 @@ input CollectionSortParameter {
 
 input ConfigArgInput {
     name: String!
-    type: ConfigArgType!
-    value: String
+    type: String!
+    value: String!
 }
 
 input ConfigurableOperationInput {
@@ -1603,6 +1756,25 @@ input DateRange {
     start: DateTime!
 }
 
+input HistoryEntryFilterParameter {
+    createdAt: DateOperators
+    type: StringOperators
+    updatedAt: DateOperators
+}
+
+input HistoryEntryListOptions {
+    filter: HistoryEntryFilterParameter
+    skip: Int
+    sort: HistoryEntrySortParameter
+    take: Int
+}
+
+input HistoryEntrySortParameter {
+    createdAt: SortOrder
+    id: SortOrder
+    updatedAt: SortOrder
+}
+
 input NumberOperators {
     between: NumberRange
     eq: Float
@@ -1632,10 +1804,6 @@ input OrderFilterParameter {
     updatedAt: DateOperators
 }
 
-input OrderLineCustomFieldsInput {
-    message: String
-}
-
 input OrderListOptions {
     filter: OrderFilterParameter
     skip: Int
@@ -1657,8 +1825,15 @@ input OrderSortParameter {
     updatedAt: SortOrder
 }
 
+"Passed as input to the `addPaymentToOrder` mutation."
 input PaymentInput {
+    """
+    This field should contain arbitrary data passed to the specified PaymentMethodHandler's `createPayment()` method
+    as the \"metadata\" argument. For example, it could contain an ID for the payment and other
+    data generated by the payment provider.
+    """
     metadata: JSON!
+    "This field should correspond to the `code` property of a PaymentMethodHandler."
     method: String!
 }
 
@@ -1697,6 +1872,7 @@ input ProductVariantFilterParameter {
     priceWithTax: NumberOperators
     sku: StringOperators
     updatedAt: DateOperators
+    weight: NumberOperators
 }
 
 input ProductVariantListOptions {
@@ -1715,6 +1891,7 @@ input ProductVariantSortParameter {
     productId: SortOrder
     sku: SortOrder
     updatedAt: SortOrder
+    weight: SortOrder
 }
 
 input RegisterCustomerInput {
@@ -1726,8 +1903,8 @@ input RegisterCustomerInput {
 }
 
 input SearchInput {
-    collectionId: String
-    facetValueIds: [String!]
+    collectionId: ID
+    facetValueIds: [ID!]
     groupByProduct: Boolean
     skip: Int
     sort: SearchResultSortParameter

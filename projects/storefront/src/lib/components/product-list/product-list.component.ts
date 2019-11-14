@@ -37,7 +37,7 @@ export class ProductListComponent implements OnInit {
             distinctUntilChanged(),
             map(id => {
                 if (id) {
-                    const parts = id.split('-');
+                    const parts = id.split('_');
                     return parts[parts.length - 1];
                 }
             }),

@@ -7,7 +7,7 @@ export class ProductUrlPipe implements PipeTransform {
 
     transform(value: { id?: string; productId?: string; slug: string; }): string {
         const { id, productId, slug } = value;
-        return slug + '-' + (id || productId || '');
+        return slug;
     }
 
 }
