@@ -33,7 +33,7 @@
     "@angular/router": "^8.0.0",
     "@angular/service-worker": "^8.0.0",
     "@fortawesome/fontawesome-free-brands": "^5.0.13",
-    "@nguniversal/express-engine": "^7.1.1",
+    "@nguniversal/express-engine": "^8.1.0",
     "@nguniversal/module-map-ngfactory-loader": "^8.0.0-rc.1",
     "compression": "^1.7.4",
     "core-js": "^3.1.3",
@@ -45,9 +45,9 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.800.2",
-    "@angular-devkit/build-ng-packagr": "~0.800.2",
-    "@angular/cli": "^8.0.0",
+    "@angular-devkit/build-angular": "~0.803.25",
+    "@angular-devkit/build-ng-packagr": "~0.803.25",
+    "@angular/cli": "^8.3.25",
     "@angular/compiler-cli": "^8.0.0",
     "@angular/language-service": "^8.0.0",
     "@types/compression": "^0.0.36",
