@@ -7,8 +7,10 @@ schema {
 
 interface CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     name: String!
+    readonly: Boolean
     type: String!
 }
 
@@ -80,6 +82,8 @@ type AdministratorList implements PaginatedList {
 type Asset implements Node {
     createdAt: DateTime!
     fileSize: Int!
+    focalPoint: Coordinate
+    height: Int!
     id: ID!
     mimeType: String!
     name: String!
@@ -87,6 +91,7 @@ type Asset implements Node {
     source: String!
     type: AssetType!
     updatedAt: DateTime!
+    width: Int!
 }
 
 type AssetList implements PaginatedList {
@@ -96,8 +101,10 @@ type AssetList implements PaginatedList {
 
 type BooleanCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     name: String!
+    readonly: Boolean
     type: String!
 }
 
@@ -187,13 +194,20 @@ type ConfigurableOperationDefinition {
     description: String!
 }
 
+type Coordinate {
+    x: Float!
+    y: Float!
+}
+
 type Country implements Node {
     code: String!
+    createdAt: DateTime!
     enabled: Boolean!
     id: ID!
     languageCode: LanguageCode!
     name: String!
     translations: [CountryTranslation!]!
+    updatedAt: DateTime!
 }
 
 type CountryList implements PaginatedList {
@@ -210,9 +224,16 @@ type CountryTranslation {
 }
 
 type CurrentUser {
-    channelTokens: [String!]!
+    channels: [CurrentUserChannel!]!
     id: ID!
     identifier: String!
+}
+
+type CurrentUserChannel {
+    code: String!
+    id: ID!
+    permissions: [Permission!]!
+    token: String!
 }
 
 type CustomFields {
@@ -222,6 +243,7 @@ type CustomFields {
     Facet: [CustomFieldConfig!]!
     FacetValue: [CustomFieldConfig!]!
     GlobalSettings: [CustomFieldConfig!]!
+    Order: [CustomFieldConfig!]!
     OrderLine: [CustomFieldConfig!]!
     Product: [CustomFieldConfig!]!
     ProductOption: [CustomFieldConfig!]!
@@ -263,10 +285,12 @@ See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime-loc
 """
 type DateTimeCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     max: String
     min: String
     name: String!
+    readonly: Boolean
     step: Int
     type: String!
 }
@@ -332,10 +356,12 @@ type FacetValueTranslation {
 
 type FloatCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     max: Float
     min: Float
     name: String!
+    readonly: Boolean
     step: Float
     type: String!
 }
@@ -364,6 +390,7 @@ type HistoryEntry implements Node {
     createdAt: DateTime!
     data: JSON!
     id: ID!
+    isPublic: Boolean!
     type: HistoryEntryType!
     updatedAt: DateTime!
 }
@@ -381,19 +408,23 @@ type ImportInfo {
 
 type IntCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     max: Int
     min: Int
     name: String!
+    readonly: Boolean
     step: Int
     type: String!
 }
 
 type LocaleStringCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
     name: String!
     pattern: String
+    readonly: Boolean
     type: String!
 }
 
@@ -418,6 +449,8 @@ type Mutation {
     third argument 'customFields' will be available.
     """
     adjustOrderLine(orderLineId: ID!, quantity: Int): Order
+    "Applies the given coupon code to the active Order"
+    applyCouponCode(couponCode: String!): Order
     "Create a new Customer Address"
     createCustomerAddress(input: CreateAddressInput!): Address!
     "Delete an existing Address"
@@ -431,6 +464,8 @@ type Mutation {
     refreshCustomerVerification(emailAddress: String!): Boolean!
     "Register a Customer account with the given credentials"
     registerCustomerAccount(input: RegisterCustomerInput!): Boolean!
+    "Removes the given coupon code from the active Order"
+    removeCouponCode(couponCode: String!): Order
     removeOrderLine(orderLineId: ID!): Order
     "Requests a password reset email to be sent"
     requestPasswordReset(emailAddress: String!): Boolean
@@ -466,23 +501,30 @@ type Mutation {
 }
 
 type Order implements Node {
+    "An order is active as long as the payment process has not been completed"
     active: Boolean!
+    "Order-level adjustments to the order total, such as discounts from promotions"
     adjustments: [Adjustment!]!
     billingAddress: OrderAddress
+    "A unique code for the Order"
     code: String!
+    couponCodes: [String!]!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
+    customFields: JSON
     customer: Customer
     fulfillments: [Fulfillment!]
     history(options: HistoryEntryListOptions): HistoryEntryList!
     id: ID!
     lines: [OrderLine!]!
     payments: [Payment!]
+    promotions: [Promotion!]!
     shipping: Int!
     shippingAddress: OrderAddress
     shippingMethod: ShippingMethod
     shippingWithTax: Int!
     state: String!
+    "The subTotal is the total of the OrderLines, before order-level promotions and shipping has been applied."
     subTotal: Int!
     subTotalBeforeTax: Int!
     total: Int!
@@ -643,7 +685,7 @@ type ProductVariant implements Node {
     assets: [Asset!]!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
-    customFields: ProductVariantCustomFields
+    customFields: JSON
     facetValues: [FacetValue!]!
     featuredAsset: Asset
     id: ID!
@@ -659,10 +701,6 @@ type ProductVariant implements Node {
     taxRateApplied: TaxRate!
     translations: [ProductVariantTranslation!]!
     updatedAt: DateTime!
-}
-
-type ProductVariantCustomFields {
-    weight: Int
 }
 
 type ProductVariantList implements PaginatedList {
@@ -681,10 +719,14 @@ type ProductVariantTranslation {
 type Promotion implements Node {
     actions: [ConfigurableOperation!]!
     conditions: [ConfigurableOperation!]!
+    couponCode: String
     createdAt: DateTime!
     enabled: Boolean!
+    endsAt: DateTime
     id: ID!
     name: String!
+    perCustomerUsageLimit: Int
+    startsAt: DateTime
     updatedAt: DateTime!
 }
 
@@ -782,16 +824,24 @@ type SearchResult {
     facetValueIds: [ID!]!
     price: SearchResultPrice!
     priceWithTax: SearchResultPrice!
+    productAsset: SearchResultAsset
     productId: ID!
     productName: String!
-    productPreview: String!
+    productPreview: String! @deprecated(reason : "Use `productAsset.preview` instead")
+    productVariantAsset: SearchResultAsset
     productVariantId: ID!
     productVariantName: String!
-    productVariantPreview: String!
+    productVariantPreview: String! @deprecated(reason : "Use `productVariantAsset.preview` instead")
     "A relevence score for the result. Differs between database implementations"
     score: Float!
     sku: String!
     slug: String!
+}
+
+type SearchResultAsset {
+    focalPoint: Coordinate
+    id: ID!
+    preview: String!
 }
 
 type ServerConfig {
@@ -842,10 +892,13 @@ type StockMovementList {
 
 type StringCustomFieldConfig implements CustomField {
     description: [LocalizedString!]
+    internal: Boolean
     label: [LocalizedString!]
+    length: Int
     name: String!
     options: [StringFieldOption!]
     pattern: String
+    readonly: Boolean
     type: String!
 }
 
@@ -869,7 +922,7 @@ type TaxRate implements Node {
     id: ID!
     name: String!
     updatedAt: DateTime!
-    value: Int!
+    value: Float!
     zone: Zone!
 }
 
@@ -1048,7 +1101,7 @@ enum CurrencyCode {
     IQD
     #Iranian rial
     IRR
-    #Icelandic krÃ³na
+    #Icelandic króna
     ISK
     #Jamaican dollar
     JMD
@@ -1096,7 +1149,7 @@ enum CurrencyCode {
     MKD
     #Myanmar kyat
     MMK
-    #Mongolian tÃ¶grÃ¶g
+    #Mongolian tögrög
     MNT
     #Macanese pataca
     MOP
@@ -1118,7 +1171,7 @@ enum CurrencyCode {
     NAD
     #Nigerian naira
     NGN
-    #Nicaraguan cÃ³rdoba
+    #Nicaraguan córdoba
     NIO
     #Norwegian krone
     NOK
@@ -1138,9 +1191,9 @@ enum CurrencyCode {
     PHP
     #Pakistani rupee
     PKR
-    #Polish zÅoty
+    #Polish złoty
     PLN
-    #Paraguayan guaranÃ­
+    #Paraguayan guaraní
     PYG
     #Qatari riyal
     QAR
@@ -1174,9 +1227,9 @@ enum CurrencyCode {
     SRD
     #South Sudanese pound
     SSP
-    #SÃ£o TomÃ© and PrÃ­ncipe dobra
+    #São Tomé and Príncipe dobra
     STN
-    #Salvadoran colÃ³n
+    #Salvadoran colón
     SVC
     #Syrian pound
     SYP
@@ -1190,7 +1243,7 @@ enum CurrencyCode {
     TMT
     #Tunisian dinar
     TND
-    #Tongan paÊ»anga
+    #Tongan paʻanga
     TOP
     #Turkish lira
     TRY
@@ -1210,9 +1263,9 @@ enum CurrencyCode {
     UYU
     #Uzbekistan som
     UZS
-    #Venezuelan bolÃ­var soberano
+    #Venezuelan bolívar soberano
     VES
-    #Vietnamese Äá»ng
+    #Vietnamese đồng
     VND
     #Vanuatu vatu
     VUV
@@ -1245,6 +1298,8 @@ enum DeletionResult {
 
 enum HistoryEntryType {
     ORDER_CANCELLATION
+    ORDER_COUPON_APPLIED
+    ORDER_COUPON_REMOVED
     ORDER_FULLFILLMENT
     ORDER_NOTE
     ORDER_PAYMENT_TRANSITION
@@ -1481,7 +1536,7 @@ enum LanguageCode {
     my
     #Nauru
     na
-    #BokmÃ¥l, Norwegian; Norwegian BokmÃ¥l
+    #Bokmål, Norwegian; Norwegian Bokmål
     nb
     #Ndebele, North; North Ndebele
     nd
@@ -1501,7 +1556,7 @@ enum LanguageCode {
     nv
     #Chichewa; Chewa; Nyanja
     ny
-    #Occitan (post 1500); ProvenÃ§al
+    #Occitan (post 1500); Provençal
     oc
     #Ojibwa
     oj
@@ -1609,7 +1664,7 @@ enum LanguageCode {
     ve
     #Vietnamese
     vi
-    #VolapÃ¼k
+    #Volapük
     vo
     #Walloon
     wa
@@ -1644,11 +1699,13 @@ enum Permission {
     CreateCatalog
     CreateCustomer
     CreateOrder
+    CreatePromotion
     CreateSettings
     DeleteAdministrator
     DeleteCatalog
     DeleteCustomer
     DeleteOrder
+    DeletePromotion
     DeleteSettings
     # Owner means the user owns this entity, e.g. a Customer's own Order
     Owner
@@ -1658,6 +1715,7 @@ enum Permission {
     ReadCatalog
     ReadCustomer
     ReadOrder
+    ReadPromotion
     ReadSettings
     # SuperAdmin can perform the most sensitive tasks
     SuperAdmin
@@ -1665,6 +1723,7 @@ enum Permission {
     UpdateCatalog
     UpdateCustomer
     UpdateOrder
+    UpdatePromotion
     UpdateSettings
 }
 
@@ -1758,6 +1817,7 @@ input DateRange {
 
 input HistoryEntryFilterParameter {
     createdAt: DateOperators
+    isPublic: BooleanOperators
     type: StringOperators
     updatedAt: DateOperators
 }
@@ -1872,7 +1932,6 @@ input ProductVariantFilterParameter {
     priceWithTax: NumberOperators
     sku: StringOperators
     updatedAt: DateOperators
-    weight: NumberOperators
 }
 
 input ProductVariantListOptions {
@@ -1891,7 +1950,6 @@ input ProductVariantSortParameter {
     productId: SortOrder
     sku: SortOrder
     updatedAt: SortOrder
-    weight: SortOrder
 }
 
 input RegisterCustomerInput {

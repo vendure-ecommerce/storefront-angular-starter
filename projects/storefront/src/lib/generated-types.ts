@@ -1,5 +1,5 @@
 // tslint:disable
-// Generated in 2019-10-04T16:35:55+02:00
+// Generated in 2020-02-19T12:09:03+01:00
 export type Maybe<T> = T | null;
 
 export interface OrderListOptions {
@@ -121,6 +121,8 @@ export interface HistoryEntryListOptions {
 export interface HistoryEntryFilterParameter {
     createdAt?: Maybe<DateOperators>;
 
+    isPublic?: Maybe<BooleanOperators>;
+
     type?: Maybe<StringOperators>;
 
     updatedAt?: Maybe<DateOperators>;
@@ -162,8 +164,6 @@ export interface ProductVariantFilterParameter {
     sku?: Maybe<StringOperators>;
 
     updatedAt?: Maybe<DateOperators>;
-
-    weight?: Maybe<NumberOperators>;
 }
 
 export interface ProductVariantSortParameter {
@@ -182,8 +182,6 @@ export interface ProductVariantSortParameter {
     sku?: Maybe<SortOrder>;
 
     updatedAt?: Maybe<SortOrder>;
-
-    weight?: Maybe<SortOrder>;
 }
 
 export interface CollectionListOptions {
@@ -765,11 +763,13 @@ export enum Permission {
     CreateCatalog = "CreateCatalog",
     CreateCustomer = "CreateCustomer",
     CreateOrder = "CreateOrder",
+    CreatePromotion = "CreatePromotion",
     CreateSettings = "CreateSettings",
     DeleteAdministrator = "DeleteAdministrator",
     DeleteCatalog = "DeleteCatalog",
     DeleteCustomer = "DeleteCustomer",
     DeleteOrder = "DeleteOrder",
+    DeletePromotion = "DeletePromotion",
     DeleteSettings = "DeleteSettings",
     Owner = "Owner",
     Public = "Public",
@@ -777,17 +777,21 @@ export enum Permission {
     ReadCatalog = "ReadCatalog",
     ReadCustomer = "ReadCustomer",
     ReadOrder = "ReadOrder",
+    ReadPromotion = "ReadPromotion",
     ReadSettings = "ReadSettings",
     SuperAdmin = "SuperAdmin",
     UpdateAdministrator = "UpdateAdministrator",
     UpdateCatalog = "UpdateCatalog",
     UpdateCustomer = "UpdateCustomer",
     UpdateOrder = "UpdateOrder",
+    UpdatePromotion = "UpdatePromotion",
     UpdateSettings = "UpdateSettings"
 }
 
 export enum HistoryEntryType {
     ORDER_CANCELLATION = "ORDER_CANCELLATION",
+    ORDER_COUPON_APPLIED = "ORDER_COUPON_APPLIED",
+    ORDER_COUPON_REMOVED = "ORDER_COUPON_REMOVED",
     ORDER_FULLFILLMENT = "ORDER_FULLFILLMENT",
     ORDER_NOTE = "ORDER_NOTE",
     ORDER_PAYMENT_TRANSITION = "ORDER_PAYMENT_TRANSITION",
@@ -1446,7 +1450,7 @@ export namespace SearchProducts {
 
         priceWithTax: PriceWithTax;
 
-        productPreview: string;
+        productAsset: Maybe<ProductAsset>;
     };
 
     export type PriceWithTax = PriceRangeInlineFragment;
@@ -1457,6 +1461,12 @@ export namespace SearchProducts {
         min: number;
 
         max: number;
+    };
+
+    export type ProductAsset = {
+        __typename?: "SearchResultAsset";
+
+        preview: string;
     };
 
     export type FacetValues = {

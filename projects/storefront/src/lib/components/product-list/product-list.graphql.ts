@@ -14,7 +14,9 @@ export const SEARCH_PRODUCTS = gql`
                         max
                     }
                 }
-                productPreview
+                productAsset {
+                    preview
+                }
             }
             totalItems
             facetValues {
