@@ -75,14 +75,6 @@ let providedCacheState: any | undefined;
         HttpClientModule,
         ApolloModule,
         HttpLinkModule,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: HttpLoaderFactory,
-                deps: [HttpClient, PlatformLocation],
-            },
-            compiler: { provide: TranslateCompiler, useClass: TranslateMessageFormatCompiler },
-        }),
         StorefrontSharedModule,
     ],
     providers: [
@@ -94,7 +86,7 @@ let providedCacheState: any | undefined;
 })
 export class StorefrontModule {
 
-    static forRoot(config: StorefrontConfig | (() => StorefrontConfig)): ModuleWithProviders {
+    static forRoot(config: StorefrontConfig | (() => StorefrontConfig)): ModuleWithProviders<StorefrontModule> {
         return {
             ngModule: StorefrontModule,
             providers: [

@@ -70,7 +70,10 @@ const GET_TOP_SELLERS = gql`
             items {
                 productId
                 slug
-                productPreview
+                productAsset {
+                    id
+                    preview
+                }
                 priceWithTax {
                     ... on PriceRange {
                         min

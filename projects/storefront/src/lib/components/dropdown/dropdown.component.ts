@@ -47,9 +47,9 @@ export class DropdownComponent {
     @Input() position: DropdownPosition[] = ['bottom'];
     @Input() minWidth = 0;
 
-    @ContentChild(DropdownTriggerDirective, { read: ElementRef, static: false }) trigger: ElementRef;
-    @ViewChild('contentTemplate', { read: TemplateRef, static: false }) contentTemplate: TemplateRef<any>;
-    @ViewChild('contentElement', { read: ElementRef, static: false }) contentElement: ElementRef<any>;
+    @ContentChild(DropdownTriggerDirective, { read: ElementRef }) trigger: ElementRef;
+    @ViewChild('contentTemplate', { read: TemplateRef }) contentTemplate: TemplateRef<any>;
+    @ViewChild('contentElement', { read: ElementRef }) contentElement: ElementRef<any>;
     private closeFn: (() => any) | null = null;
     private clickSubscriber: Subscription;
     private mouseoverSubscriber: Subscription;

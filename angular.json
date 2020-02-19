@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "baseHref": "/storefront/",
             "outputPath": "dist/browser",
             "index": "src/index.html",
@@ -39,6 +40,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -126,7 +133,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "optimization": true
             }
           }
         }
@@ -143,6 +151,11 @@
           "options": {
             "tsConfig": "projects/storefront/tsconfig.lib.json",
             "project": "projects/storefront/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/storefront/tsconfig.lib.prod.json"
+            }
           }
         },
         "test": {
@@ -171,24 +184,27 @@
   "defaultProject": "reference-storefront",
   "schematics": {
     "@schematics/angular:component": {
-      "styleext": "scss",
-      "spec": false,
+      "style": "scss",
+      "skipTests": true,
       "changeDetection": "OnPush"
     },
     "@schematics/angular:directive": {
-      "spec": false
+      "skipTests": true
     },
     "@schematics/angular:modules": {
-      "spec": false
+      "skipTests": true
     },
     "@schematics/angular:pipe": {
-      "spec": false
+      "skipTests": true
     },
     "@schematics/angular:service": {
-      "spec": false
+      "skipTests": true
     },
     "@schematics/angular:class": {
-      "spec": false
+      "skipTests": true
     }
+  },
+  "cli": {
+    "analytics": "85a41c1c-a523-42a4-a574-852fdd82e49c"
   }
 }

@@ -20,7 +20,7 @@ export const routes: Route[] = [
     {
         path: 'account',
         component: AccountComponent,
-        loadChildren: './routing/account-routing.module#AccountRoutingModule',
+        loadChildren: () => import('./account-routing.module').then(m => m.AccountRoutingModule),
     },
     {
         path: 'checkout',
@@ -28,6 +28,6 @@ export const routes: Route[] = [
         resolve: {
             activeOrder: CheckoutResolver,
         },
-        loadChildren: './routing/checkout-routing.module#CheckoutRoutingModule',
+        loadChildren: () => import('./checkout-routing.module').then(m => m.CheckoutRoutingModule),
     },
 ];
