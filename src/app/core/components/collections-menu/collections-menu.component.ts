@@ -1,13 +1,24 @@
-import { Overlay } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { ChangeDetectionStrategy, Component, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { DataService } from '../../providers/data/data.service';
+import { Overlay, OverlayConfig } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { DOCUMENT } from '@angular/common';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    Inject,
+    OnDestroy,
+    OnInit,
+    TemplateRef,
+    ViewChild,
+    ViewContainerRef,
+} from '@angular/core';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, map, takeUntil } from 'rxjs/operators';
 
 import { GetCollections } from '../../../common/generated-types';
 import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
+import { DataService } from '../../../core/providers/data/data.service';
+
+import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
 
 @Component({
     selector: 'vsf-collections-menu',
@@ -15,10 +26,22 @@ import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
     styleUrls: ['./collections-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CollectionsMenuComponent implements OnInit {
+export class CollectionsMenuComponent implements OnInit, OnDestroy {
 
     collectionTree$: Observable<RootNode<GetCollections.Items>>;
-    constructor(private dataService: DataService) { }
+    activeCollection: TreeNode<GetCollections.Items> | null;
+
+    @ViewChild('menuTemplate', { read: TemplateRef, static: false }) menuTemplate: TemplateRef<any>;
+
+    private closeFn: (() => any) | null = null;
+    private overlayIsOpen$ = new Subject<boolean>();
+    private setActiveCollection$ = new Subject<TreeNode<GetCollections.Items>>();
+    private destroy$ = new Subject();
+
+    constructor(@Inject(DOCUMENT) private document: Document,
+                private dataService: DataService,
+                private overlay: Overlay,
+                private viewContainerRef: ViewContainerRef) { }
 
     ngOnInit() {
         this.collectionTree$ = this.dataService.query<GetCollections.Query, GetCollections.Variables>(GET_COLLECTIONS, {
@@ -26,49 +49,92 @@ export class CollectionsMenuComponent implements OnInit {
         }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
-    }
 
-}
-
-export type HasParent = { id: string; parent?: { id: string; } | null };
-export type TreeNode<T extends HasParent> = T & { children: Array<TreeNode<T>>; };
-export type RootNode<T extends HasParent> = { id?: string; children: Array<TreeNode<T>>; };
-
-/**
- * Builds a tree from an array of nodes which have a parent.
- * Based on https://stackoverflow.com/a/31247960/772859, modified to preserve ordering.
- */
-export function arrayToTree<T extends HasParent>(nodes: T[]): RootNode<T> {
-    const topLevelNodes: Array<TreeNode<T>> = [];
-    const mappedArr: { [id: string]: TreeNode<T> } = {};
-
-    // First map the nodes of the array to an object -> create a hash table.
-    for (const node of nodes) {
-        mappedArr[node.id] = { ...(node as any), children: [] };
-    }
-
-    for (const id of nodes.map(n => n.id)) {
-
-        if (mappedArr.hasOwnProperty(id)) {
-            const mappedElem = mappedArr[id];
-            const parent = mappedElem.parent;
-            if (!parent) {
-                continue;
-            }
-            // If the element is not at the root level, add it to its parent array of children.
-            const parentIsRoot = !mappedArr[parent.id];
-            if (!parentIsRoot) {
-                if (mappedArr[parent.id]) {
-                    mappedArr[parent.id].children.push(mappedElem);
-                } else {
-                    mappedArr[parent.id] = { children: [mappedElem] } as any;
-                }
+        this.overlayIsOpen$.pipe(
+            debounceTime(300),
+            takeUntil(this.destroy$),
+        ).subscribe((val) => {
+            if (val) {
+                this.openOverlay();
             } else {
-                topLevelNodes.push(mappedElem);
+                this.closeOverlay();
             }
+        });
+
+        this.setActiveCollection$.pipe(
+            debounceTime(300),
+            takeUntil(this.destroy$),
+        ).subscribe(val => {
+            this.activeCollection = val;
+        });
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    onTopLevelClick(event: MouseEvent, collection: TreeNode<GetCollections.Items>) {
+        if (collection.children.length) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            this.onMouseEnter(collection);
+            this.registerDocumentTouchHandler();
+        } else {
+            this.closeOverlay();
         }
     }
-    // tslint:disable-next-line:no-non-null-assertion
-    const rootId = topLevelNodes.length ? topLevelNodes[0].parent!.id : undefined;
-    return { id: rootId, children: topLevelNodes };
+
+    captureTouchStart(event: TouchEvent) {
+        event.stopPropagation();
+    }
+
+    onMouseEnter(collection: TreeNode<GetCollections.Items>) {
+        this.setActiveCollection$.next(collection);
+        this.overlayIsOpen$.next(true);
+    }
+
+    close(event: any) {
+        this.overlayIsOpen$.next(false);
+    }
+
+    private openOverlay() {
+        if (this.closeFn) {
+            return;
+        }
+        const positionStrategy = this.overlay.position().flexibleConnectedTo(this.viewContainerRef.element)
+            .withPositions([{
+                originX : 'center',
+                originY : 'bottom',
+                overlayX: 'center',
+                overlayY: 'top',
+            }])
+            .withPush(false);
+        const scrollStrategy = this.overlay.scrollStrategies.reposition();
+        const overlayRef = this.overlay.create(new OverlayConfig({
+            scrollStrategy,
+            positionStrategy,
+            minWidth: '100vw',
+            maxHeight: 500,
+        }));
+        this.closeFn = () => {
+            overlayRef.dispose();
+            this.closeFn = null;
+        };
+        const dropdown = overlayRef.attach(new TemplatePortal(this.menuTemplate, this.viewContainerRef));
+    }
+
+    private closeOverlay() {
+        if (typeof this.closeFn === 'function') {
+            this.closeFn();
+        }
+    }
+
+    private registerDocumentTouchHandler = () => {
+        const handler = () => {
+            this.closeOverlay();
+            this.document.removeEventListener('touchstart', handler);
+        };
+        this.document.addEventListener('touchstart', handler);
+    }
 }

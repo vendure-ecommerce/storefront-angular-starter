@@ -21,6 +21,10 @@ export class CartContentsComponent {
         this.setQuantity.emit({ itemId: item.id, quantity: item.quantity - 1 });
     }
 
+    trackByFn(index: number, line: { id: string; }) {
+        return line.id;
+    }
+
     /**
      * Filters out the Promotion adjustments for an OrderLine and aggregates the discount.
      */

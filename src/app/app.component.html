@@ -3,19 +3,22 @@
     <vsf-layout-header>
         <div class="header">
             <div class="container">
+                <vsf-mobile-menu-toggle></vsf-mobile-menu-toggle>
                 <a [routerLink]="['/']" class="logo-link">
                     <img src="/assets/cube-logo-line-icon-nostroke.png" class="logo">
                     <div class="logo-type d-none d-md-inline-block text-muted">Vendure Storefront</div>
                 </a>
                 <div class="flex-grow-1"></div>
+                <vsf-product-search-bar></vsf-product-search-bar>
                 <vsf-account-link class="mr-2"></vsf-account-link>
-                <vsf-cart-toggle (toggle)="cartDrawerVisible = !cartDrawerVisible"></vsf-cart-toggle>
-                <vsf-cart-drawer [visible]="cartDrawerVisible" (close)="cartDrawerVisible = false"></vsf-cart-drawer>
+                <vsf-cart-toggle (toggle)="openCartDrawer()"></vsf-cart-toggle>
             </div>
+            <vsf-collections-menu></vsf-collections-menu>
         </div>
     </vsf-layout-header>
+    <vsf-collections-menu-mobile [visible]="mobileNavVisible$ | async"></vsf-collections-menu-mobile>
+    <vsf-cart-drawer [visible]="cartDrawerVisible$ | async" (close)="closeCartDrawer()"></vsf-cart-drawer>
     <div class="contents">
-        <vsf-collections-menu></vsf-collections-menu>
         <sf-home-page *ngIf="isHomePage$ | async; else main"></sf-home-page>
         <ng-template #main>
             <div class="container" >

@@ -6,12 +6,16 @@ export interface AppState {
     signedIn: boolean;
     activeOrderId: string | null;
     lastCollectionId: string | null;
+    mobileNavMenuIsOpen: boolean;
+    cartDrawerOpen: boolean;
 }
 
 export const initialState: AppState = {
     signedIn: false,
     activeOrderId: null,
     lastCollectionId: null,
+    mobileNavMenuIsOpen: false,
+    cartDrawerOpen: false,
 };
 
 /**

@@ -1,30 +1,37 @@
 <div class="nav-wrapper">
     <ul class="nav" *ngIf="collectionTree$ | async as tree">
-        <li class="nav-item" *ngFor="let collection of tree.children">
-            <vsf-dropdown #dropdown
-                          [openOnHover]="true"
-                          [minWidth]="150"
-                          [position]="['bottom', 'bottom-left', 'bottom-right']">
-                <a class="nav-link"
-                   [routerLink]="['/category', collection | collectionUrl ]"
-                   vsfDropdownTrigger>{{ collection.name }}</a>
-                <div class="collections-menu-sub-collections" vsfDropdownContent *ngIf="collection.children.length">
-                    <ng-container *ngFor="let child of collection.children">
-                        <ng-template [ngTemplateOutlet]="childItem" [ngTemplateOutletContext]="{ $implicit: child, depth: 1, close: dropdown.close.bind(dropdown) }"></ng-template>
-                    </ng-container>
-                </div>
-            </vsf-dropdown>
+        <li class="nav-item" *ngFor="let collection of tree.children"
+            (mouseenter)="onMouseEnter(collection)"
+            (mouseleave)="close($event)">
+            <a class="nav-link"
+               (touchstart)="onTopLevelClick($event, collection)"
+               [routerLink]="['/category', collection | collectionUrl ]">{{ collection.name }}</a>
         </li>
     </ul>
 </div>
 
-<ng-template #childItem let-collection let-depth="depth" let-close="close">
-    <a class="depth-{{ depth }} nav-link"
-       [routerLink]="['/category', collection | collectionUrl]"
-       (click)="close()">
-        {{ collection.name }}
-    </a>
-    <ng-container *ngFor="let child of collection.children">
-        <ng-template [ngTemplateOutlet]="childItem" [ngTemplateOutletContext]="{ $implicit: child, depth: depth + 1, close: close }"></ng-template>
-    </ng-container>
+<ng-template #menuTemplate>
+    <div class="collections-menu-sub-collections shadow"
+         *ngIf="activeCollection?.children?.length"
+         (touchstart)="captureTouchStart($event)"
+         (mouseenter)="onMouseEnter(activeCollection)"
+         (mouseleave)="close('sodderick')"
+    >
+        <div class="container d-flex flex-wrap">
+            <div class="level-1-block" *ngFor="let level1 of activeCollection.children">
+                <a class="level-1-link"
+                   [routerLink]="['/category', level1 | collectionUrl]"
+                   (click)="close()">
+                    {{ level1.name }}
+                </a>
+                <ng-container *ngFor="let level2 of level1.children">
+                    <a class="level-2-link"
+                       [routerLink]="['/category', level2 | collectionUrl]"
+                       (click)="close()">
+                        {{ level2.name }}
+                    </a>
+                </ng-container>
+            </div>
+        </div>
+    </div>
 </ng-template>

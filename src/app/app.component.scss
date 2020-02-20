@@ -1,12 +1,4 @@
-$header-height: 62px;
-
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 5;
-    height: $header-height;
     background-color: rgba(255, 255, 255, 0.9);
     border-bottom: 1px solid #e9ecef;
 
@@ -31,8 +23,4 @@ $header-height: 62px;
         color: #0e95c7;
         font-size: 22px;
     }
-}
-
-.contents {
-    margin-top: $header-height;
 }

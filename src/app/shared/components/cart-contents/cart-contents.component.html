@@ -1,6 +1,6 @@
 <div *ngIf="cart;" class="cart-contents">
     <div class="items">
-        <ng-container *ngFor="let line of cart.lines">
+        <ng-container *ngFor="let line of cart.lines; trackBy: trackByFn">
             <div class="item">
                 <div class="thumb">
                     <img [src]="line.featuredAsset?.preview + '?preset=tiny'">
