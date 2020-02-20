@@ -1,5 +1,7 @@
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -23,7 +25,6 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { buildIconLibrary } from './icon-library';
 import { DefaultInterceptor } from './providers/data/interceptor';
-import { BrowserModule } from '@angular/platform-browser';
 
 const CORE_COMPONENTS = [
     ProductListComponent,
@@ -69,8 +70,8 @@ let providedCacheState: any | undefined;
     ],
 })
 export class CoreModule {
-    constructor() {
-        buildIconLibrary();
+    constructor(library: FaIconLibrary) {
+        buildIconLibrary(library);
     }
 
     extractState() {
