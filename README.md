@@ -1,49 +1,21 @@
-# Vendure Storefront
+# Vendure Angular Storefront
 
-This is a storefront library which is designed to be used with the [Vendure ecommerce framework](https://github.com/vendure-ecommerce/vendure) as a back end.
+This is an e-commerce storefront application which is designed to be used with the [Vendure ecommerce framework](https://github.com/vendure-ecommerce/vendure) as a back end.
+
+It is a progressive web application (PWA) which also uses Angular Universal for server-side rendering.
 
 The app is built with the [Angular CLI](https://github.com/angular/angular-cli), with the data layer being handled by [Apollo Client](https://github.com/apollographql/apollo-client).
 
-## Folder structure
+## Development
 
-The `@vendure/storefront` library source is located in the [`projects/storefront`](./projects/storefront) directory.
+0. Clone this repo
+1. Run `npm install` or `yarn` in the root dir
+2. Run `npm start` or `yarn start` to build in development mode.
+3. Make sure you have a local Vendure instance running a `http://localhost:3000`.
+4. Open `http://localhost:4201` to see the storefront app running.
 
-There is also an example shop app located in the [`src`](./src) directory. This is the source of the [Vendure Storefront Demo](https://demo.vendure.io/storefront/)
+## License
 
-## Building
+MIT
 
-1. Run `npm install` or `yarn` in the root dir and in `projects/storefront` to install dependencies.
-2. Build the library: `npm run lib:build` or `yarn lib:build`
-3. Serve the storefront app: `npm start` or `yarn start`. Make sure you have a local Vendure instance running a `http://localhost:3000`.
-
-## Concept
-
-The idea of this library is to provide an out-of-the box complete storefront for Angular applications. The workflow would be:
-
-1. Start a new Angular CLI project in the usual way.
-2. `npm install @vendure/storefront`
-3. Consume the storefront lib in your app (see example below). The storefront lib is almost totally self-contained - it handles all data fetching and provides all the necessary UI components. The app itself (currently) just defines the app shell component, home page and the routing. Routing may somehow be provided by the lib with the option to extend.
-
-```ts
-import { StorefrontModule } from '@vendure/storefront';
-
-@NgModule({
-    declarations: [
-        AppComponent,
-    ],
-    imports: [
-        BrowserModule,
-        RouterModule.forRoot(routes),
-        StorefrontModule.forRoot({
-            apolloOptions: {
-                uri: 'http://localhost:3000/shop-api',
-                withCredentials: true,
-            },
-        }),
-        StorefrontSharedModule
-    ],
-    bootstrap: [AppComponent],
-})
-export class AppModule {}
-```
 
