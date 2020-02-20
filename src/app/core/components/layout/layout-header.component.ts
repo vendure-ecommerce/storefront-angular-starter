@@ -35,7 +35,6 @@ export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
     constructor(@Optional() @Inject(DOCUMENT) private document: Document) {}
 
     ngAfterViewInit() {
-        const window = document.defaultView;
         if (this.document) {
             this.setUpScrollHandler();
         }
