@@ -11,7 +11,6 @@ import { CheckoutGuard } from './providers/checkout.guard';
 export const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
         component: CheckoutProcessComponent,
         resolve: {
             activeOrder: CheckoutResolver,

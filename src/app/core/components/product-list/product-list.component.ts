@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
 
-import { SearchProducts, GetCollection } from '../../../common/generated-types';
+import { GetCollection, SearchProducts } from '../../../common/generated-types';
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data/data.service';
@@ -24,6 +24,7 @@ export class ProductListComponent implements OnInit {
     searchTerm$: Observable<string>;
     displayLoadMore$: Observable<boolean>;
     loading$: Observable<boolean>;
+    breadcrumbs$: Observable<Array<{id: string; name: string; }>>;
     private currentPage = 0;
     private refresh = new BehaviorSubject<void>(undefined);
     readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
@@ -75,6 +76,22 @@ export class ProductListComponent implements OnInit {
                 }
             }),
             shareReplay(1),
+        );
+
+        this.breadcrumbs$ = this.collection$.pipe(
+            map(collection => {
+                if (collection) {
+                    return collection.breadcrumbs;
+                } else {
+                    return [{
+                        id: '',
+                        name: 'Home',
+                    }, {
+                        id: '',
+                        name: 'Search',
+                    }];
+                }
+            }),
         );
 
         const triggerFetch$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$, this.refresh);

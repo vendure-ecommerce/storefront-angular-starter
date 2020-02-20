@@ -21,7 +21,6 @@ import { SignInGuard } from './providers/sign-in.guard';
 export const routes: Routes = [
     {
         path: '',
-        pathMatch: 'full',
         component: AccountComponent,
         children: [
             {

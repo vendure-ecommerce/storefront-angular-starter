@@ -27,7 +27,7 @@ export class ProductSearchBarComponent implements OnInit, OnDestroy {
     }
 
     doSearch(term: string) {
-        this.router.navigate(['./'], {
+        this.router.navigate(['/search'], {
             queryParams: { search: term },
             relativeTo: this.route,
             queryParamsHandling: 'merge',

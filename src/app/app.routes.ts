@@ -10,6 +10,10 @@ export const routes: Route[] = [
         pathMatch: 'full',
     },
     {
+        path: 'search',
+        component: ProductListComponent,
+    },
+    {
         path: 'product/:id',
         component: ProductDetailComponent,
     },

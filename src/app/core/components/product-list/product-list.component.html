@@ -1,4 +1,4 @@
-<vsf-collection-breadcrumbs [breadcrumbs]="(collection$ | async)?.breadcrumbs"></vsf-collection-breadcrumbs>
+<vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></vsf-collection-breadcrumbs>
 <div class="row">
     <div class="col-12 col-md-2">
         <vsf-product-list-controls [facetValues]="facetValues$ | async"
@@ -16,11 +16,6 @@
         <div class="h1 text-muted text-center" *ngIf="searchTerm$ | async as term">
             <small>
                 Results for <span class="text-dark">"{{ term }}"</span>
-                <a routerLink="./"
-                   [queryParams]="{ search: null }"
-                   queryParamsHandling="merge">
-                    <span class="badge badge-light"><fa-icon icon="times" class=""></fa-icon></span>
-                </a>
             </small>
         </div>
         <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
