@@ -11,12 +11,12 @@ import { environment } from '../../environments/environment';
 import { SharedModule } from '../shared/shared.module';
 
 import { AccountLinkComponent } from './components/account-link/account-link.component';
+import { AssetGalleryComponent } from './components/asset-gallery/asset-gallery.component';
 import { CartDrawerComponent } from './components/cart-drawer/cart-drawer.component';
 import { CartToggleComponent } from './components/cart-toggle/cart-toggle.component';
 import { CollectionBreadcrumbsComponent } from './components/collection-breadcrumbs/collection-breadcrumbs.component';
 import { CollectionsMenuMobileComponent } from './components/collections-menu-mobile/collections-menu-mobile.component';
 import { CollectionsMenuComponent } from './components/collections-menu/collections-menu.component';
-import { ImageZoomDirective } from './components/image-zoom/image-zoom.directive';
 import { LayoutFooterComponent } from './components/layout/layout-footer.component';
 import { LayoutHeaderComponent } from './components/layout/layout-header.component';
 import { LayoutComponent } from './components/layout/layout.component';
@@ -45,7 +45,7 @@ const CORE_COMPONENTS = [
     CollectionBreadcrumbsComponent,
     ProductListControlsComponent,
     ProductSearchBarComponent,
-    ImageZoomDirective,
+    AssetGalleryComponent,
 ];
 
 let apolloCache: InMemoryCache;

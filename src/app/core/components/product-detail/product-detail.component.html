@@ -4,20 +4,7 @@
 <ng-template [ngIf]="product" [ngIfElse]="placeholder">
     <div class="row">
         <div class="col-12 col-md-6 text-center">
-            <div class="product-image">
-                <img *ngIf="selectedAsset" [src]="selectedAsset | assetPreview:'medium'"
-                     [vsfImageZoom]="selectedAsset?.preview"
-                     [vsfImageZoomContainer]="zoomPreviewArea"
-                     class="img-fluid main-preview">
-                <div class="alt-images" *ngIf="1 < product.assets.length">
-                    <div *ngFor="let asset of product.assets"
-                         class="alt-image"
-                         [class.selected]="selectedAsset.id === asset.id"
-                         (click)="selectedAsset = asset">
-                        <img [src]="asset | assetPreview:'tiny'">
-                    </div>
-                </div>
-            </div>
+            <vsf-asset-gallery [assets]="product.assets" [selectedAssetId]="product.featuredAsset?.id"></vsf-asset-gallery>
         </div>
         <div class="col-12 col-md-6" #zoomPreviewArea>
             <h2 class="display-4">{{ product.name }}</h2>
