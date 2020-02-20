@@ -19,9 +19,6 @@ export class CollectionCardComponent implements OnChanges {
     ngOnChanges() {
         if (this.collection.featuredAsset) {
             this.backgroundImage = this.collection.featuredAsset.preview + '?w=400&h=150';
-            this.backgroundImageStyle = this.sanitizer.bypassSecurityTrustStyle(
-                `url("${this.backgroundImage}");`,
-            );
         }
     }
 

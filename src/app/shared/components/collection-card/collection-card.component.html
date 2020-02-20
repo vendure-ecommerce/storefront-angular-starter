@@ -1,5 +1,5 @@
 <a [routerLink]="['/category', collection | collectionUrl]">
-    <div class="card-background" [style.background-image]="'url(' + backgroundImage + ')'"></div>
+    <div class="card-background" [style.background-image]="'url(' + (collection.featuredAsset | assetPreview:400:150) + ')'"></div>
 
     <h3 class="display-4 collection-name">{{ collection.name }}</h3>
 </a>

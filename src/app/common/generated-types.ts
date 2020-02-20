@@ -1531,29 +1531,9 @@ export namespace GetProductDetail {
         name: string;
     };
 
-    export type FeaturedAsset = {
-        __typename?: "Asset";
+    export type FeaturedAsset = Asset.Fragment;
 
-        id: string;
-
-        name: string;
-
-        preview: string;
-
-        type: AssetType;
-    };
-
-    export type Assets = {
-        __typename?: "Asset";
-
-        id: string;
-
-        name: string;
-
-        preview: string;
-
-        type: AssetType;
-    };
+    export type Assets = Asset.Fragment;
 
     export type Collections = {
         __typename?: "Collection";
@@ -1634,11 +1614,7 @@ export namespace SearchProducts {
         max: number;
     };
 
-    export type ProductAsset = {
-        __typename?: "SearchResultAsset";
-
-        preview: string;
-    };
+    export type ProductAsset = Asset.Fragment;
 
     export type FacetValues = {
         __typename?: "FacetValueResult";
@@ -1791,6 +1767,32 @@ export namespace GetActiveChannel {
     };
 }
 
+export namespace Asset {
+    export type Fragment = {
+        __typename?: "Asset";
+
+        id: string;
+
+        width: number;
+
+        height: number;
+
+        name: string;
+
+        preview: string;
+
+        focalPoint: Maybe<FocalPoint>;
+    };
+
+    export type FocalPoint = {
+        __typename?: "Coordinate";
+
+        x: number;
+
+        y: number;
+    };
+}
+
 export namespace Cart {
     export type Fragment = {
         __typename?: "Order";
@@ -1840,15 +1842,7 @@ export namespace Cart {
         adjustments: Adjustments[];
     };
 
-    export type FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
-
-        name: string;
-    };
+    export type FeaturedAsset = Asset.Fragment;
 
     export type ProductVariant = {
         __typename?: "ProductVariant";

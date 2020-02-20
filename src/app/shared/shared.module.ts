@@ -21,6 +21,7 @@ import { DropdownContentDirective } from './components/dropdown/dropdown-content
 import { DropdownTriggerDirective } from './components/dropdown/dropdown-trigger.directive';
 import { DropdownComponent } from './components/dropdown/dropdown.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
+import { AssetPreviewPipe } from './pipes/asset-preview.pipe';
 import { CollectionUrlPipe } from './pipes/collection-url.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
@@ -44,6 +45,7 @@ const SHARED_DECLARATIONS = [
     FormatPricePipe,
     CollectionUrlPipe,
     ProductUrlPipe,
+    AssetPreviewPipe,
 ];
 
 const IMPORTS = [

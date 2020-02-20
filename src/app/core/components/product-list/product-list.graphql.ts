@@ -1,5 +1,7 @@
 import gql from 'graphql-tag';
 
+import { ASSET_FRAGMENT } from '../../../common/graphql/fragments.graphql';
+
 export const SEARCH_PRODUCTS = gql`
     query SearchProducts($input: SearchInput!) {
         search(input: $input) {
@@ -15,7 +17,12 @@ export const SEARCH_PRODUCTS = gql`
                     }
                 }
                 productAsset {
+                    id
                     preview
+                    focalPoint {
+                        x
+                        y
+                    }
                 }
             }
             totalItems
@@ -41,8 +48,7 @@ export const GET_COLLECTION = gql`
             name
             description
             featuredAsset {
-                id
-                preview
+                ...Asset
             }
             breadcrumbs {
                 id
@@ -51,11 +57,11 @@ export const GET_COLLECTION = gql`
             children {
                 id
                 featuredAsset {
-                    id
-                    preview
+                    ...Asset
                 }
                 name
             }
         }
     }
+    ${ASSET_FRAGMENT}
 `;

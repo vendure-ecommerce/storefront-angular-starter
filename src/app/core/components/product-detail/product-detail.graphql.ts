@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { CART_FRAGMENT } from '../../../common/graphql/fragments.graphql';
+import { ASSET_FRAGMENT, CART_FRAGMENT } from '../../../common/graphql/fragments.graphql';
 
 export const GET_PRODUCT_DETAIL = gql`
     query GetProductDetail($slug: String!) {
@@ -20,16 +20,10 @@ export const GET_PRODUCT_DETAIL = gql`
                 sku
             }
             featuredAsset {
-                id
-                name
-                preview
-                type
+                ...Asset
             }
             assets {
-                id
-                name
-                preview
-                type
+                ...Asset
             }
             collections {
                 id
@@ -40,6 +34,7 @@ export const GET_PRODUCT_DETAIL = gql`
             }
         }
     }
+    ${ASSET_FRAGMENT}
 `;
 
 export const ADD_TO_CART = gql`

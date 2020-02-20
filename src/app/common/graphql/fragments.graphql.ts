@@ -1,5 +1,19 @@
 import gql from 'graphql-tag';
 
+export const ASSET_FRAGMENT = gql`
+    fragment Asset on Asset {
+        id
+        width
+        height
+        name
+        preview
+        focalPoint {
+            x
+            y
+        }
+    }
+`;
+
 export const CART_FRAGMENT = gql`
     fragment Cart on Order {
         id
@@ -9,9 +23,7 @@ export const CART_FRAGMENT = gql`
         lines {
             id
             featuredAsset {
-                id
-                preview
-                name
+                ...Asset
             }
             unitPrice
             unitPriceWithTax
@@ -45,6 +57,7 @@ export const CART_FRAGMENT = gql`
             type
         }
     }
+    ${ASSET_FRAGMENT}
 `;
 
 export const COUNTRY_FRAGMENT = gql`
