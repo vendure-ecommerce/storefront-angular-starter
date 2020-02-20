@@ -35,8 +35,8 @@ export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
     constructor(@Optional() @Inject(DOCUMENT) private document: Document) {}
 
     ngAfterViewInit() {
-        if (this.document) {
-            this.setUpScrollHandler();
+        if (this.document && this.document.defaultView) {
+            this.setUpScrollHandler(this.document.defaultView);
         }
     }
 
@@ -46,18 +46,18 @@ export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
         }
     }
 
-    private setUpScrollHandler() {
-        this.subscription = fromEvent(window, 'scroll').pipe(
-            map(() => window.scrollY),
+    private setUpScrollHandler(_window: Window) {
+        this.subscription = fromEvent(_window, 'scroll').pipe(
+            map(() => _window.scrollY),
             bufferTime(250),
             filter(val => 1 < val.length),
             map(val => val[val.length - 1] - val[0]),
         ).subscribe((val) => {
-            if (window.scrollY === 0) {
+            if (_window.scrollY === 0) {
                 this.setFloating(false);
             } else if (0 < val) {
                 this.setFloating(false);
-            } else if (val < -50 && 300 < window.scrollY) {
+            } else if (val < -50 && 300 < _window.scrollY) {
                 this.setFloating(true);
             }
         });
