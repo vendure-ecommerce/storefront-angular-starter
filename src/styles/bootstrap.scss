@@ -11,6 +11,9 @@ $border-radius-lg: .2rem;
 $border-radius-sm: .05rem;
 $breadcrumb-divider: quote("/");
 
+// $font-family-base: 'Montserrat', sans-serif;
+$headings-font-family: 'Didact Gothic', serif;
+
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/mixins";
@@ -21,7 +24,7 @@ $breadcrumb-divider: quote("/");
 @import "../node_modules/bootstrap/scss/images";
 // @import "../node_modules/bootstrap/scss/code";
 @import "../node_modules/bootstrap/scss/grid";
-// @import "../node_modules/bootstrap/scss/tables";
+@import "../node_modules/bootstrap/scss/tables";
 @import "../node_modules/bootstrap/scss/forms";
 @import "../node_modules/bootstrap/scss/buttons";
 @import "../node_modules/bootstrap/scss/transitions";
@@ -41,7 +44,7 @@ $breadcrumb-divider: quote("/");
 @import "../node_modules/bootstrap/scss/media";
 @import "../node_modules/bootstrap/scss/list-group";
 @import "../node_modules/bootstrap/scss/close";
-// @import "../node_modules/bootstrap/scss/toasts";
+@import "../node_modules/bootstrap/scss/toasts";
 @import "../node_modules/bootstrap/scss/modal";
 // @import "../node_modules/bootstrap/scss/tooltip";
 // @import "../node_modules/bootstrap/scss/popover";

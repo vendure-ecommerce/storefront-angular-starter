@@ -9,7 +9,10 @@ $spacer: 1rem;
     justify-content: center;
     padding: $spacer * 3 $spacer;
     color: #d2d2d2;
-    background-image: linear-gradient(135deg, #586588 0%, #353a24 100%);
+    background-size: cover;
+    position: relative;
+    background-position: bottom;
+    min-height: 70vh;
 
     .logo {
         opacity: 0.8;
@@ -18,13 +21,17 @@ $spacer: 1rem;
     }
 
     .title {
-        max-width: 500px;
-        font-size: 3rem;
+        position: absolute;
+        mix-blend-mode: overlay;
+        color: #b1b1b1;
+        line-height: 0.85em;
+        font-size: 20vw;
+        bottom: 1vh;
     }
 
-    @media all and (min-width: 768px){
+    @media all and (min-width: 768px) {
         .title {
-            font-size: 6rem;
+            font-size: 12vw;
         }
 
         .scene {

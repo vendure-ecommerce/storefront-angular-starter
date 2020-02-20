@@ -1,10 +1,9 @@
-<div class="hero">
-    <img src="/assets/cube-logo-line.png" alt="Vendure Storefront logo" class="logo" />
-    <h1 class="display-1 title text-center text-lg-left">Vendure Storefront</h1>
+<div class="hero" [style.background-image]="heroImage">
+    <h1 class="display-1 title text-center">vendure storefront</h1>
 </div>
 
 <div class="container">
-    <div class="top-categories">
+    <div class="top-categories mt-5">
         <vsf-collection-card *ngFor="let collection of collections$ | async"
                              [collection]="collection">
         </vsf-collection-card>

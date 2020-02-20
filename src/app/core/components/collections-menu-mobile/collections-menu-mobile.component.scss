@@ -11,12 +11,13 @@
     top: 0;
     left: 0;
     bottom: 0;
-    transform: translateX(-100vw) translateX(3rem);
+    transform: translateX(-102vw) translateX(3rem);
     transition: transform 0.3s;
     background-color: $gray-100;
     z-index: $zindex-dropdown;
-    box-shadow: $box-shadow;
     overflow: auto;
+    box-shadow: $box-shadow;
+    font-size: $font-size-lg;
 
     @include media-breakpoint-up(sm) {
         display: none;
@@ -51,7 +52,7 @@ ul.expandable {
 }
 
 .level0 {
-    margin-bottom: $spacer / 2;
+    margin-bottom: $spacer;
 }
 .level1 {
     margin-left: $spacer;

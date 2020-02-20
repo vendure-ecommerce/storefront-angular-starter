@@ -1,6 +1,9 @@
 <button type="button" class="close" aria-label="Close" (click)="close()">
-  <span aria-hidden="true">&times;</span>
+    <span aria-hidden="true">&times;</span>
 </button>
+<a [routerLink]="['/']" class="logo-link ml-3 mb-3" (click)="close()">
+    <img src="/assets/cube-logo-line-icon-nostroke.png" class="logo" alt="Vendure Storefront">
+</a>
 <ul class="" *ngIf="collectionTree$ | async as tree">
     <li class="level0" *ngFor="let collection of tree.children">
         <a class=""
@@ -24,3 +27,7 @@
         </ul>
     </li>
 </ul>
+<div class="flex-grow-1"></div>
+<div class="text-center">
+    <a href="http://www.vendure.io/">vendure.io</a>
+</div>
