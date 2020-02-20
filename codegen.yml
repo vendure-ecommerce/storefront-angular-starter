@@ -5,7 +5,6 @@ generates:
   ./src/app/common/generated-types.ts:
     plugins:
       - add: "// tslint:disable"
-      - "time"
       - "typescript-common"
       - "typescript-client"
     config:
