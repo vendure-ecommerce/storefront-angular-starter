@@ -6,7 +6,7 @@ import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
-import { getAppConfig } from '../app.config';
+import { environment } from '../../environments/environment';
 import { SharedModule } from '../shared/shared.module';
 
 import { AccountLinkComponent } from './components/account-link/account-link.component';
@@ -25,6 +25,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { buildIconLibrary } from './icon-library';
 import { DefaultInterceptor } from './providers/data/interceptor';
+import { APP_BASE_HREF } from '@angular/common';
 
 const CORE_COMPONENTS = [
     ProductListComponent,
@@ -58,7 +59,8 @@ let providedCacheState: any | undefined;
         BrowserModule,
     ],
     providers: [
-        {provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true},
+        { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
+        { provide: APP_BASE_HREF, useValue: environment.baseHref },
         {
             provide: APOLLO_OPTIONS,
             useFactory: apolloOptionsFactory,
@@ -89,8 +91,8 @@ export class CoreModule {
 export function apolloOptionsFactory(httpLink: HttpLink) {
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
+    const {apiHost, apiPort, shopApiPath} = environment;
     apolloCache = new InMemoryCache();
-    const {apiHost, apiPort, shopApiPath} = getAppConfig();
     if (providedCacheState) {
         apolloCache.restore(providedCacheState);
     }

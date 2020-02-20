@@ -14,7 +14,6 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "aot": true,
-            "baseHref": "/storefront/",
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -40,6 +39,8 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/storefront/",
+              "deployUrl": "/",
               "budgets": [
                 {
                   "type": "anyComponentStyle",
@@ -117,7 +118,7 @@
           "options": {
             "outputPath": "dist/server",
             "sourceMap": false,
-            "main": "src/main.server.ts",
+            "main": "server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "stylePreprocessorOptions": {
               "includePaths": [
@@ -137,9 +138,35 @@
               "optimization": true
             }
           }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "reference-storefront:build",
+            "serverTarget": "reference-storefront:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "reference-storefront:build:production",
+              "serverTarget": "reference-storefront:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "reference-storefront:build:production",
+            "serverTarget": "reference-storefront:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
+          }
         }
       }
-    },
+    }
   },
   "defaultProject": "reference-storefront",
   "schematics": {

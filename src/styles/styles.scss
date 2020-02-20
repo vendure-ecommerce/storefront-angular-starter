@@ -1,17 +1,4 @@
-// Bootstrap overrides
-$breadcrumb-bg: white !default;
-$breadcrumb-divider: "›" !default;
-$breadcrumb-margin-bottom: 0 !default;
-
-$primary: #0e95c7;
-$link-hover-color: #1c7d92;
-$link-hover-decoration: underline solid #6898bd;
-$border-radius: .1rem;
-$border-radius-lg: .2rem;
-$border-radius-sm: .05rem;
-$breadcrumb-divider: quote("/");
-
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap";
 @import "~@angular/cdk/overlay-prebuilt";
 @import "~drift-zoom/dist/drift-basic.css";
 

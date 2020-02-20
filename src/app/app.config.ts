@@ -27,6 +27,9 @@ export function loadAppConfigServer(): void {
 
 export function getAppConfig(): ServerConfig {
     if (!serverConfig) {
+        loadAppConfigServer();
+    }
+    if (!serverConfig) {
         throw new Error(`server config not loaded`);
     }
     return serverConfig;
