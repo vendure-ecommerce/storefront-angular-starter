@@ -7,7 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "sf",
+      "prefix": "vsf",
       "schematics": {},
       "architect": {
         "build": {
@@ -28,7 +28,7 @@
               "src/manifest.json"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles/styles.scss"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
@@ -140,46 +140,6 @@
         }
       }
     },
-    "storefront": {
-      "root": "projects/storefront",
-      "sourceRoot": "projects/storefront/src",
-      "projectType": "library",
-      "prefix": "vsf",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/storefront/tsconfig.lib.json",
-            "project": "projects/storefront/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "tsConfig": "projects/storefront/tsconfig.lib.prod.json"
-            }
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/storefront/src/test.ts",
-            "tsConfig": "projects/storefront/tsconfig.spec.json",
-            "karmaConfig": "projects/storefront/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/storefront/tsconfig.lib.json",
-              "projects/storefront/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    }
   },
   "defaultProject": "reference-storefront",
   "schematics": {

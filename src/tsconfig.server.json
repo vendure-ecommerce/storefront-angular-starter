@@ -3,20 +3,11 @@
   "compilerOptions": {
     "module": "commonjs",
     "outDir": "../out-tsc/app-server",
-    "baseUrl": ".",
-    "paths": {
-      "@vendure/storefront": [
-        "../dist/storefront"
-      ],
-      "*": [
-        "../projects/storefront/node_modules/*"
-      ]
-    }
+    "baseUrl": "."
   },
   "angularCompilerOptions": {
     "entryModule": "app/app.server.module#AppServerModule"
-  }
-,
+  },
   "files": [
     "main.server.ts"
   ],

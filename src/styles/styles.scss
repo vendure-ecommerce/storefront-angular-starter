@@ -1,0 +1,53 @@
+// Bootstrap overrides
+$breadcrumb-bg: white !default;
+$breadcrumb-divider: "›" !default;
+$breadcrumb-margin-bottom: 0 !default;
+
+$primary: #0e95c7;
+$link-hover-color: #1c7d92;
+$link-hover-decoration: underline solid #6898bd;
+$border-radius: .1rem;
+$border-radius-lg: .2rem;
+$border-radius-sm: .05rem;
+$breadcrumb-divider: quote("/");
+
+@import "~bootstrap/scss/bootstrap";
+@import "~@angular/cdk/overlay-prebuilt";
+@import "~drift-zoom/dist/drift-basic.css";
+
+@import "variables";
+
+.loading-placeholder {
+    position: relative;
+    overflow: hidden;
+    background-color: $gray-100;
+    &::after {
+        content: "";
+        display: block;
+        background-color: $gray-200;
+        opacity: 0.3;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateX(0);
+        animation: 1.5s loading-placeholder ease-in-out infinite;
+    }
+}
+
+@keyframes loading-placeholder {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+img[data-zoom] {
+    cursor: crosshair;
+}
+.vsf-zoom-zoom-pane {
+    box-shadow: $box-shadow-lg;
+}

@@ -2,19 +2,14 @@ import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import faFacebook from '@fortawesome/fontawesome-free-brands/faFacebook';
-import faInstagram from '@fortawesome/fontawesome-free-brands/faInstagram';
-import faTwitter from '@fortawesome/fontawesome-free-brands/faTwitter';
-import faYoutube from '@fortawesome/fontawesome-free-brands/faYoutube';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { StorefrontModule, StorefrontSharedModule } from '@vendure/storefront';
 
 import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
-import { getAppConfig } from './app.config';
-import { HomePageComponent } from './components/home-page/home-page.component';
-import { routes } from './routing/app.routes';
+import { routes } from './app.routes';
+import { HomePageComponent } from './core/components/home-page/home-page.component';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from './shared/shared.module';
 
 const STATE_KEY = makeStateKey<any>('apollo.state');
 
@@ -27,8 +22,8 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' }),
-        StorefrontModule.forRoot(getStorefrontConfig),
-        StorefrontSharedModule,
+        CoreModule,
+        SharedModule,
         ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     ],
     bootstrap: [AppComponent],
@@ -36,10 +31,9 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
 export class AppModule {
 
     constructor(
-        private storefrontModule: StorefrontModule,
+        private coreModule: CoreModule,
         private readonly transferState: TransferState,
     ) {
-        library.add(faTwitter, faFacebook, faInstagram, faYoutube);
         const isBrowser = this.transferState.hasKey<any>(STATE_KEY);
 
         if (isBrowser) {
@@ -51,23 +45,14 @@ export class AppModule {
 
     onServer() {
         this.transferState.onSerialize(STATE_KEY, () => {
-            const state = this.storefrontModule.extractState();
+            const state = this.coreModule.extractState();
             return state;
         });
     }
 
     onBrowser() {
         const state = this.transferState.get<any>(STATE_KEY, null);
-        this.storefrontModule.restoreState(state);
+        this.coreModule.restoreState(state);
     }
 }
-
-export function getStorefrontConfig() {
-    const { apiHost, apiPort, shopApiPath } = getAppConfig();
-    return {
-        apolloOptions: {
-            uri: `${apiHost}:${apiPort}/${shopApiPath}`,
-            withCredentials: true,
-        },
-    };
-}
+

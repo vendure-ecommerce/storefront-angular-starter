@@ -1,0 +1,33 @@
+@import "variables";
+
+:host {
+    display: block;
+    border-bottom: 1px solid $gray-200;
+    margin-bottom: 0;
+    background-color: $light;
+    overflow: auto;
+
+    .nav-wrapper {
+        width: max-content;
+    }
+    @include media-breakpoint-up(sm) {
+        .nav-wrapper {
+            @include make-container-max-widths();
+            width: 100%;
+            margin: auto;
+        }
+    }
+}
+
+.collections-menu-sub-collections {
+    margin: $spacer;
+    a {
+        display: block;
+        padding: $spacer / 2;
+    }
+    .depth-1 { padding-left: calc(1.5rem + 0); }
+    .depth-2 { padding-left: calc(1.5rem + 12px); }
+    .depth-3 { padding-left: calc(1.5rem + 24px); }
+    .depth-4 { padding-left: calc(1.5rem + 36px); }
+}
+
