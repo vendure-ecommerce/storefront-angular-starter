@@ -20,9 +20,7 @@
     <div class="contents">
         <vsf-home-page *ngIf="isHomePage$ | async; else main"></vsf-home-page>
         <ng-template #main>
-            <div class="container" >
                 <router-outlet></router-outlet>
-            </div>
         </ng-template>
     </div>
 

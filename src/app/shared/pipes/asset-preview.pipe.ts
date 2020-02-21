@@ -6,7 +6,10 @@ import { Asset } from '../../common/generated-types';
     name: 'assetPreview',
 })
 export class AssetPreviewPipe implements PipeTransform {
-    transform(asset: Asset.Fragment, ...args: Array<string | number>): string {
+    transform(asset?: Asset.Fragment, ...args: Array<string | number>): string {
+        if (!asset) {
+            return '';
+        }
         if (!asset.preview || typeof asset.preview !== 'string') {
             throw new Error(`Expected an Asset, got ${JSON.stringify(asset)}`);
         }

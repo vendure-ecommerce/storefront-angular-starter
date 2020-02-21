@@ -5,6 +5,28 @@
     min-height: 80vh;
 }
 
+.masthead {
+    background-color: $light;
+    min-height: 40vh;
+    position: relative;
+    &.search-mode {
+        min-height: 20vh;
+    }
+}
+
+.masthead-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0.15;
+    background-color: #d4eefc;
+    background-size: cover;
+    background-position: top;
+    background-blend-mode: luminosity;
+}
+
 .child-categories {
     justify-content: space-around;
     flex-wrap: wrap;

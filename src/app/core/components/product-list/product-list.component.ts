@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import { distinctUntilChanged, filter, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
+import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
 
 import { GetCollection, SearchProducts } from '../../../common/generated-types';
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
-import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
+import { AssetPreviewPipe } from '../../../shared/pipes/asset-preview.pipe';
 import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state/state.service';
 
@@ -25,13 +26,15 @@ export class ProductListComponent implements OnInit {
     displayLoadMore$: Observable<boolean>;
     loading$: Observable<boolean>;
     breadcrumbs$: Observable<Array<{id: string; name: string; }>>;
+    mastheadBackground$: Observable<SafeStyle>;
     private currentPage = 0;
     private refresh = new BehaviorSubject<void>(undefined);
     readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
 
     constructor(private dataService: DataService,
                 private route: ActivatedRoute,
-                private stateService: StateService) { }
+                private stateService: StateService,
+                private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
         const collectionId$ = this.route.paramMap.pipe(
@@ -76,6 +79,13 @@ export class ProductListComponent implements OnInit {
                 }
             }),
             shareReplay(1),
+        );
+
+        const assetPreviewPipe = new AssetPreviewPipe();
+
+        this.mastheadBackground$ = this.collection$.pipe(
+            map(c => 'url(' + assetPreviewPipe.transform(c?.featuredAsset || undefined, 1000, 300) + ')'),
+            map(style => this.sanitizer.bypassSecurityTrustStyle(style)),
         );
 
         this.breadcrumbs$ = this.collection$.pipe(

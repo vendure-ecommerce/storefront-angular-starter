@@ -1398,13 +1398,7 @@ export namespace GetCollections {
         name: string;
     };
 
-    export type FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
-    };
+    export type FeaturedAsset = Asset.Fragment;
 }
 
 export namespace GetActiveOrder {
@@ -1614,7 +1608,23 @@ export namespace SearchProducts {
         max: number;
     };
 
-    export type ProductAsset = Asset.Fragment;
+    export type ProductAsset = {
+        __typename?: "SearchResultAsset";
+
+        id: string;
+
+        preview: string;
+
+        focalPoint: Maybe<FocalPoint>;
+    };
+
+    export type FocalPoint = {
+        __typename?: "Coordinate";
+
+        x: number;
+
+        y: number;
+    };
 
     export type FacetValues = {
         __typename?: "FacetValueResult";
@@ -1670,13 +1680,7 @@ export namespace GetCollection {
         children: Maybe<Children[]>;
     };
 
-    export type FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
-    };
+    export type FeaturedAsset = Asset.Fragment;
 
     export type Breadcrumbs = {
         __typename?: "CollectionBreadcrumb";
@@ -1696,13 +1700,7 @@ export namespace GetCollection {
         name: string;
     };
 
-    export type _FeaturedAsset = {
-        __typename?: "Asset";
-
-        id: string;
-
-        preview: string;
-    };
+    export type _FeaturedAsset = Asset.Fragment;
 }
 
 export namespace CreateAddress {

@@ -1,6 +1,6 @@
 @import "variables";
 
-:host {
+.checkout-wrapper {
     display: flex;
     margin-top: $spacer * 2;
     @include media-breakpoint-down(sm) {
