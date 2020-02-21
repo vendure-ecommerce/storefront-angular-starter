@@ -14,6 +14,10 @@ The app is built with the [Angular CLI](https://github.com/angular/angular-cli),
 3. Make sure you have a local Vendure instance running a `http://localhost:3000`.
 4. Open `http://localhost:4201` to see the storefront app running.
 
+## Deployment
+
+This project is used in the [Vendure Demo](https://github.com/vendure-ecommerce/vendure-demo). There is a [GitHub Actions workflow](./.github/workflows/build.yml) which is triggered whenever a new tag is added. The tag should be of the format `"vX.Y.Z"`. The workflow will run the `build:ssr` script and upload the compiled output to an Amazon S3 bucket, from which the vendure-demo project will pull the artifacts.
+
 ## License
 
 MIT
