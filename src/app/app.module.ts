@@ -21,10 +21,10 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
     imports: [
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
-        RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled', initialNavigation: 'enabled' }),
+        RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled', initialNavigation: 'enabled'}),
         CoreModule,
         SharedModule,
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+        ServiceWorkerModule.register('/storefront/ngsw-worker.js', {enabled: environment.production}),
     ],
     bootstrap: [AppComponent],
 })
@@ -55,4 +55,3 @@ export class AppModule {
         this.coreModule.restoreState(state);
     }
 }
-
