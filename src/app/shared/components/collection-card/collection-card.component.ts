@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnChanges } from '@angular/c
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 
 import { GetCollection } from '../../../common/generated-types';
+import { AssetPreviewPipe } from '../../pipes/asset-preview.pipe';
 
 @Component({
     selector: 'vsf-collection-card',
@@ -11,14 +12,16 @@ import { GetCollection } from '../../../common/generated-types';
 })
 export class CollectionCardComponent implements OnChanges {
     @Input() collection: GetCollection.Children;
-    backgroundImageStyle: SafeStyle;
-    backgroundImage: string;
+    backgroundImage: SafeStyle;
 
     constructor(private sanitizer: DomSanitizer) {}
 
     ngOnChanges() {
         if (this.collection.featuredAsset) {
-            this.backgroundImage = this.collection.featuredAsset.preview + '?w=400&h=150';
+            const assetPreviewPipe = new AssetPreviewPipe();
+            this.backgroundImage = this.sanitizer.bypassSecurityTrustStyle(
+                `url('${assetPreviewPipe.transform(this.collection.featuredAsset, 400, 150)}')`,
+            );
         }
     }
 

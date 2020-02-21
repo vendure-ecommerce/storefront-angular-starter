@@ -13,9 +13,10 @@ export class AssetPreviewPipe implements PipeTransform {
         if (!asset.preview || typeof asset.preview !== 'string') {
             throw new Error(`Expected an Asset, got ${JSON.stringify(asset)}`);
         }
+        const previewUrl = asset.preview.replace(/\\/g, '/');
         const fp = asset.focalPoint ? `&fpx=${asset.focalPoint.x}&fpy=${asset.focalPoint.y}` : '';
         const query = this.getSizeQuery(args);
-        return `${asset.preview}?${query}${fp}`;
+        return `${previewUrl}?${query}${fp}`;
     }
 
     private getSizeQuery(args?: Array<string | number>): string {

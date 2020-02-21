@@ -44,7 +44,7 @@ export class HomePageComponent implements OnInit {
 
     private getHeroImageUrl(): string {
         const { apiHost, apiPort } = environment;
-        return `url('${apiHost}:${apiPort}/assets/abel-y-costa-716024-unsplash__preview.jpg')`;
+        return `url('${apiHost}:${apiPort}/assets/preview/40/abel-y-costa-716024-unsplash__preview.jpg')`;
     }
 
 }
