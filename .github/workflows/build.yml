@@ -23,7 +23,7 @@ jobs:
     - name: Zip artifacts
       run: |
         mkdir artifacts
-        zip -r artifacts/vendure-storefront-build.zip dist
+        zip -r artifacts/vendure-storefront-build-{{ github.ref }}.zip dist
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
