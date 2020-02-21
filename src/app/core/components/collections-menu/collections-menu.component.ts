@@ -51,7 +51,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         );
 
         this.overlayIsOpen$.pipe(
-            debounceTime(300),
+            debounceTime(50),
             takeUntil(this.destroy$),
         ).subscribe((val) => {
             if (val) {
@@ -62,7 +62,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         });
 
         this.setActiveCollection$.pipe(
-            debounceTime(300),
+            debounceTime(0),
             takeUntil(this.destroy$),
         ).subscribe(val => {
             this.activeCollection = val;

@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { ADDRESS_FRAGMENT, COUNTRY_FRAGMENT } from './fragments.graphql';
+import { ADDRESS_FRAGMENT, ASSET_FRAGMENT, COUNTRY_FRAGMENT } from './fragments.graphql';
 
 export const GET_CUSTOMER_ADDRESSES = gql`
     query GetCustomerAddresses {
@@ -45,10 +45,10 @@ export const GET_COLLECTIONS = gql`
                     name
                 }
                 featuredAsset {
-                    id
-                    preview
+                    ...Asset
                 }
             }
         }
     }
+    ${ASSET_FRAGMENT}
 `;

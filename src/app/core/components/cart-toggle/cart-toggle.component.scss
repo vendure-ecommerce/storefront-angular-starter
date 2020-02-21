@@ -1,5 +1,13 @@
 @import "variables";
 
+button.btn {
+    background-color: transparent;
+    border: none;
+    &:hover {
+        background-color: $light;
+    }
+}
+
 .badge.qty-indicator {
     position: absolute;
     right: -2px;
