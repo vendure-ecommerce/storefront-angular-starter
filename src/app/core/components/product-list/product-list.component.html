@@ -2,7 +2,7 @@
     <div class="masthead-bg" [style.background-image]="mastheadBackground$ | async"></div>
     <div class="container position-relative">
         <vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></vsf-collection-breadcrumbs>
-        <h1 class="display-1">{{ (collection$ | async)?.name }}</h1>
+        <h1 class="display-1 collection-name">{{ (collection$ | async)?.name }}</h1>
         <h1 class="display-4 text-muted" *ngIf="searchTerm$ | async as term">
              Results for <span class="text-dark">"{{ term }}"</span>
         </h1>

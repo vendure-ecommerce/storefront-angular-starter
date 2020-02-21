@@ -9,6 +9,7 @@
     background-color: $light;
     min-height: 40vh;
     position: relative;
+
     &.search-mode {
         min-height: 20vh;
     }
@@ -25,6 +26,12 @@
     background-size: cover;
     background-position: top;
     background-blend-mode: luminosity;
+}
+
+.collection-name {
+    @include media-breakpoint-down(sm) {
+        font-size: 4.5rem;
+    }
 }
 
 .child-categories {
