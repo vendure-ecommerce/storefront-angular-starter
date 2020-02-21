@@ -1,4 +1,4 @@
-import { DOCUMENT } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
     AfterViewInit,
     ChangeDetectionStrategy,
@@ -7,7 +7,7 @@ import {
     HostBinding,
     Inject,
     OnDestroy,
-    Optional,
+    PLATFORM_ID,
     ViewChild,
 } from '@angular/core';
 import { fromEvent, Subscription } from 'rxjs';
@@ -32,11 +32,11 @@ export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
 
     private subscription: Subscription;
 
-    constructor(@Optional() @Inject(DOCUMENT) private document: Document) {}
+    constructor(@Inject(PLATFORM_ID) private platformId: any) {}
 
     ngAfterViewInit() {
-        if (this.document && this.document.defaultView) {
-            this.setUpScrollHandler(this.document.defaultView);
+        if (isPlatformBrowser(this.platformId)) {
+            this.setUpScrollHandler(window);
         }
     }
 
