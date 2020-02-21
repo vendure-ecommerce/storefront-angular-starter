@@ -24,7 +24,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled', initialNavigation: 'enabled'}),
         CoreModule,
         SharedModule,
-        ServiceWorkerModule.register('/storefront/ngsw-worker.js', {enabled: environment.production}),
+        ServiceWorkerModule.register('/storefront/ngsw-worker.js', {enabled: environment.production, registrationStrategy: 'registerWithDelay:5000'}),
     ],
     bootstrap: [AppComponent],
 })
