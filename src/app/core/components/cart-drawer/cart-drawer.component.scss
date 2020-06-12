@@ -5,6 +5,7 @@
     flex-direction: column;
     align-items: flex-start;
     position: fixed;
+    height: 100vh;
     min-width: 200px;
     max-width: 440px;
     padding: $spacer;
@@ -33,6 +34,7 @@
     align-items: flex-start;
     justify-content: space-between;
     margin-bottom: $spacer;
+    flex: none;
 }
 
 .cart-title {
@@ -41,9 +43,15 @@
 
 .cart-drawer-contents {
     display: flex;
+    height: 10px;
     flex-direction: column;
-    height: 100%;
     width: 100%;
+    flex: 1;
+}
+
+vsf-cart-contents {
+    max-height: 80vh;
+    overflow: auto;
 }
 
 .checkout-button {
