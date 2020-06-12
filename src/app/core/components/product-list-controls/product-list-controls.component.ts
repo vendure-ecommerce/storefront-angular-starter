@@ -15,17 +15,19 @@ export interface FacetWithValues {
 }
 
 @Component({
-  selector: 'vsf-product-list-controls',
-  templateUrl: './product-list-controls.component.html',
-  styleUrls: ['./product-list-controls.component.scss'],
+    selector: 'vsf-product-list-controls',
+    templateUrl: './product-list-controls.component.html',
+    styleUrls: ['./product-list-controls.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListControlsComponent implements OnChanges {
+    @Input() activeFacetValueIds: string[] = [];
     @Input() facetValues: SearchProducts.FacetValues[] | null;
     @Input() totalResults = 0;
     facets: FacetWithValues[];
 
-    constructor(private route: ActivatedRoute, private router: Router) {}
+    constructor(private route: ActivatedRoute, private router: Router) {
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if ('facetValues' in changes) {
@@ -33,38 +35,37 @@ export class ProductListControlsComponent implements OnChanges {
         }
     }
 
+    isActive(facetValueId: string): boolean {
+        return this.activeFacetValueIds.includes(facetValueId);
+    }
+
+    toggleFacetValueIdInRoute(id: string) {
+        this.router.navigate(['./', {
+            facets: this.toggleFacetValueId(id),
+        }], {
+            queryParamsHandling: 'merge',
+            relativeTo: this.route,
+        });
+    }
+
     toggleFacetValueId(id: string): string[] {
-        const existing = this.activeFacetValueIds();
+        const existing = this.activeFacetValueIds;
         return existing.includes(id) ? existing.filter(x => x !== id) : existing.concat(id);
     }
 
-    facetValueIsSelected(id: string): boolean {
-        return this.activeFacetValueIds().includes(id);
-    }
-
-    inactiveFacetValues(values: FacetWithValues['values']): FacetWithValues['values'] {
-        const activeIds = this.activeFacetValueIds();
-        return values.filter(v => !activeIds.includes(v.id));
-    }
-
-    activeFacetValues(values: FacetWithValues['values']): FacetWithValues['values'] {
-        const activeIds = this.activeFacetValueIds();
-        return values.filter(v => activeIds.includes(v.id));
-    }
-
-    activeFacetValueIds(): string[] {
-        return getRouteArrayParam(this.route.snapshot.queryParamMap, 'facets');
+    trackById(index: number, item: { id: string }) {
+        return item.id;
     }
 
     private groupFacetValues(facetValues: SearchProducts.FacetValues[] | null): FacetWithValues[] {
         if (!facetValues) {
             return [];
         }
-        const activeFacetValueIds = this.activeFacetValueIds();
+        const activeFacetValueIds = this.activeFacetValueIds;
         const facetMap = new Map<string, FacetWithValues>();
         for (const { count, facetValue: { id, name, facet } } of facetValues) {
             if (count === this.totalResults && !activeFacetValueIds.includes(id)) {
-                // skip FacetValues that do not ave any effect on the
+                // skip FacetValues that do not have any effect on the
                 // result set and are not active
                 continue;
             }

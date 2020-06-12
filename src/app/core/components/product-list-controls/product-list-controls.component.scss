@@ -23,10 +23,14 @@
         }
     }
 
-
-
     .facet-group {
         margin-bottom: $spacer;
+        li {
+            transition: color 0.2s;
+        }
+        &.enabled li:not(.active) {
+            color: $gray-500;
+        }
     }
     button.facet-name {
         font-size: $font-size-sm;
@@ -37,41 +41,5 @@
         transition: color 0.3s;
         border: none;
         background: none;
-    }
-}
-
-.facet-value-filter-dropdown {
-    min-width: 178px;
-    min-height: 24px;
-    ul.facet-values {
-        padding-left: $spacer / 3;
-        margin: $spacer 0;
-    }
-    a.facet-value {
-        margin: $spacer / 3 $spacer / 2;
-    }
-}
-
-:host, .facet-value-filter-dropdown {
-    a.facet-value {
-        font-size: $font-size-sm;
-        display: inline-block;
-        padding-left: $spacer / 2;
-        border-radius: $border-radius;
-        transition: background-color 0.2s, color 0.2s;
-        color: $gray-900;
-        &:hover {
-            text-decoration: none;
-            // background-color: $gray-100;
-            color: $gray-900;
-        }
-        &.selected {
-            // background-color: $gray-300;
-            // color: $light;
-        }
-        .badge {
-            display: inline-block;
-            min-width: 16px;
-        }
     }
 }

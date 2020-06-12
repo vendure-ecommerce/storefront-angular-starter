@@ -2,7 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, tap } from 'rxjs/operators';
+import {
+    distinctUntilChanged,
+    exhaustMap,
+    map,
+    mapTo,
+    scan,
+    share,
+    shareReplay,
+    skip,
+    switchMap,
+    take,
+    tap,
+    withLatestFrom,
+} from 'rxjs/operators';
 
 import { GetCollection, SearchProducts } from '../../../common/generated-types';
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
@@ -21,7 +34,9 @@ export class ProductListComponent implements OnInit {
     products$: Observable<SearchProducts.Items[]>;
     totalResults$: Observable<number>;
     collection$: Observable<GetCollection.Collection | null>;
-    facetValues$: Observable<SearchProducts.FacetValues[]>;
+    facetValues: SearchProducts.FacetValues[] | undefined;
+    unfilteredTotalItems = 0;
+    activeFacetValueIds$: Observable<string[]>;
     searchTerm$: Observable<string>;
     displayLoadMore$: Observable<boolean>;
     loading$: Observable<boolean>;
@@ -37,6 +52,7 @@ export class ProductListComponent implements OnInit {
                 private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
+        const perPage = 24;
         const collectionSlug$ = this.route.paramMap.pipe(
             map(pm => pm.get('slug')),
             distinctUntilChanged(),
@@ -46,7 +62,7 @@ export class ProductListComponent implements OnInit {
             }),
             shareReplay(1),
         );
-        const facetValueIds$ = this.route.queryParamMap.pipe(
+        this.activeFacetValueIds$ = this.route.paramMap.pipe(
             map(pm => getRouteArrayParam(pm, 'facets')),
             distinctUntilChanged((x, y) => x.toString() === y.toString()),
             tap(() => {
@@ -98,13 +114,31 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
-        const triggerFetch$ = combineLatest(this.collection$, facetValueIds$, this.searchTerm$, this.refresh);
+        const triggerFetch$ = combineLatest(this.collection$, this.activeFacetValueIds$, this.searchTerm$, this.refresh);
+        const getInitialFacetValueIds = () => {
+            combineLatest(this.collection$, this.searchTerm$).pipe(
+                take(1),
+                switchMap(([collection, term]) => {
+                    return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
+                        input: {
+                            term,
+                            groupByProduct: true,
+                            collectionId: collection?.id,
+                            take: perPage,
+                            skip: this.currentPage * perPage,
+                        },
+                    });
+                }),
+                ).subscribe(data => {
+                    this.facetValues = data.search.facetValues;
+                    this.unfilteredTotalItems = data.search.totalItems;
+                });
+        };
         this.loading$ = merge(
             triggerFetch$.pipe(mapTo(true)),
         );
         const queryResult$ = triggerFetch$.pipe(
             switchMap(([collection, facetValueIds, term]) => {
-                const perPage = 24;
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
@@ -114,7 +148,18 @@ export class ProductListComponent implements OnInit {
                         take: perPage,
                         skip: this.currentPage * perPage,
                     },
-                });
+                }).pipe(
+                    tap(data => {
+                        if (facetValueIds.length === 0) {
+                            this.facetValues = data.search.facetValues;
+                            this.unfilteredTotalItems = data.search.totalItems;
+                        } else if (!this.facetValues) {
+                            getInitialFacetValueIds();
+                        } else {
+                            this.facetValues = this.facetValues.map(fv => fv)
+                        }
+                    }),
+                );
             }),
             shareReplay(1),
         );
@@ -126,7 +171,7 @@ export class ProductListComponent implements OnInit {
 
         const RESET = 'RESET';
         const items$ = this.products$ = queryResult$.pipe(map(data => data.search.items));
-        const reset$ = merge(collectionSlug$, facetValueIds$, this.searchTerm$).pipe(
+        const reset$ = merge(collectionSlug$, this.activeFacetValueIds$, this.searchTerm$).pipe(
             mapTo(RESET),
             skip(1),
             share(),
@@ -141,12 +186,16 @@ export class ProductListComponent implements OnInit {
             }, [] as SearchProducts.Items[]),
         );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
-        this.facetValues$ = queryResult$.pipe(map(data => data.search.facetValues));
         this.displayLoadMore$ = combineLatest(this.products$, this.totalResults$).pipe(
             map(([products, totalResults]) => {
                 return 0 < products.length && products.length < totalResults;
             }),
         );
+
+    }
+
+    trackByProductId(index: number, item: SearchProducts.Items) {
+        return item.productId;
     }
 
     loadMore() {
