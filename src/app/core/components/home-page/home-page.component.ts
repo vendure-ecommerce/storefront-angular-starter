@@ -55,8 +55,10 @@ const GET_COLLECTIONS = gql`
             items {
                 id
                 name
+                slug
                 parent {
                     id
+                    slug
                     name
                 }
                 featuredAsset {
