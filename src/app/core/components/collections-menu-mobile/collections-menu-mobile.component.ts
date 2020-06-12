@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, Inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -24,8 +23,7 @@ export class CollectionsMenuMobileComponent implements OnInit {
     selected0: string | null = null;
     selected1: string | null = null;
 
-    constructor(@Inject(DOCUMENT) private document: Document,
-                private router: Router,
+    constructor(private router: Router,
                 private stateService: StateService,
                 private dataService: DataService) { }
 

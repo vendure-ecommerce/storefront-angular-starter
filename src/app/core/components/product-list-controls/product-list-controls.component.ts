@@ -50,6 +50,9 @@ export class ProductListControlsComponent implements OnChanges {
         }], {
             queryParamsHandling: 'merge',
             relativeTo: this.route,
+            state: {
+                noScroll: true,
+            },
         });
     }
 

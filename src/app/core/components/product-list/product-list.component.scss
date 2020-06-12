@@ -49,6 +49,7 @@
     grid-template-columns: repeat(auto-fill, 220px);
     grid-row-gap: $spacer;
     justify-content: space-around;
+    min-height: 50vh;
 }
 
 .no-results {
