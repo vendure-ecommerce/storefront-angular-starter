@@ -55,3 +55,19 @@
         </div>
     </ng-template>
 </div>
+
+<ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
+    <div class="add-to-cart-notification">
+        <div class="thumb mr-2">
+            <img
+                class=""
+                [src]="(variant.featuredAsset?.preview || product.featuredAsset?.preview) + '?preset=tiny'"
+                alt="product thumbnail"
+            />
+        </div>
+        <div>{{ quantity }} x {{ variant.name }}</div>
+    </div>
+    <button class="btn btn-sm btn-outline-primary btn-block" (click)="viewCartFromNotification(close)">
+        View cart
+    </button>
+</ng-template>

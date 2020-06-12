@@ -6,6 +6,11 @@
         </button>
     </div>
     <div class="toast-body">
-        {{ options.message }}
+        <ng-container *ngIf="options.message">
+            {{ options.message }}
+        </ng-container>
+        <ng-container *ngIf="options.templateRef">
+            <ng-container *ngTemplateOutlet="options.templateRef; context: options.templateContext"></ng-container>
+        </ng-container>
     </div>
 </div>

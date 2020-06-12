@@ -12,7 +12,7 @@ import { NOTIFICATION_OPTIONS, NotificationOptions } from './notification-types'
  * This service is responsible for instantiating a ModalDialog component and
  * embedding the specified component within.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class NotificationService {
     constructor(private overlay: Overlay, private injector: Injector) {
     }
@@ -23,22 +23,33 @@ export class NotificationService {
     notify(options: NotificationOptions) {
         const positionStrategy = this.overlay.position().global().top('16px').right('16px');
         const scrollStrategy = this.overlay.scrollStrategies.noop();
-        const overlayRef = this.overlay.create(new OverlayConfig({
-            scrollStrategy,
-            positionStrategy,
-            hasBackdrop: false,
-        }));
+        const overlayRef = this.overlay.create(
+            new OverlayConfig({
+                scrollStrategy,
+                positionStrategy,
+                hasBackdrop: false,
+            }),
+        );
+        const closeFn = () => {
+            if (overlayRef.hasAttached()) {
+                const notificationEl = overlayRef.overlayElement.querySelector('vsf-notification');
+                if (notificationEl) {
+                    notificationEl.classList.add('remove');
+                }
+                setTimeout(() => overlayRef.dispose(), 250);
+            }
+        };
 
-        const portal = new ComponentPortal(NotificationComponent, null, this.createInjector(options));
+        const portal = new ComponentPortal(
+            NotificationComponent,
+            null,
+            this.createInjector(options, closeFn),
+        );
         const notificationRef = overlayRef.attach(portal);
 
-        const backdropClick$ = overlayRef.backdropClick().pipe(mapTo(undefined));
-        return race<any>(
-            notificationRef.instance.close,
-            timer(options.duration),
-        ).pipe(
+        return race<any>(notificationRef.instance.close, timer(options.duration)).pipe(
             take(1),
-            finalize(() => overlayRef.dispose()),
+            finalize(() => closeFn()),
         );
     }
 
@@ -69,10 +80,12 @@ export class NotificationService {
         });
     }
 
-    private createInjector(options: NotificationOptions): PortalInjector {
-        const weakMap = new WeakMap<any, any>([
-            [NOTIFICATION_OPTIONS, options],
-        ]);
+    private createInjector(options: NotificationOptions, closeFn: () => void): PortalInjector {
+        options.templateContext = {
+            ...options.templateContext,
+            closeFn,
+        };
+        const weakMap = new WeakMap<any, any>([[NOTIFICATION_OPTIONS, options]]);
         return new PortalInjector(this.injector, weakMap);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 import { AddToCart, GetProductDetail } from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data/data.service';
+import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
@@ -13,8 +14,8 @@ import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 @Component({
     selector: 'vsf-product-detail',
     templateUrl: './product-detail.component.html',
-styleUrls: ['./product-detail.component.scss'],
-    })
+    styleUrls: ['./product-detail.component.scss'],
+})
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetail.Product;
@@ -22,11 +23,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     selectedVariant: GetProductDetail.Variants;
     qty = 1;
     breadcrumbs: GetProductDetail.Breadcrumbs[] | null = null;
+    @ViewChild('addedToCartTemplate', {static: true})
+    private addToCartTemplate: TemplateRef<any>;
     private sub: Subscription;
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
-                private route: ActivatedRoute) { }
+                private notificationService: NotificationService,
+                private route: ActivatedRoute) {
+    }
 
     ngOnInit() {
         const lastCollectionSlug$ = this.stateService.select(state => state.lastCollectionSlug);
@@ -68,7 +73,24 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             qty,
         }).subscribe((data) => {
             this.stateService.setState('activeOrderId', data.addItemToOrder ? data.addItemToOrder.id : null);
+            if (variant) {
+                this.notificationService.notify({
+                    title: 'Added to cart',
+                    type: 'info',
+                    duration: 3000,
+                    templateRef: this.addToCartTemplate,
+                    templateContext: {
+                        variant,
+                        quantity: qty,
+                    },
+                }).subscribe();
+            }
         });
+    }
+
+    viewCartFromNotification(closeFn: () => void) {
+        this.stateService.setState('cartDrawerOpen', true);
+        closeFn();
     }
 
     /**
