@@ -5,7 +5,7 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 export interface AppState {
     signedIn: boolean;
     activeOrderId: string | null;
-    lastCollectionId: string | null;
+    lastCollectionSlug: string | null;
     mobileNavMenuIsOpen: boolean;
     cartDrawerOpen: boolean;
 }
@@ -13,7 +13,7 @@ export interface AppState {
 export const initialState: AppState = {
     signedIn: false,
     activeOrderId: null,
-    lastCollectionId: null,
+    lastCollectionSlug: null,
     mobileNavMenuIsOpen: false,
     cartDrawerOpen: false,
 };

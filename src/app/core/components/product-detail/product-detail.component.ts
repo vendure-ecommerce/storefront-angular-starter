@@ -29,9 +29,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
-        const lastCollectionId$ = this.stateService.select(state => state.lastCollectionId);
+        const lastCollectionSlug$ = this.stateService.select(state => state.lastCollectionSlug);
         const productSlug$ = this.route.paramMap.pipe(
-            map(paramMap => paramMap.get('id')),
+            map(paramMap => paramMap.get('slug')),
             filter(notNullOrUndefined),
         );
 
@@ -44,14 +44,14 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             }),
             map(data => data.product),
             filter(notNullOrUndefined),
-            withLatestFrom(lastCollectionId$),
-        ).subscribe(([product, lastCollectionId]) => {
+            withLatestFrom(lastCollectionSlug$),
+        ).subscribe(([product, lastCollectionSlug]) => {
             this.product = product;
             if (this.product.featuredAsset) {
                 this.selectedAsset = this.product.featuredAsset;
             }
             this.selectedVariant = product.variants[0];
-            const collection = this.getMostRelevantCollection(product.collections, lastCollectionId);
+            const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
         });
     }
@@ -75,8 +75,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * If there is a collection matching the `lastCollectionId`, return that. Otherwise return the collection
      * with the longest `breadcrumbs` array, which corresponds to the most specific collection.
      */
-    private getMostRelevantCollection(collections: GetProductDetail.Collections[], lastCollectionId: string | null) {
-        const lastCollection = collections.find(c => c.id === lastCollectionId);
+    private getMostRelevantCollection(collections: GetProductDetail.Collections[], lastCollectionSlug: string | null) {
+        const lastCollection = collections.find(c => c.slug === lastCollectionSlug);
         if (lastCollection) {
             return lastCollection;
         }

@@ -8,7 +8,7 @@
             [attr.aria-current]="isLast">
             <ng-container *ngIf="isLast && !linkLast; else link">{{ breadcrumb.name }}</ng-container>
             <ng-template #link>
-                <a [routerLink]="['/category', breadcrumb | collectionUrl]">{{ breadcrumb.name }}</a>
+                <a [routerLink]="['/category', breadcrumb.slug]">{{ breadcrumb.name }}</a>
             </ng-template>
         </li>
     </ol>

@@ -40,9 +40,11 @@ export const GET_COLLECTIONS = gql`
             items {
                 id
                 name
+                slug
                 parent {
                     id
                     name
+                    slug
                 }
                 featuredAsset {
                     ...Asset

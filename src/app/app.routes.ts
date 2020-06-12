@@ -5,7 +5,7 @@ import { ProductListComponent } from './core/components/product-list/product-lis
 
 export const routes: Route[] = [
     {
-        path: 'category/:collectionId',
+        path: 'category/:slug',
         component: ProductListComponent,
         pathMatch: 'full',
     },
@@ -14,7 +14,7 @@ export const routes: Route[] = [
         component: ProductListComponent,
     },
     {
-        path: 'product/:id',
+        path: 'product/:slug',
         component: ProductDetailComponent,
     },
     {

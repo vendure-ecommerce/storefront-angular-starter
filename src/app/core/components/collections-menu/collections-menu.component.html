@@ -6,7 +6,7 @@
             <a class="nav-link"
                [class.active]="(setActiveCollection$ | async)?.id === collection.id && overlayIsOpen$ | async"
                (touchstart)="onTopLevelClick($event, collection)"
-               [routerLink]="['/category', collection | collectionUrl ]">{{ collection.name }}</a>
+               [routerLink]="['/category', collection.slug ]">{{ collection.name }}</a>
         </li>
     </ul>
 </div>
@@ -23,7 +23,7 @@
                 <vsf-collection-card [collection]="level1"></vsf-collection-card>
                 <ng-container *ngFor="let level2 of level1.children">
                     <a class="level-2-link"
-                       [routerLink]="['/category', level2 | collectionUrl]"
+                       [routerLink]="['/category', level2.slug]"
                        (click)="close()">
                         {{ level2.name }}
                     </a>

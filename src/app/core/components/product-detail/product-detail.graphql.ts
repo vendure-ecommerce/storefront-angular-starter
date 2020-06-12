@@ -27,9 +27,11 @@ export const GET_PRODUCT_DETAIL = gql`
             }
             collections {
                 id
+                slug
                 breadcrumbs {
                     id
                     name
+                    slug
                 }
             }
         }

@@ -37,17 +37,11 @@ export class ProductListComponent implements OnInit {
                 private sanitizer: DomSanitizer) { }
 
     ngOnInit() {
-        const collectionId$ = this.route.paramMap.pipe(
-            map(pm => pm.get('collectionId')),
+        const collectionSlug$ = this.route.paramMap.pipe(
+            map(pm => pm.get('slug')),
             distinctUntilChanged(),
-            map(id => {
-                if (id) {
-                    const parts = id.split('_');
-                    return parts[parts.length - 1];
-                }
-            }),
-            tap(collectionId => {
-                this.stateService.setState('lastCollectionId', collectionId || null);
+            tap(slug => {
+                this.stateService.setState('lastCollectionSlug', slug || null);
                 this.currentPage = 0;
             }),
             shareReplay(1),
@@ -66,11 +60,11 @@ export class ProductListComponent implements OnInit {
             shareReplay(1),
         );
 
-        this.collection$ = collectionId$.pipe(
-            switchMap(collectionId => {
-                if (collectionId) {
+        this.collection$ = collectionSlug$.pipe(
+            switchMap(slug => {
+                if (slug) {
                     return this.dataService.query<GetCollection.Query, GetCollection.Variables>(GET_COLLECTION, {
-                        id: collectionId,
+                        slug,
                     }).pipe(
                         map(data => data.collection),
                     );
@@ -104,18 +98,18 @@ export class ProductListComponent implements OnInit {
             }),
         );
 
-        const triggerFetch$ = combineLatest(collectionId$, facetValueIds$, this.searchTerm$, this.refresh);
+        const triggerFetch$ = combineLatest(this.collection$, facetValueIds$, this.searchTerm$, this.refresh);
         this.loading$ = merge(
             triggerFetch$.pipe(mapTo(true)),
         );
         const queryResult$ = triggerFetch$.pipe(
-            switchMap(([collectionId, facetValueIds, term]) => {
+            switchMap(([collection, facetValueIds, term]) => {
                 const perPage = 24;
                 return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
                         groupByProduct: true,
-                        collectionId,
+                        collectionId: collection?.id,
                         facetValueIds,
                         take: perPage,
                         skip: this.currentPage * perPage,
@@ -132,7 +126,7 @@ export class ProductListComponent implements OnInit {
 
         const RESET = 'RESET';
         const items$ = this.products$ = queryResult$.pipe(map(data => data.search.items));
-        const reset$ = merge(collectionId$, facetValueIds$, this.searchTerm$).pipe(
+        const reset$ = merge(collectionSlug$, facetValueIds$, this.searchTerm$).pipe(
             mapTo(RESET),
             skip(1),
             share(),
