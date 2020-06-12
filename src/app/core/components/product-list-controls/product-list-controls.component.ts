@@ -25,8 +25,13 @@ export class ProductListControlsComponent implements OnChanges {
     @Input() facetValues: SearchProducts.FacetValues[] | null;
     @Input() totalResults = 0;
     facets: FacetWithValues[];
+    manuallyExpanded = false;
 
     constructor(private route: ActivatedRoute, private router: Router) {
+    }
+
+    get filtersExpanded(): boolean {
+        return this.manuallyExpanded || this.activeFacetValueIds.length > 0;
     }
 
     ngOnChanges(changes: SimpleChanges) {
