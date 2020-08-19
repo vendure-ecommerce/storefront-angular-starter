@@ -1,6 +1,6 @@
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
@@ -68,7 +68,7 @@ let providedCacheState: any | undefined;
         {
             provide: APOLLO_OPTIONS,
             useFactory: apolloOptionsFactory,
-            deps: [HttpLink],
+            deps: [HttpLink, PLATFORM_ID],
         },
     ],
     exports: [
@@ -92,13 +92,19 @@ export class CoreModule {
     }
 }
 
-export function apolloOptionsFactory(httpLink: HttpLink) {
+export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
+    console.log({ platformId });
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
-    const {apiHost, apiPort, shopApiPath} = environment;
+    let { apiHost, apiPort, shopApiPath } = environment;
     apolloCache = new InMemoryCache();
     if (providedCacheState) {
         apolloCache.restore(providedCacheState);
+    }
+    if (isPlatformServer(platformId)) {
+        apiHost = process?.env?.SERVER_API_HOST || apiHost;
+        apiPort = process?.env?.SERVER_API_PORT ? +process.env.SERVER_API_PORT : apiPort;
+        shopApiPath = process?.env?.SERVER_API_PATH || shopApiPath;
     }
     const result = {
         cache: apolloCache,
