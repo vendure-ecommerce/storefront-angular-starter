@@ -68,6 +68,10 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "serviceWorker": true
+            },
+            "docker": {
+              "baseHref": "/",
+              "deployUrl": "/"
             }
           }
         },
@@ -138,6 +142,15 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true
+            },
+            "docker": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.docker.ts"
                 }
               ],
               "optimization": true

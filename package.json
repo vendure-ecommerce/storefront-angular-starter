@@ -13,6 +13,7 @@
     "dev:ssr": "ng run reference-storefront:serve-ssr",
     "serve:ssr": "node dist/server/main.js",
     "build:ssr": "ng build --prod && ng run reference-storefront:server:production",
+    "build:ssr:docker": "ng build --configuration=production,docker && ng run reference-storefront:server:docker",
     "prerender": "ng run reference-storefront:prerender"
   },
   "private": true,
