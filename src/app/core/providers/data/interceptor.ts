@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Inject, Injectable, Injector, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -18,6 +19,7 @@ export class DefaultInterceptor implements HttpInterceptor {
         private dataService: DataService,
         private injector: Injector,
         private router: Router,
+        @Inject(PLATFORM_ID) private platformId: any,
     ) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -81,7 +83,7 @@ export class DefaultInterceptor implements HttpInterceptor {
      * for the existence of an auth token.
      */
     private checkForAuthToken(response: HttpResponse<any>) {
-        if (environment.tokenMethod === 'bearer') {
+        if (environment.tokenMethod === 'bearer' && isPlatformBrowser(this.platformId)) {
             const authToken = response.headers.get('vendure-auth-token');
             if (authToken) {
                 localStorage.setItem('authToken', authToken);

@@ -98,11 +98,12 @@ export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
     let { apiHost, apiPort, shopApiPath } = environment;
+    const isServer = isPlatformServer(platformId);
     apolloCache = new InMemoryCache();
     if (providedCacheState) {
         apolloCache.restore(providedCacheState);
     }
-    if (isPlatformServer(platformId)) {
+    if (isServer) {
         apiHost = process?.env?.SERVER_API_HOST || apiHost;
         apiPort = process?.env?.SERVER_API_PORT ? +process.env.SERVER_API_PORT : apiPort;
         shopApiPath = process?.env?.SERVER_API_PATH || shopApiPath;
@@ -111,14 +112,16 @@ export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
         cache: apolloCache,
         link: ApolloLink.from([
             setContext(() => {
-                if (environment.tokenMethod === 'bearer') {
-                    const authToken = localStorage.getItem('authToken');
-                    if (authToken) {
-                        return {
-                            headers: {
-                                authorization: `Bearer ${authToken}`,
-                            },
-                        };
+                if (!isServer) {
+                    if (environment.tokenMethod === 'bearer') {
+                        const authToken = localStorage.getItem('authToken');
+                        if (authToken) {
+                            return {
+                                headers: {
+                                    authorization: `Bearer ${authToken}`,
+                                },
+                            };
+                        }
                     }
                 }
             }),
