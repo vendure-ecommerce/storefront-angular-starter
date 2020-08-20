@@ -1,6 +1,6 @@
 {
   "name": "vendure-angular-storefront",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4201",
