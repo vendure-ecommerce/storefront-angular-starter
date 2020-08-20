@@ -93,7 +93,6 @@ export class CoreModule {
 }
 
 export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
-    console.log({ platformId });
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
     let { apiHost, apiPort, shopApiPath } = environment;

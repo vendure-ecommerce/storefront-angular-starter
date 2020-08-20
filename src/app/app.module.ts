@@ -84,7 +84,7 @@ export class AppModule {
                     primaryRoot?.segments[1]?.parameterMap.has('facets'));
 
                 if (!isFacetFilterNavigation) {
-                    this.document.defaultView.scrollTo({
+                    this.document.defaultView?.scrollTo({
                         top: 0,
                     });
                 }
