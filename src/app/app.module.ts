@@ -26,7 +26,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         RouterModule.forRoot(routes, {scrollPositionRestoration: 'disabled', initialNavigation: 'enabled'}),
         CoreModule,
         SharedModule,
-        ServiceWorkerModule.register('/storefront/ngsw-worker.js', {
+        ServiceWorkerModule.register(`${environment.baseHref}ngsw-worker.js`, {
             enabled: environment.production,
             registrationStrategy: 'registerWithDelay:5000',
         }),
@@ -46,11 +46,10 @@ export class AppModule {
 
         if (isBrowser) {
             this.onBrowser();
+            this.handleScrollOnNavigations();
         } else {
             this.onServer();
         }
-
-        this.handleScrollOnNavigations();
     }
 
     onServer() {
@@ -77,14 +76,14 @@ export class AppModule {
         this.router.events.pipe(
             filter((e): e is NavigationEnd => e instanceof NavigationEnd),
         ).subscribe(event => {
-            if (this.document && this.document.defaultView) {
+            if (this.document?.defaultView) {
                 const parsed = this.urlSerializer.parse(event.urlAfterRedirects);
                 const primaryRoot = parsed.root.children.primary;
                 const isFacetFilterNavigation = (primaryRoot?.segments[0]?.path === 'category' &&
                     primaryRoot?.segments[1]?.parameterMap.has('facets'));
 
                 if (!isFacetFilterNavigation) {
-                    this.document.defaultView?.scrollTo({
+                    this.document.defaultView.scrollTo({
                         top: 0,
                     });
                 }
