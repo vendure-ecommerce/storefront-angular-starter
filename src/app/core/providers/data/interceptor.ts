@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
+import { environment } from '../../../../environments/environment';
 import { NotificationService } from '../notification/notification.service';
 
 import { DataService } from './data.service';
@@ -24,6 +25,7 @@ export class DefaultInterceptor implements HttpInterceptor {
             tap(
                 event => {
                     if (event instanceof HttpResponse) {
+                        this.checkForAuthToken(event);
                         this.notifyOnError(event);
                     }
                 },
@@ -72,5 +74,18 @@ export class DefaultInterceptor implements HttpInterceptor {
     private displayErrorNotification(message: string): void {
         const notificationService = this.injector.get<NotificationService>(NotificationService);
         notificationService.error(message).subscribe();
+    }
+
+    /**
+     * If the server is configured to use the "bearer" tokenMethod, each response should be checked
+     * for the existence of an auth token.
+     */
+    private checkForAuthToken(response: HttpResponse<any>) {
+        if (environment.tokenMethod === 'bearer') {
+            const authToken = response.headers.get('vendure-auth-token');
+            if (authToken) {
+                localStorage.setItem('authToken', authToken);
+            }
+        }
     }
 }

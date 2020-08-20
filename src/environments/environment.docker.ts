@@ -4,4 +4,5 @@ export const environment = {
     apiPort: 3000,
     shopApiPath: 'shop-api',
     baseHref: '/',
+    tokenMethod: 'bearer',
 };

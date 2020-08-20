@@ -6,6 +6,8 @@ import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
+import { ApolloLink } from 'apollo-link';
+import { setContext } from 'apollo-link-context';
 
 import { environment } from '../../environments/environment';
 import { SharedModule } from '../shared/shared.module';
@@ -107,10 +109,23 @@ export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
     }
     const result = {
         cache: apolloCache,
-        link: httpLink.create({
-            uri: `${apiHost}:${apiPort}/${shopApiPath}`,
-            withCredentials: true,
-        }),
+        link: ApolloLink.from([
+            setContext(() => {
+                if (environment.tokenMethod === 'bearer') {
+                    const authToken = localStorage.getItem('authToken');
+                    if (authToken) {
+                        return {
+                            headers: {
+                                authorization: `Bearer ${authToken}`,
+                            },
+                        };
+                    }
+                }
+            }),
+            httpLink.create({
+                uri: `${apiHost}:${apiPort}/${shopApiPath}`,
+                withCredentials: true,
+            })]),
     };
     return result;
 }
