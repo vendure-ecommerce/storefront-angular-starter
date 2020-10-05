@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Apollo } from 'apollo-angular';
-import { FetchPolicy, NetworkStatus } from 'apollo-client';
+import {FetchPolicy, NetworkStatus} from '@apollo/client/core';
+import {Apollo} from 'apollo-angular';
 import { DocumentNode } from 'graphql';
 import { Observable } from 'rxjs';
 import { filter, map, tap } from 'rxjs/operators';

@@ -112,7 +112,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         if (lastCollection) {
             return lastCollection;
         }
-        return collections.sort((a, b) => {
+        return collections.slice().sort((a, b) => {
             if (a.breadcrumbs.length < b.breadcrumbs.length) {
                 return 1;
             }

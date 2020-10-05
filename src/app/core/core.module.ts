@@ -1,16 +1,16 @@
 import { APP_BASE_HREF, isPlatformServer } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, PLATFORM_ID } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { ApolloLink, InMemoryCache } from '@apollo/client/core';
+import { setContext } from '@apollo/client/link/context';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
-import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
-import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
-import { ApolloLink } from 'apollo-link';
-import { setContext } from 'apollo-link-context';
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+
 
 import { environment } from '../../environments/environment';
-import introspectionResults from '../common/introspection-results';
+import possibleTypesData from '../common/introspection-results';
 import { SharedModule } from '../shared/shared.module';
 
 import { AccountLinkComponent } from './components/account-link/account-link.component';
@@ -60,8 +60,6 @@ let providedCacheState: any | undefined;
     ],
     imports: [
         HttpClientModule,
-        ApolloModule,
-        HttpLinkModule,
         SharedModule,
         BrowserModule,
     ],
@@ -101,7 +99,26 @@ export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
     let {apiHost, apiPort, shopApiPath} = environment;
     const isServer = isPlatformServer(platformId);
     apolloCache = new InMemoryCache({
-        fragmentMatcher: new IntrospectionFragmentMatcher({introspectionQueryResultData: introspectionResults}),
+        possibleTypes: possibleTypesData.possibleTypes,
+        typePolicies: {
+            Order: {
+                fields: {
+                    adjustments: {
+                        merge: (existing, incoming) => incoming,
+                    },
+                    lines: {
+                        merge: (existing, incoming) => incoming,
+                    }
+                }
+            },
+            OrderLine: {
+                fields: {
+                    adjustments: {
+                        merge: (existing, incoming) => incoming,
+                    },
+                }
+            }
+        }
     });
     if (providedCacheState) {
         apolloCache.restore(providedCacheState);
