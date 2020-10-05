@@ -5,11 +5,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import { ApolloLink } from 'apollo-link';
 import { setContext } from 'apollo-link-context';
 
 import { environment } from '../../environments/environment';
+import introspectionResults from '../common/introspection-results';
 import { SharedModule } from '../shared/shared.module';
 
 import { AccountLinkComponent } from './components/account-link/account-link.component';
@@ -97,9 +98,11 @@ export class CoreModule {
 export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
     // Note: the intermediate assignment to `fn` is required to prevent
     // an angular compiler error. See https://stackoverflow.com/a/51977115/772859
-    let { apiHost, apiPort, shopApiPath } = environment;
+    let {apiHost, apiPort, shopApiPath} = environment;
     const isServer = isPlatformServer(platformId);
-    apolloCache = new InMemoryCache();
+    apolloCache = new InMemoryCache({
+        fragmentMatcher: new IntrospectionFragmentMatcher({introspectionQueryResultData: introspectionResults}),
+    });
     if (providedCacheState) {
         apolloCache.restore(providedCacheState);
     }

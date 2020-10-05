@@ -103,3 +103,10 @@ export const ADDRESS_FRAGMENT = gql`
         defaultBillingAddress
     }
 `;
+
+export const ERROR_RESULT_FRAGMENT = gql`
+    fragment ErrorResult on ErrorResult {
+        errorCode
+        message
+    }
+`;

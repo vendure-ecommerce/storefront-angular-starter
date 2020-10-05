@@ -71,20 +71,30 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         this.dataService.mutate<AddToCart.Mutation, AddToCart.Variables>(ADD_TO_CART, {
             variantId: variant.id,
             qty,
-        }).subscribe((data) => {
-            this.stateService.setState('activeOrderId', data.addItemToOrder ? data.addItemToOrder.id : null);
-            if (variant) {
-                this.notificationService.notify({
-                    title: 'Added to cart',
-                    type: 'info',
-                    duration: 3000,
-                    templateRef: this.addToCartTemplate,
-                    templateContext: {
-                        variant,
-                        quantity: qty,
-                    },
-                }).subscribe();
+        }).subscribe(({addItemToOrder}) => {
+            switch (addItemToOrder.__typename) {
+                case 'Order':
+                    this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);
+                    if (variant) {
+                        this.notificationService.notify({
+                            title: 'Added to cart',
+                            type: 'info',
+                            duration: 3000,
+                            templateRef: this.addToCartTemplate,
+                            templateContext: {
+                                variant,
+                                quantity: qty,
+                            },
+                        }).subscribe();
+                    }
+                    break;
+                case 'OrderModificationError':
+                case 'OrderLimitError':
+                case 'NegativeQuantityError':
+                    this.notificationService.error(addItemToOrder.message);
+                    break;
             }
+
         });
     }
 

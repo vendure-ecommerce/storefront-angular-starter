@@ -17,6 +17,7 @@ export class CheckoutPaymentComponent {
     cardNumber: string;
     expMonth: number;
     expYear: number;
+    paymentErrorMessage: string | undefined;
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
@@ -41,15 +42,26 @@ export class CheckoutPaymentComponent {
                 },
             },
         })
-            .subscribe(async result => {
-                const order = result.addPaymentToOrder;
-                if (order && (order.state === 'PaymentSettled' || order.state === 'PaymentAuthorized')) {
-                    await new Promise(resolve => setTimeout(() => {
-                        this.stateService.setState('activeOrderId', null);
-                        resolve();
-                    }, 500));
-                    this.router.navigate(['../confirmation', order.code], { relativeTo: this.route });
+            .subscribe(async ({ addPaymentToOrder }) => {
+                switch (addPaymentToOrder?.__typename) {
+                    case 'Order':
+                        const order = addPaymentToOrder;
+                        if (order && (order.state === 'PaymentSettled' || order.state === 'PaymentAuthorized')) {
+                            await new Promise(resolve => setTimeout(() => {
+                                this.stateService.setState('activeOrderId', null);
+                                resolve();
+                            }, 500));
+                            this.router.navigate(['../confirmation', order.code], { relativeTo: this.route });
+                        }
+                        break;
+                    case 'OrderPaymentStateError':
+                    case 'PaymentDeclinedError':
+                    case 'PaymentFailedError':
+                    case 'OrderStateTransitionError':
+                        this.paymentErrorMessage = addPaymentToOrder.message;
+                        break;
                 }
+
             });
     }
 }

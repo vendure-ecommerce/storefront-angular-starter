@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { CART_FRAGMENT, ORDER_ADDRESS_FRAGMENT } from '../../../common/graphql/fragments.graphql';
+import { CART_FRAGMENT, ERROR_RESULT_FRAGMENT, ORDER_ADDRESS_FRAGMENT } from '../../../common/graphql/fragments.graphql';
 
 export const GET_SHIPPING_ADDRESS = gql`
     query GetShippingAddress {
@@ -42,30 +42,38 @@ export const SET_SHIPPING_METHOD = gql`
     mutation SetShippingMethod($id: ID!) {
         setOrderShippingMethod(shippingMethodId: $id) {
             ...Cart
+            ...ErrorResult
         }
     }
     ${CART_FRAGMENT}
+    ${ERROR_RESULT_FRAGMENT}
 `;
 
 export const SET_CUSTOMER_FOR_ORDER = gql`
     mutation SetCustomerForOrder($input: CreateCustomerInput!) {
         setCustomerForOrder(input: $input) {
-            id
-            customer {
+            ...on Order {
                 id
-                emailAddress
-                firstName
-                lastName
+                customer {
+                    id
+                    emailAddress
+                    firstName
+                    lastName
+                }
             }
+            ...ErrorResult
         }
     }
+    ${ERROR_RESULT_FRAGMENT}
 `;
 
 export const TRANSITION_TO_ARRANGING_PAYMENT = gql`
     mutation TransitionToArrangingPayment {
         transitionOrderToState(state: "ArrangingPayment") {
             ...Cart
+            ...ErrorResult
         }
     }
     ${CART_FRAGMENT}
+    ${ERROR_RESULT_FRAGMENT}
 `;

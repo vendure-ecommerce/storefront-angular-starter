@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-import { ASSET_FRAGMENT, CART_FRAGMENT } from '../../../common/graphql/fragments.graphql';
+import { ASSET_FRAGMENT, CART_FRAGMENT, ERROR_RESULT_FRAGMENT } from '../../../common/graphql/fragments.graphql';
 
 export const GET_PRODUCT_DETAIL = gql`
     query GetProductDetail($slug: String!) {
@@ -43,7 +43,9 @@ export const ADD_TO_CART = gql`
     mutation AddToCart($variantId: ID!, $qty: Int!) {
         addItemToOrder(productVariantId: $variantId, quantity: $qty) {
             ...Cart
+            ...ErrorResult
         }
     }
     ${CART_FRAGMENT}
+    ${ERROR_RESULT_FRAGMENT}
 `;

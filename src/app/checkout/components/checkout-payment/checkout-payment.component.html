@@ -1,3 +1,6 @@
+<div class="alert alert-danger" role="alert" *ngIf="paymentErrorMessage">
+    {{ paymentErrorMessage }}
+</div>
 <form class="payment-form mb-5" #paymentForm="ngForm" (submit)="completeOrder()">
     <div class="input-group mb-3">
         <div class="input-group-prepend">
@@ -11,7 +14,6 @@
                [(ngModel)]="cardNumber"
                placeholder="Credit card #">
     </div>
-
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <label class="input-group-text" for="month">Expiry</label>
