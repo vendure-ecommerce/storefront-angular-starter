@@ -8,10 +8,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
-  DateTime: any;
   /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
   JSON: any;
+  /** A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar. */
+  DateTime: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -53,11 +53,11 @@ export type AddPaymentToOrderResult = Order | OrderPaymentStateError | OrderStat
 
 export type ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order;
 
-export type AuthenticationResult = CurrentUser | InvalidCredentialsError;
+export type AuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError;
 
 export type CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | StringCustomFieldConfig;
 
-export type NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError;
+export type NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError;
 
 export type RefreshCustomerVerificationResult = NativeAuthStrategyError | Success;
 
@@ -76,9 +76,9 @@ export type SearchResultPrice = PriceRange | SinglePrice;
 
 export type SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | Order;
 
-export type SetOrderShippingMethodResult = Order | OrderModificationError;
+export type SetOrderShippingMethodResult = IneligibleShippingMethodError | Order | OrderModificationError;
 
-export type StockMovementItem = Cancellation | Return | Sale | StockAdjustment;
+export type StockMovementItem = Allocation | Cancellation | Release | Return | Sale | StockAdjustment;
 
 export type TransitionOrderToStateResult = Order | OrderStateTransitionError;
 
@@ -86,7 +86,7 @@ export type UpdateCustomerEmailAddressResult = IdentifierChangeTokenExpiredError
 
 export type UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | Success;
 
-export type UpdateOrderItemsResult = NegativeQuantityError | Order | OrderLimitError | OrderModificationError;
+export type UpdateOrderItemsResult = InsufficientStockError | NegativeQuantityError | Order | OrderLimitError | OrderModificationError;
 
 export type VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | VerificationTokenExpiredError | VerificationTokenInvalidError;
 
@@ -132,6 +132,17 @@ export type AdministratorList = PaginatedList & {
   __typename?: 'AdministratorList';
   items: Array<Administrator>;
   totalItems: Scalars['Int'];
+};
+
+export type Allocation = Node & StockMovement & {
+  __typename?: 'Allocation';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  orderLine: OrderLine;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
 };
 
 /** Retured when attemting to set the Customer for an Order when already logged in. */
@@ -213,7 +224,7 @@ export type Collection = Node & {
   breadcrumbs: Array<CollectionBreadcrumb>;
   children?: Maybe<Array<Collection>>;
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<CollectionCustomFields>;
+  customFields?: Maybe<Scalars['JSON']>;
   description: Scalars['String'];
   featuredAsset?: Maybe<Asset>;
   filters: Array<ConfigurableOperation>;
@@ -238,11 +249,6 @@ export type CollectionBreadcrumb = {
   id: Scalars['ID'];
   name: Scalars['String'];
   slug: Scalars['String'];
-};
-
-export type CollectionCustomFields = {
-  __typename?: 'CollectionCustomFields';
-  extra?: Maybe<Scalars['String']>;
 };
 
 export type CollectionList = PaginatedList & {
@@ -371,6 +377,7 @@ export type CustomFields = {
   Customer: Array<CustomFieldConfig>;
   Facet: Array<CustomFieldConfig>;
   FacetValue: Array<CustomFieldConfig>;
+  Fulfillment: Array<CustomFieldConfig>;
   GlobalSettings: Array<CustomFieldConfig>;
   Order: Array<CustomFieldConfig>;
   OrderLine: Array<CustomFieldConfig>;
@@ -531,6 +538,7 @@ export type FloatCustomFieldConfig = CustomField & {
 export type Fulfillment = Node & {
   __typename?: 'Fulfillment';
   createdAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
   method: Scalars['String'];
   orderItems: Array<OrderItem>;
@@ -545,6 +553,7 @@ export type GlobalSettings = {
   createdAt: Scalars['DateTime'];
   customFields?: Maybe<Scalars['JSON']>;
   id: Scalars['ID'];
+  outOfStockThreshold: Scalars['Int'];
   serverConfig: ServerConfig;
   trackInventory: Scalars['Boolean'];
   updatedAt: Scalars['DateTime'];
@@ -594,6 +603,22 @@ export type ImportInfo = {
   processed: Scalars['Int'];
 };
 
+/** Returned when attempting to set a ShippingMethod for which the order is not eligible */
+export type IneligibleShippingMethodError = ErrorResult & {
+  __typename?: 'IneligibleShippingMethodError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+};
+
+/** Returned when attempting to add more items to the Order than are available */
+export type InsufficientStockError = ErrorResult & {
+  __typename?: 'InsufficientStockError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+  order: Order;
+  quantityAvailable: Scalars['Int'];
+};
+
 export type IntCustomFieldConfig = CustomField & {
   __typename?: 'IntCustomFieldConfig';
   description?: Maybe<Array<LocalizedString>>;
@@ -611,6 +636,7 @@ export type IntCustomFieldConfig = CustomField & {
 /** Returned if the user authentication credentials are not valid */
 export type InvalidCredentialsError = ErrorResult & {
   __typename?: 'InvalidCredentialsError';
+  authenticationError: Scalars['String'];
   errorCode: ErrorCode;
   message: Scalars['String'];
 };
@@ -643,17 +669,11 @@ export type MissingPasswordError = ErrorResult & {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  /**
-   * Adds an item to the order. If custom fields are defined on the OrderLine
-   * entity, a third argument 'customFields' will be available.
-   */
+  /** Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available. */
   addItemToOrder: UpdateOrderItemsResult;
   /** Add a Payment to the Order */
   addPaymentToOrder?: Maybe<AddPaymentToOrderResult>;
-  /**
-   * Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a
-   * third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available.
-   */
+  /** Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available. */
   adjustOrderLine: UpdateOrderItemsResult;
   /** Applies the given coupon code to the active Order */
   applyCouponCode: ApplyCouponCodeResult;
@@ -663,38 +683,27 @@ export type Mutation = {
   createCustomerAddress: Address;
   /** Delete an existing Address */
   deleteCustomerAddress: Success;
-  /**
-   * Authenticates the user using the native authentication strategy. This mutation
-   * is an alias for `authenticate({ native: { ... }})`
-   */
+  /** Authenticates the user using the native authentication strategy. This mutation is an alias for `authenticate({ native: { ... }})` */
   login: NativeAuthenticationResult;
   /** End the current authenticated session */
   logout: Success;
-  /**
-   * Regenerate and send a verification token for a new Customer registration. Only
-   * applicable if `authOptions.requireVerification` is set to true.
-   */
+  /** Regenerate and send a verification token for a new Customer registration. Only applicable if `authOptions.requireVerification` is set to true. */
   refreshCustomerVerification: RefreshCustomerVerificationResult;
   /**
    * Register a Customer account with the given credentials. There are three possible registration flows:
    * 
    * _If `authOptions.requireVerification` is set to `true`:_
    * 
-   * 1. **The Customer is registered _with_ a password**. A verificationToken will
-   * be created (and typically emailed to the Customer). That
-   * verificationToken would then be passed to the `verifyCustomerAccount`
-   * mutation _without_ a password. The Customer is then
+   * 1. **The Customer is registered _with_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+   * verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
    * verified and authenticated in one step.
-   * 2. **The Customer is registered _without_ a password**. A verificationToken
-   * will be created (and typically emailed to the Customer). That
-   * verificationToken would then be passed to the `verifyCustomerAccount`
-   * mutation _with_ the chosed password of the Customer. The Customer is then
+   * 2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
+   * verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
    * verified and authenticated in one step.
    * 
    * _If `authOptions.requireVerification` is set to `false`:_
    * 
-   * 3. The Customer _must_ be registered _with_ a password. No further action is
-   * needed - the Customer is able to authenticate immediately.
+   * 3. The Customer _must_ be registered _with_ a password. No further action is needed - the Customer is able to authenticate immediately.
    */
   registerCustomerAccount: RegisterCustomerAccountResult;
   /** Remove all OrderLine from the Order */
@@ -738,8 +747,7 @@ export type Mutation = {
   /** Update the password of the active Customer */
   updateCustomerPassword: UpdateCustomerPasswordResult;
   /**
-   * Verify a Customer email address with the token sent to that address. Only
-   * applicable if `authOptions.requireVerification` is set to true.
+   * Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
    * 
    * If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
    * provided here.
@@ -900,6 +908,16 @@ export type NegativeQuantityError = ErrorResult & {
   message: Scalars['String'];
 };
 
+/**
+ * Returned if `authOptions.requireVerification` is set to `true` (which is the default)
+ * and an unverified user attempts to authenticate.
+ */
+export type NotVerifiedError = ErrorResult & {
+  __typename?: 'NotVerifiedError';
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+};
+
 export type Order = Node & {
   __typename?: 'Order';
   /** An order is active as long as the payment process has not been completed */
@@ -918,6 +936,11 @@ export type Order = Node & {
   history: HistoryEntryList;
   id: Scalars['ID'];
   lines: Array<OrderLine>;
+  /**
+   * The date & time that the Order was placed, i.e. the Customer
+   * completed the checkout and the Order is no longer "active"
+   */
+  orderPlacedAt?: Maybe<Scalars['DateTime']>;
   payments?: Maybe<Array<Payment>>;
   /** Promotions applied to the order. Only gets populated after the payment process has completed. */
   promotions: Array<Promotion>;
@@ -929,6 +952,7 @@ export type Order = Node & {
   /** The subTotal is the total of the OrderLines, before order-level promotions and shipping has been applied. */
   subTotal: Scalars['Int'];
   subTotalBeforeTax: Scalars['Int'];
+  taxSummary: Array<OrderTaxSummary>;
   total: Scalars['Int'];
   totalBeforeTax: Scalars['Int'];
   totalQuantity: Scalars['Int'];
@@ -963,8 +987,11 @@ export type OrderItem = Node & {
   id: Scalars['ID'];
   refundId?: Maybe<Scalars['ID']>;
   taxRate: Scalars['Float'];
+  /** The price of a single unit, excluding tax */
   unitPrice: Scalars['Int'];
+  /** @deprecated `unitPrice` is now always without tax */
   unitPriceIncludesTax: Scalars['Boolean'];
+  /** The price of a single unit, including tax */
   unitPriceWithTax: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
 };
@@ -985,9 +1012,17 @@ export type OrderLine = Node & {
   featuredAsset?: Maybe<Asset>;
   id: Scalars['ID'];
   items: Array<OrderItem>;
+  /** The total price of the line excluding tax */
+  linePrice: Scalars['Int'];
+  /** The total price of the line including tax */
+  linePriceWithTax: Scalars['Int'];
+  /** The total tax on this line */
+  lineTax: Scalars['Int'];
   order: Order;
   productVariant: ProductVariant;
   quantity: Scalars['Int'];
+  taxRate: Scalars['Float'];
+  /** @deprecated Use `linePriceWithTax` instead */
   totalPrice: Scalars['Int'];
   unitPrice: Scalars['Int'];
   unitPriceWithTax: Scalars['Int'];
@@ -1028,6 +1063,20 @@ export type OrderStateTransitionError = ErrorResult & {
   message: Scalars['String'];
   toState: Scalars['String'];
   transitionError: Scalars['String'];
+};
+
+/**
+ * A summary of the taxes being applied to this order, grouped
+ * by taxRate.
+ */
+export type OrderTaxSummary = {
+  __typename?: 'OrderTaxSummary';
+  /** The total net price or OrderItems to which this taxRate applies */
+  taxBase: Scalars['Int'];
+  /** The taxRate as a percentage */
+  taxRate: Scalars['Float'];
+  /** The total tax being applied to the Order at this taxRate */
+  taxTotal: Scalars['Int'];
 };
 
 /** Retured when attemting to verify a customer account with a password, when a password has already been set. */
@@ -1096,6 +1145,13 @@ export type PaymentMethod = Node & {
   enabled: Scalars['Boolean'];
   id: Scalars['ID'];
   updatedAt: Scalars['DateTime'];
+};
+
+export type PermissionDefinition = {
+  __typename?: 'PermissionDefinition';
+  assignable: Scalars['Boolean'];
+  description: Scalars['String'];
+  name: Scalars['String'];
 };
 
 /** The price range where the result has more than one price */
@@ -1345,6 +1401,17 @@ export type Refund = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type Release = Node & StockMovement & {
+  __typename?: 'Release';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  orderItem: OrderItem;
+  productVariant: ProductVariant;
+  quantity: Scalars['Int'];
+  type: StockMovementType;
+  updatedAt: Scalars['DateTime'];
+};
+
 export type Return = Node & StockMovement & {
   __typename?: 'Return';
   createdAt: Scalars['DateTime'];
@@ -1377,7 +1444,7 @@ export type Sale = Node & StockMovement & {
   __typename?: 'Sale';
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
-  orderLine: OrderLine;
+  orderItem: OrderItem;
   productVariant: ProductVariant;
   quantity: Scalars['Int'];
   type: StockMovementType;
@@ -1433,6 +1500,7 @@ export type ServerConfig = {
   __typename?: 'ServerConfig';
   customFieldConfig: CustomFields;
   orderProcess: Array<OrderProcessState>;
+  permissions: Array<PermissionDefinition>;
   permittedAssetTypes: Array<Scalars['String']>;
 };
 
@@ -1442,10 +1510,18 @@ export type ShippingMethod = Node & {
   checker: ConfigurableOperation;
   code: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<Scalars['JSON']>;
+  customFields?: Maybe<ShippingMethodCustomFields>;
   description: Scalars['String'];
   id: Scalars['ID'];
+  name: Scalars['String'];
+  translations: Array<ShippingMethodTranslation>;
   updatedAt: Scalars['DateTime'];
+};
+
+export type ShippingMethodCustomFields = {
+  __typename?: 'ShippingMethodCustomFields';
+  isGood?: Maybe<Scalars['Boolean']>;
+  localName?: Maybe<Scalars['String']>;
 };
 
 export type ShippingMethodList = PaginatedList & {
@@ -1459,8 +1535,25 @@ export type ShippingMethodQuote = {
   description: Scalars['String'];
   id: Scalars['ID'];
   metadata?: Maybe<Scalars['JSON']>;
+  name: Scalars['String'];
   price: Scalars['Int'];
   priceWithTax: Scalars['Int'];
+};
+
+export type ShippingMethodTranslation = {
+  __typename?: 'ShippingMethodTranslation';
+  createdAt: Scalars['DateTime'];
+  customFields?: Maybe<ShippingMethodTranslationCustomFields>;
+  description: Scalars['String'];
+  id: Scalars['ID'];
+  languageCode: LanguageCode;
+  name: Scalars['String'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type ShippingMethodTranslationCustomFields = {
+  __typename?: 'ShippingMethodTranslationCustomFields';
+  localName?: Maybe<Scalars['String']>;
 };
 
 /** The price value where the result has a single price */
@@ -1934,10 +2027,13 @@ export enum ErrorCode {
   EMAIL_ADDRESS_CONFLICT_ERROR = 'EMAIL_ADDRESS_CONFLICT_ERROR',
   IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR = 'IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR',
   IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR = 'IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR',
+  INELIGIBLE_SHIPPING_METHOD_ERROR = 'INELIGIBLE_SHIPPING_METHOD_ERROR',
+  INSUFFICIENT_STOCK_ERROR = 'INSUFFICIENT_STOCK_ERROR',
   INVALID_CREDENTIALS_ERROR = 'INVALID_CREDENTIALS_ERROR',
   MISSING_PASSWORD_ERROR = 'MISSING_PASSWORD_ERROR',
   NATIVE_AUTH_STRATEGY_ERROR = 'NATIVE_AUTH_STRATEGY_ERROR',
   NEGATIVE_QUANTITY_ERROR = 'NEGATIVE_QUANTITY_ERROR',
+  NOT_VERIFIED_ERROR = 'NOT_VERIFIED_ERROR',
   ORDER_LIMIT_ERROR = 'ORDER_LIMIT_ERROR',
   ORDER_MODIFICATION_ERROR = 'ORDER_MODIFICATION_ERROR',
   ORDER_PAYMENT_STATE_ERROR = 'ORDER_PAYMENT_STATE_ERROR',
@@ -1950,6 +2046,12 @@ export enum ErrorCode {
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
   VERIFICATION_TOKEN_EXPIRED_ERROR = 'VERIFICATION_TOKEN_EXPIRED_ERROR',
   VERIFICATION_TOKEN_INVALID_ERROR = 'VERIFICATION_TOKEN_INVALID_ERROR'
+}
+
+export enum GlobalFlag {
+  FALSE = 'FALSE',
+  INHERIT = 'INHERIT',
+  TRUE = 'TRUE'
 }
 
 export enum HistoryEntryType {
@@ -2310,7 +2412,6 @@ export enum LogicalOperator {
 }
 
 /**
- * "
  * @description
  * Permissions for administrators and customers. Used to control access to
  * GraphQL resolvers via the {@link Allow} decorator.
@@ -2318,37 +2419,61 @@ export enum LogicalOperator {
  * @docsCategory common
  */
 export enum Permission {
-  /**  The Authenticated role means simply that the user is logged in  */
+  /** Authenticated means simply that the user is logged in */
   Authenticated = 'Authenticated',
+  /** Grants permission to create Administrator */
   CreateAdministrator = 'CreateAdministrator',
+  /** Grants permission to create Catalog */
   CreateCatalog = 'CreateCatalog',
+  /** Grants permission to create Customer */
   CreateCustomer = 'CreateCustomer',
+  /** Grants permission to create Order */
   CreateOrder = 'CreateOrder',
+  /** Grants permission to create Promotion */
   CreatePromotion = 'CreatePromotion',
+  /** Grants permission to create Settings */
   CreateSettings = 'CreateSettings',
+  /** Grants permission to delete Administrator */
   DeleteAdministrator = 'DeleteAdministrator',
+  /** Grants permission to delete Catalog */
   DeleteCatalog = 'DeleteCatalog',
+  /** Grants permission to delete Customer */
   DeleteCustomer = 'DeleteCustomer',
+  /** Grants permission to delete Order */
   DeleteOrder = 'DeleteOrder',
+  /** Grants permission to delete Promotion */
   DeletePromotion = 'DeletePromotion',
+  /** Grants permission to delete Settings */
   DeleteSettings = 'DeleteSettings',
-  /**  Owner means the user owns this entity, e.g. a Customer's own Order */
+  /** Owner means the user owns this entity, e.g. a Customer's own Order */
   Owner = 'Owner',
-  /**  Public means any unauthenticated user may perform the operation  */
+  /** Public means any unauthenticated user may perform the operation */
   Public = 'Public',
+  /** Grants permission to read Administrator */
   ReadAdministrator = 'ReadAdministrator',
+  /** Grants permission to read Catalog */
   ReadCatalog = 'ReadCatalog',
+  /** Grants permission to read Customer */
   ReadCustomer = 'ReadCustomer',
+  /** Grants permission to read Order */
   ReadOrder = 'ReadOrder',
+  /** Grants permission to read Promotion */
   ReadPromotion = 'ReadPromotion',
+  /** Grants permission to read Settings */
   ReadSettings = 'ReadSettings',
-  /**  SuperAdmin can perform the most sensitive tasks */
+  /** SuperAdmin has unrestricted access to all operations */
   SuperAdmin = 'SuperAdmin',
+  /** Grants permission to update Administrator */
   UpdateAdministrator = 'UpdateAdministrator',
+  /** Grants permission to update Catalog */
   UpdateCatalog = 'UpdateCatalog',
+  /** Grants permission to update Customer */
   UpdateCustomer = 'UpdateCustomer',
+  /** Grants permission to update Order */
   UpdateOrder = 'UpdateOrder',
+  /** Grants permission to update Promotion */
   UpdatePromotion = 'UpdatePromotion',
+  /** Grants permission to update Settings */
   UpdateSettings = 'UpdateSettings'
 }
 
@@ -2359,7 +2484,9 @@ export enum SortOrder {
 
 export enum StockMovementType {
   ADJUSTMENT = 'ADJUSTMENT',
+  ALLOCATION = 'ALLOCATION',
   CANCELLATION = 'CANCELLATION',
+  RELEASE = 'RELEASE',
   RETURN = 'RETURN',
   SALE = 'SALE'
 }
@@ -2375,7 +2502,6 @@ export type BooleanOperators = {
 export type CollectionFilterParameter = {
   createdAt?: Maybe<DateOperators>;
   description?: Maybe<StringOperators>;
-  extra?: Maybe<StringOperators>;
   languageCode?: Maybe<StringOperators>;
   name?: Maybe<StringOperators>;
   position?: Maybe<NumberOperators>;
@@ -2393,7 +2519,6 @@ export type CollectionListOptions = {
 export type CollectionSortParameter = {
   createdAt?: Maybe<SortOrder>;
   description?: Maybe<SortOrder>;
-  extra?: Maybe<SortOrder>;
   id?: Maybe<SortOrder>;
   name?: Maybe<SortOrder>;
   position?: Maybe<SortOrder>;
@@ -2519,6 +2644,7 @@ export type OrderFilterParameter = {
   code?: Maybe<StringOperators>;
   createdAt?: Maybe<DateOperators>;
   currencyCode?: Maybe<StringOperators>;
+  orderPlacedAt?: Maybe<DateOperators>;
   shipping?: Maybe<NumberOperators>;
   shippingWithTax?: Maybe<NumberOperators>;
   state?: Maybe<StringOperators>;
@@ -2541,6 +2667,7 @@ export type OrderSortParameter = {
   code?: Maybe<SortOrder>;
   createdAt?: Maybe<SortOrder>;
   id?: Maybe<SortOrder>;
+  orderPlacedAt?: Maybe<SortOrder>;
   shipping?: Maybe<SortOrder>;
   shippingWithTax?: Maybe<SortOrder>;
   state?: Maybe<SortOrder>;
@@ -2648,6 +2775,8 @@ export type SearchResultSortParameter = {
 export type StringOperators = {
   contains?: Maybe<Scalars['String']>;
   eq?: Maybe<Scalars['String']>;
+  in?: Maybe<Array<Scalars['String']>>;
+  regex?: Maybe<Scalars['String']>;
 };
 
 export type UpdateAddressInput = {
@@ -3351,6 +3480,9 @@ export type SetShippingMethodMutationVariables = Exact<{
 export type SetShippingMethodMutation = (
   { __typename?: 'Mutation' }
   & { setOrderShippingMethod: (
+    { __typename?: 'IneligibleShippingMethodError' }
+    & ErrorResult_IneligibleShippingMethodError_Fragment
+  ) | (
     { __typename?: 'Order' }
     & CartFragment
   ) | (
@@ -3559,6 +3691,16 @@ type ErrorResult_IdentifierChangeTokenInvalidError_Fragment = (
   & Pick<IdentifierChangeTokenInvalidError, 'errorCode' | 'message'>
 );
 
+type ErrorResult_IneligibleShippingMethodError_Fragment = (
+  { __typename?: 'IneligibleShippingMethodError' }
+  & Pick<IneligibleShippingMethodError, 'errorCode' | 'message'>
+);
+
+type ErrorResult_InsufficientStockError_Fragment = (
+  { __typename?: 'InsufficientStockError' }
+  & Pick<InsufficientStockError, 'errorCode' | 'message'>
+);
+
 type ErrorResult_InvalidCredentialsError_Fragment = (
   { __typename?: 'InvalidCredentialsError' }
   & Pick<InvalidCredentialsError, 'errorCode' | 'message'>
@@ -3577,6 +3719,11 @@ type ErrorResult_NativeAuthStrategyError_Fragment = (
 type ErrorResult_NegativeQuantityError_Fragment = (
   { __typename?: 'NegativeQuantityError' }
   & Pick<NegativeQuantityError, 'errorCode' | 'message'>
+);
+
+type ErrorResult_NotVerifiedError_Fragment = (
+  { __typename?: 'NotVerifiedError' }
+  & Pick<NotVerifiedError, 'errorCode' | 'message'>
 );
 
 type ErrorResult_OrderLimitError_Fragment = (
@@ -3634,7 +3781,7 @@ type ErrorResult_VerificationTokenInvalidError_Fragment = (
   & Pick<VerificationTokenInvalidError, 'errorCode' | 'message'>
 );
 
-export type ErrorResultFragment = ErrorResult_AlreadyLoggedInError_Fragment | ErrorResult_CouponCodeExpiredError_Fragment | ErrorResult_CouponCodeInvalidError_Fragment | ErrorResult_CouponCodeLimitError_Fragment | ErrorResult_EmailAddressConflictError_Fragment | ErrorResult_IdentifierChangeTokenExpiredError_Fragment | ErrorResult_IdentifierChangeTokenInvalidError_Fragment | ErrorResult_InvalidCredentialsError_Fragment | ErrorResult_MissingPasswordError_Fragment | ErrorResult_NativeAuthStrategyError_Fragment | ErrorResult_NegativeQuantityError_Fragment | ErrorResult_OrderLimitError_Fragment | ErrorResult_OrderModificationError_Fragment | ErrorResult_OrderPaymentStateError_Fragment | ErrorResult_OrderStateTransitionError_Fragment | ErrorResult_PasswordAlreadySetError_Fragment | ErrorResult_PasswordResetTokenExpiredError_Fragment | ErrorResult_PasswordResetTokenInvalidError_Fragment | ErrorResult_PaymentDeclinedError_Fragment | ErrorResult_PaymentFailedError_Fragment | ErrorResult_VerificationTokenExpiredError_Fragment | ErrorResult_VerificationTokenInvalidError_Fragment;
+export type ErrorResultFragment = ErrorResult_AlreadyLoggedInError_Fragment | ErrorResult_CouponCodeExpiredError_Fragment | ErrorResult_CouponCodeInvalidError_Fragment | ErrorResult_CouponCodeLimitError_Fragment | ErrorResult_EmailAddressConflictError_Fragment | ErrorResult_IdentifierChangeTokenExpiredError_Fragment | ErrorResult_IdentifierChangeTokenInvalidError_Fragment | ErrorResult_IneligibleShippingMethodError_Fragment | ErrorResult_InsufficientStockError_Fragment | ErrorResult_InvalidCredentialsError_Fragment | ErrorResult_MissingPasswordError_Fragment | ErrorResult_NativeAuthStrategyError_Fragment | ErrorResult_NegativeQuantityError_Fragment | ErrorResult_NotVerifiedError_Fragment | ErrorResult_OrderLimitError_Fragment | ErrorResult_OrderModificationError_Fragment | ErrorResult_OrderPaymentStateError_Fragment | ErrorResult_OrderStateTransitionError_Fragment | ErrorResult_PasswordAlreadySetError_Fragment | ErrorResult_PasswordResetTokenExpiredError_Fragment | ErrorResult_PasswordResetTokenInvalidError_Fragment | ErrorResult_PaymentDeclinedError_Fragment | ErrorResult_PaymentFailedError_Fragment | ErrorResult_VerificationTokenExpiredError_Fragment | ErrorResult_VerificationTokenInvalidError_Fragment;
 
 export type GetActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -3656,6 +3803,9 @@ export type AdjustItemQuantityMutationVariables = Exact<{
 export type AdjustItemQuantityMutation = (
   { __typename?: 'Mutation' }
   & { adjustOrderLine: (
+    { __typename?: 'InsufficientStockError' }
+    & ErrorResult_InsufficientStockError_Fragment
+  ) | (
     { __typename?: 'NegativeQuantityError' }
     & ErrorResult_NegativeQuantityError_Fragment
   ) | (
@@ -3744,6 +3894,9 @@ export type AddToCartMutationVariables = Exact<{
 export type AddToCartMutation = (
   { __typename?: 'Mutation' }
   & { addItemToOrder: (
+    { __typename?: 'InsufficientStockError' }
+    & ErrorResult_InsufficientStockError_Fragment
+  ) | (
     { __typename?: 'NegativeQuantityError' }
     & ErrorResult_NegativeQuantityError_Fragment
   ) | (
@@ -3856,6 +4009,9 @@ export type SignInMutation = (
   ) | (
     { __typename?: 'NativeAuthStrategyError' }
     & ErrorResult_NativeAuthStrategyError_Fragment
+  ) | (
+    { __typename?: 'NotVerifiedError' }
+    & ErrorResult_NotVerifiedError_Fragment
   ) }
 );
 

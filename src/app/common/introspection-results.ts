@@ -23,10 +23,13 @@
       "EmailAddressConflictError",
       "IdentifierChangeTokenExpiredError",
       "IdentifierChangeTokenInvalidError",
+      "IneligibleShippingMethodError",
+      "InsufficientStockError",
       "InvalidCredentialsError",
       "MissingPasswordError",
       "NativeAuthStrategyError",
       "NegativeQuantityError",
+      "NotVerifiedError",
       "OrderLimitError",
       "OrderModificationError",
       "OrderPaymentStateError",
@@ -42,6 +45,7 @@
     "Node": [
       "Address",
       "Administrator",
+      "Allocation",
       "Asset",
       "AuthenticationMethod",
       "Cancellation",
@@ -65,6 +69,7 @@
       "ProductVariant",
       "Promotion",
       "Refund",
+      "Release",
       "Return",
       "Role",
       "Sale",
@@ -92,7 +97,9 @@
       "TaxRateList"
     ],
     "StockMovement": [
+      "Allocation",
       "Cancellation",
+      "Release",
       "Return",
       "Sale",
       "StockAdjustment"
@@ -112,7 +119,8 @@
     ],
     "AuthenticationResult": [
       "CurrentUser",
-      "InvalidCredentialsError"
+      "InvalidCredentialsError",
+      "NotVerifiedError"
     ],
     "CustomFieldConfig": [
       "BooleanCustomFieldConfig",
@@ -125,7 +133,8 @@
     "NativeAuthenticationResult": [
       "CurrentUser",
       "InvalidCredentialsError",
-      "NativeAuthStrategyError"
+      "NativeAuthStrategyError",
+      "NotVerifiedError"
     ],
     "RefreshCustomerVerificationResult": [
       "NativeAuthStrategyError",
@@ -166,11 +175,14 @@
       "Order"
     ],
     "SetOrderShippingMethodResult": [
+      "IneligibleShippingMethodError",
       "Order",
       "OrderModificationError"
     ],
     "StockMovementItem": [
+      "Allocation",
       "Cancellation",
+      "Release",
       "Return",
       "Sale",
       "StockAdjustment"
@@ -191,6 +203,7 @@
       "Success"
     ],
     "UpdateOrderItemsResult": [
+      "InsufficientStockError",
       "NegativeQuantityError",
       "Order",
       "OrderLimitError",

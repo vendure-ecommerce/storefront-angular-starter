@@ -45,6 +45,11 @@ export const ADD_TO_CART = gql`
         addItemToOrder(productVariantId: $variantId, quantity: $qty) {
             ...Cart
             ...ErrorResult
+            ...on InsufficientStockError {
+                order {
+                    ...Cart
+                }
+            }
         }
     }
     ${CART_FRAGMENT}

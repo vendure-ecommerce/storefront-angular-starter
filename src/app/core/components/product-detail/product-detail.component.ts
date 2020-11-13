@@ -91,7 +91,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 case 'OrderModificationError':
                 case 'OrderLimitError':
                 case 'NegativeQuantityError':
-                    this.notificationService.error(addItemToOrder.message);
+                case 'InsufficientStockError':
+                    this.notificationService.error(addItemToOrder.message).subscribe();
                     break;
             }
 
