@@ -6,11 +6,8 @@ export const GET_CART_TOTALS = gql`
         activeOrder {
             id
             active
-            lines {
-                id
-                quantity
-            }
-            total
+            totalQuantity
+            totalWithTax
         }
     }
 `;

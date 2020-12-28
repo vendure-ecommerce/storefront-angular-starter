@@ -29,6 +29,7 @@
       "MissingPasswordError",
       "NativeAuthStrategyError",
       "NegativeQuantityError",
+      "NoActiveOrderError",
       "NotVerifiedError",
       "OrderLimitError",
       "OrderModificationError",
@@ -44,11 +45,8 @@
     ],
     "Node": [
       "Address",
-      "Administrator",
-      "Allocation",
       "Asset",
       "AuthenticationMethod",
-      "Cancellation",
       "Channel",
       "Collection",
       "Country",
@@ -62,26 +60,21 @@
       "OrderItem",
       "OrderLine",
       "Payment",
-      "PaymentMethod",
       "Product",
       "ProductOption",
       "ProductOptionGroup",
       "ProductVariant",
       "Promotion",
       "Refund",
-      "Release",
-      "Return",
       "Role",
-      "Sale",
       "ShippingMethod",
-      "StockAdjustment",
+      "Surcharge",
       "TaxCategory",
       "TaxRate",
       "User",
       "Zone"
     ],
     "PaginatedList": [
-      "AdministratorList",
       "AssetList",
       "CollectionList",
       "CountryList",
@@ -96,15 +89,12 @@
       "ShippingMethodList",
       "TaxRateList"
     ],
-    "StockMovement": [
-      "Allocation",
-      "Cancellation",
-      "Release",
-      "Return",
-      "Sale",
-      "StockAdjustment"
+    "ActiveOrderResult": [
+      "NoActiveOrderError",
+      "Order"
     ],
     "AddPaymentToOrderResult": [
+      "NoActiveOrderError",
       "Order",
       "OrderPaymentStateError",
       "OrderStateTransitionError",
@@ -172,20 +162,14 @@
     "SetCustomerForOrderResult": [
       "AlreadyLoggedInError",
       "EmailAddressConflictError",
+      "NoActiveOrderError",
       "Order"
     ],
     "SetOrderShippingMethodResult": [
       "IneligibleShippingMethodError",
+      "NoActiveOrderError",
       "Order",
       "OrderModificationError"
-    ],
-    "StockMovementItem": [
-      "Allocation",
-      "Cancellation",
-      "Release",
-      "Return",
-      "Sale",
-      "StockAdjustment"
     ],
     "TransitionOrderToStateResult": [
       "Order",

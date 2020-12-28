@@ -29,16 +29,9 @@ interface PaginatedList {
     totalItems: Int!
 }
 
-interface StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
-}
+union ActiveOrderResult = NoActiveOrderError | Order
 
-union AddPaymentToOrderResult = Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
+union AddPaymentToOrderResult = NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
 
 union ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order
 
@@ -63,11 +56,9 @@ union ResetPasswordResult = CurrentUser | NativeAuthStrategyError | PasswordRese
 "The price of a search result product, either as a range or as a single price"
 union SearchResultPrice = PriceRange | SinglePrice
 
-union SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | Order
+union SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | NoActiveOrderError | Order
 
-union SetOrderShippingMethodResult = IneligibleShippingMethodError | Order | OrderModificationError
-
-union StockMovementItem = Allocation | Cancellation | Release | Return | Sale | StockAdjustment
+union SetOrderShippingMethodResult = IneligibleShippingMethodError | NoActiveOrderError | Order | OrderModificationError
 
 union TransitionOrderToStateResult = Order | OrderStateTransitionError
 
@@ -102,31 +93,6 @@ type Adjustment {
     amount: Int!
     description: String!
     type: AdjustmentType!
-}
-
-type Administrator implements Node {
-    createdAt: DateTime!
-    emailAddress: String!
-    firstName: String!
-    id: ID!
-    lastName: String!
-    updatedAt: DateTime!
-    user: User!
-}
-
-type AdministratorList implements PaginatedList {
-    items: [Administrator!]!
-    totalItems: Int!
-}
-
-type Allocation implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    orderLine: OrderLine!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
 }
 
 "Retured when attemting to set the Customer for an Order when already logged in."
@@ -170,16 +136,6 @@ type BooleanCustomFieldConfig implements CustomField {
     name: String!
     readonly: Boolean
     type: String!
-}
-
-type Cancellation implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    orderLine: OrderLine!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
 }
 
 type Channel implements Node {
@@ -325,24 +281,6 @@ type CurrentUserChannel {
     token: String!
 }
 
-type CustomFields {
-    Address: [CustomFieldConfig!]!
-    Collection: [CustomFieldConfig!]!
-    Customer: [CustomFieldConfig!]!
-    Facet: [CustomFieldConfig!]!
-    FacetValue: [CustomFieldConfig!]!
-    Fulfillment: [CustomFieldConfig!]!
-    GlobalSettings: [CustomFieldConfig!]!
-    Order: [CustomFieldConfig!]!
-    OrderLine: [CustomFieldConfig!]!
-    Product: [CustomFieldConfig!]!
-    ProductOption: [CustomFieldConfig!]!
-    ProductOptionGroup: [CustomFieldConfig!]!
-    ProductVariant: [CustomFieldConfig!]!
-    ShippingMethod: [CustomFieldConfig!]!
-    User: [CustomFieldConfig!]!
-}
-
 type Customer implements Node {
     addresses: [Address!]
     createdAt: DateTime!
@@ -479,23 +417,10 @@ type Fulfillment implements Node {
     updatedAt: DateTime!
 }
 
-type GlobalSettings {
-    availableLanguages: [LanguageCode!]!
-    createdAt: DateTime!
-    customFields: JSON
-    id: ID!
-    outOfStockThreshold: Int!
-    serverConfig: ServerConfig!
-    trackInventory: Boolean!
-    updatedAt: DateTime!
-}
-
 type HistoryEntry implements Node {
-    administrator: Administrator
     createdAt: DateTime!
     data: JSON!
     id: ID!
-    isPublic: Boolean!
     type: HistoryEntryType!
     updatedAt: DateTime!
 }
@@ -523,12 +448,6 @@ invalid or does not match any expected tokens.
 type IdentifierChangeTokenInvalidError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
-}
-
-type ImportInfo {
-    errors: [String!]
-    imported: Int!
-    processed: Int!
 }
 
 "Returned when attempting to set a ShippingMethod for which the order is not eligible"
@@ -590,11 +509,11 @@ type MissingPasswordError implements ErrorResult {
 
 type Mutation {
     "Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available."
-    addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
+    addItemToOrder(customFields: OrderLineCustomFieldsInput, productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
     "Add a Payment to the Order"
-    addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult
+    addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult!
     "Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available."
-    adjustOrderLine(orderLineId: ID!, quantity: Int): UpdateOrderItemsResult!
+    adjustOrderLine(customFields: OrderLineCustomFieldsInput, orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
     "Applies the given coupon code to the active Order"
     applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
     "Authenticates the user using a named authentication strategy"
@@ -646,13 +565,13 @@ type Mutation {
     "Resets a Customer's password based on the provided token"
     resetPassword(password: String!, token: String!): ResetPasswordResult!
     "Set the Customer for the Order. Required only if the Customer is not currently logged in"
-    setCustomerForOrder(input: CreateCustomerInput!): SetCustomerForOrderResult
+    setCustomerForOrder(input: CreateCustomerInput!): SetCustomerForOrderResult!
     "Sets the billing address for this order"
-    setOrderBillingAddress(input: CreateAddressInput!): Order
+    setOrderBillingAddress(input: CreateAddressInput!): ActiveOrderResult!
     "Allows any custom fields to be set for the active order"
-    setOrderCustomFields(input: UpdateOrderInput!): Order
+    setOrderCustomFields(input: UpdateOrderInput!): ActiveOrderResult!
     "Sets the shipping address for this order"
-    setOrderShippingAddress(input: CreateAddressInput!): Order
+    setOrderShippingAddress(input: CreateAddressInput!): ActiveOrderResult!
     "Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query"
     setOrderShippingMethod(shippingMethodId: ID!): SetOrderShippingMethodResult!
     "Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`"
@@ -693,6 +612,16 @@ type NegativeQuantityError implements ErrorResult {
 
 """
 
+Returned when invoking a mutation which depends on there being an active Order on the
+current session.
+"""
+type NoActiveOrderError implements ErrorResult {
+    errorCode: ErrorCode!
+    message: String!
+}
+
+"""
+
 Returned if `authOptions.requireVerification` is set to `true` (which is the default)
 and an unverified user attempts to authenticate.
 """
@@ -705,15 +634,17 @@ type Order implements Node {
     "An order is active as long as the payment process has not been completed"
     active: Boolean!
     "Order-level adjustments to the order total, such as discounts from promotions"
-    adjustments: [Adjustment!]!
+    adjustments: [Adjustment!]! @deprecated(reason : "Use `discounts` instead")
     billingAddress: OrderAddress
     "A unique code for the Order"
     code: String!
+    "An array of all coupon codes applied to the Order"
     couponCodes: [String!]!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
     customFields: JSON
     customer: Customer
+    discounts: [Adjustment!]!
     fulfillments: [Fulfillment!]
     history(options: HistoryEntryListOptions): HistoryEntryList!
     id: ID!
@@ -729,16 +660,34 @@ type Order implements Node {
     promotions: [Promotion!]!
     shipping: Int!
     shippingAddress: OrderAddress
-    shippingMethod: ShippingMethod
+    shippingLines: [ShippingLine!]!
     shippingWithTax: Int!
     state: String!
-    "The subTotal is the total of the OrderLines, before order-level promotions and shipping has been applied."
+    """
+
+    The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
+    discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+    To get a total of all OrderLines which does not account for prorated discounts, use the
+    sum of `OrderLine.discountedLinePrice` values.
+    """
     subTotal: Int!
-    subTotalBeforeTax: Int!
+    "Same as subTotal, but inclusive of tax"
+    subTotalWithTax: Int!
+    """
+
+    Surcharges are arbitrary modifications to the Order total which are neither
+    ProductVariants nor discounts resulting from applied Promotions. For example,
+    one-off discounts based on customer interaction, or surcharges based on payment
+    methods.
+    """
+    surcharges: [Surcharge!]!
+    "A summary of the taxes being applied to this Order"
     taxSummary: [OrderTaxSummary!]!
+    "Equal to subTotal plus shipping"
     total: Int!
-    totalBeforeTax: Int!
     totalQuantity: Int!
+    "The final payable amount. Equal to subTotalWithTax plus shippingWithTax"
+    totalWithTax: Int!
     updatedAt: DateTime!
 }
 
@@ -759,15 +708,38 @@ type OrderItem implements Node {
     adjustments: [Adjustment!]!
     cancelled: Boolean!
     createdAt: DateTime!
+    """
+
+    The price of a single unit including discounts, excluding tax.
+
+    If Order-level discounts have been applied, this will not be the
+    actual taxable unit price (see `proratedUnitPrice`), but is generally the
+    correct price to display to customers to avoid confusion
+    about the internal handling of distributed Order-level discounts.
+    """
+    discountedUnitPrice: Int!
+    "The price of a single unit including discounts and tax"
+    discountedUnitPriceWithTax: Int!
     fulfillment: Fulfillment
     id: ID!
+    """
+
+    The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+    Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+    and refund calculations.
+    """
+    proratedUnitPrice: Int!
+    "The proratedUnitPrice including tax"
+    proratedUnitPriceWithTax: Int!
     refundId: ID
+    taxLines: [TaxLine!]!
     taxRate: Float!
-    "The price of a single unit, excluding tax"
+    "The price of a single unit, excluding tax and discounts"
     unitPrice: Int!
     unitPriceIncludesTax: Boolean! @deprecated(reason : "`unitPrice` is now always without tax")
-    "The price of a single unit, including tax"
+    "The price of a single unit, including tax but excluding discounts"
     unitPriceWithTax: Int!
+    unitTax: Int!
     updatedAt: DateTime!
 }
 
@@ -779,26 +751,69 @@ type OrderLimitError implements ErrorResult {
 }
 
 type OrderLine implements Node {
-    adjustments: [Adjustment!]!
+    adjustments: [Adjustment!]! @deprecated(reason : "Use `discounts` instead")
     createdAt: DateTime!
-    customFields: JSON
+    customFields: OrderLineCustomFields
+    "The price of the line including discounts, excluding tax"
+    discountedLinePrice: Int!
+    "The price of the line including discounts and tax"
+    discountedLinePriceWithTax: Int!
+    """
+
+    The price of a single unit including discounts, excluding tax.
+
+    If Order-level discounts have been applied, this will not be the
+    actual taxable unit price (see `proratedUnitPrice`), but is generally the
+    correct price to display to customers to avoid confusion
+    about the internal handling of distributed Order-level discounts.
+    """
+    discountedUnitPrice: Int!
+    "The price of a single unit including discounts and tax"
+    discountedUnitPriceWithTax: Int!
+    discounts: [Adjustment!]!
     featuredAsset: Asset
     id: ID!
     items: [OrderItem!]!
-    "The total price of the line excluding tax"
+    "The total price of the line excluding tax and discounts."
     linePrice: Int!
-    "The total price of the line including tax"
+    "The total price of the line including tax bit excluding discounts."
     linePriceWithTax: Int!
     "The total tax on this line"
     lineTax: Int!
     order: Order!
     productVariant: ProductVariant!
+    """
+
+    The actual line price, taking into account both item discounts _and_ prorated (proportially-distributed)
+    Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
+    and refund calculations.
+    """
+    proratedLinePrice: Int!
+    "The proratedLinePrice including tax"
+    proratedLinePriceWithTax: Int!
+    """
+
+    The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+    Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
+    and refund calculations.
+    """
+    proratedUnitPrice: Int!
+    "The proratedUnitPrice including tax"
+    proratedUnitPriceWithTax: Int!
     quantity: Int!
+    taxLines: [TaxLine!]!
     taxRate: Float!
     totalPrice: Int! @deprecated(reason : "Use `linePriceWithTax` instead")
+    "The price of a single unit, excluding tax and discounts"
     unitPrice: Int!
+    "The price of a single unit, including tax but excluding discounts"
     unitPriceWithTax: Int!
     updatedAt: DateTime!
+}
+
+type OrderLineCustomFields {
+    test: String
+    test2: String
 }
 
 type OrderList implements PaginatedList {
@@ -818,11 +833,6 @@ type OrderPaymentStateError implements ErrorResult {
     message: String!
 }
 
-type OrderProcessState {
-    name: String!
-    to: [String!]!
-}
-
 "Returned if there is an error in transitioning the Order state"
 type OrderStateTransitionError implements ErrorResult {
     errorCode: ErrorCode!
@@ -838,6 +848,8 @@ A summary of the taxes being applied to this order, grouped
 by taxRate.
 """
 type OrderTaxSummary {
+    "A description of this tax"
+    description: String!
     "The total net price or OrderItems to which this taxRate applies"
     taxBase: Int!
     "The taxRate as a percentage"
@@ -897,22 +909,6 @@ type PaymentFailedError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
     paymentErrorMessage: String!
-}
-
-type PaymentMethod implements Node {
-    code: String!
-    configArgs: [ConfigArg!]!
-    createdAt: DateTime!
-    definition: ConfigurableOperationDefinition!
-    enabled: Boolean!
-    id: ID!
-    updatedAt: DateTime!
-}
-
-type PermissionDefinition {
-    assignable: Boolean!
-    description: String!
-    name: String!
 }
 
 "The price range where the result has more than one price"
@@ -1007,7 +1003,7 @@ type ProductVariant implements Node {
     name: String!
     options: [ProductOption!]!
     price: Int!
-    priceIncludesTax: Boolean!
+    priceIncludesTax: Boolean! @deprecated(reason : "price now always excludes tax")
     priceWithTax: Int!
     product: Product!
     productId: ID!
@@ -1113,26 +1109,6 @@ type Refund implements Node {
     updatedAt: DateTime!
 }
 
-type Release implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    orderItem: OrderItem!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
-}
-
-type Return implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    orderItem: OrderItem!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
-}
-
 type Role implements Node {
     channels: [Channel!]!
     code: String!
@@ -1146,16 +1122,6 @@ type Role implements Node {
 type RoleList implements PaginatedList {
     items: [Role!]!
     totalItems: Int!
-}
-
-type Sale implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    orderItem: OrderItem!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
 }
 
 type SearchReindexResponse {
@@ -1197,11 +1163,13 @@ type SearchResultAsset {
     preview: String!
 }
 
-type ServerConfig {
-    customFieldConfig: CustomFields!
-    orderProcess: [OrderProcessState!]!
-    permissions: [PermissionDefinition!]!
-    permittedAssetTypes: [String!]!
+type ShippingLine {
+    discountedPrice: Int!
+    discountedPriceWithTax: Int!
+    discounts: [Adjustment!]!
+    price: Int!
+    priceWithTax: Int!
+    shippingMethod: ShippingMethod!
 }
 
 type ShippingMethod implements Node {
@@ -1209,17 +1177,13 @@ type ShippingMethod implements Node {
     checker: ConfigurableOperation!
     code: String!
     createdAt: DateTime!
-    customFields: ShippingMethodCustomFields
+    customFields: JSON
     description: String!
+    fulfillmentHandlerCode: String!
     id: ID!
     name: String!
     translations: [ShippingMethodTranslation!]!
     updatedAt: DateTime!
-}
-
-type ShippingMethodCustomFields {
-    isGood: Boolean
-    localName: String
 }
 
 type ShippingMethodList implements PaginatedList {
@@ -1238,7 +1202,6 @@ type ShippingMethodQuote {
 
 type ShippingMethodTranslation {
     createdAt: DateTime!
-    customFields: ShippingMethodTranslationCustomFields
     description: String!
     id: ID!
     languageCode: LanguageCode!
@@ -1246,27 +1209,9 @@ type ShippingMethodTranslation {
     updatedAt: DateTime!
 }
 
-type ShippingMethodTranslationCustomFields {
-    localName: String
-}
-
 "The price value where the result has a single price"
 type SinglePrice {
     value: Int!
-}
-
-type StockAdjustment implements Node & StockMovement {
-    createdAt: DateTime!
-    id: ID!
-    productVariant: ProductVariant!
-    quantity: Int!
-    type: StockMovementType!
-    updatedAt: DateTime!
-}
-
-type StockMovementList {
-    items: [StockMovementItem!]!
-    totalItems: Int!
 }
 
 type StringCustomFieldConfig implements CustomField {
@@ -1292,11 +1237,28 @@ type Success {
     success: Boolean!
 }
 
+type Surcharge implements Node {
+    createdAt: DateTime!
+    description: String!
+    id: ID!
+    price: Int!
+    priceWithTax: Int!
+    sku: String
+    taxLines: [TaxLine!]!
+    taxRate: Float!
+    updatedAt: DateTime!
+}
+
 type TaxCategory implements Node {
     createdAt: DateTime!
     id: ID!
     name: String!
     updatedAt: DateTime!
+}
+
+type TaxLine {
+    description: String!
+    taxRate: Float!
 }
 
 type TaxRate implements Node {
@@ -1357,13 +1319,8 @@ type Zone implements Node {
 }
 
 enum AdjustmentType {
+    DISTRIBUTED_ORDER_PROMOTION
     PROMOTION
-    PROMOTION_REFUND
-    REFUND
-    SHIPPING
-    SHIPPING_REFUND
-    TAX
-    TAX_REFUND
 }
 
 enum AssetType {
@@ -1718,6 +1675,7 @@ enum ErrorCode {
     NATIVE_AUTH_STRATEGY_ERROR
     NEGATIVE_QUANTITY_ERROR
     NOT_VERIFIED_ERROR
+    NO_ACTIVE_ORDER_ERROR
     ORDER_LIMIT_ERROR
     ORDER_MODIFICATION_ERROR
     ORDER_PAYMENT_STATE_ERROR
@@ -1758,6 +1716,7 @@ enum HistoryEntryType {
     ORDER_COUPON_REMOVED
     ORDER_FULFILLMENT
     ORDER_FULFILLMENT_TRANSITION
+    ORDER_MODIFIED
     ORDER_NOTE
     ORDER_PAYMENT_TRANSITION
     ORDER_REFUND_TRANSITION
@@ -2168,15 +2127,6 @@ enum SortOrder {
     DESC
 }
 
-enum StockMovementType {
-    ADJUSTMENT
-    ALLOCATION
-    CANCELLATION
-    RELEASE
-    RETURN
-    SALE
-}
-
 input AuthenticationInput {
     native: NativeAuthInput
 }
@@ -2288,7 +2238,6 @@ input DateRange {
 
 input HistoryEntryFilterParameter {
     createdAt: DateOperators
-    isPublic: BooleanOperators
     type: StringOperators
     updatedAt: DateOperators
 }
@@ -2335,11 +2284,16 @@ input OrderFilterParameter {
     shippingWithTax: NumberOperators
     state: StringOperators
     subTotal: NumberOperators
-    subTotalBeforeTax: NumberOperators
+    subTotalWithTax: NumberOperators
     total: NumberOperators
-    totalBeforeTax: NumberOperators
     totalQuantity: NumberOperators
+    totalWithTax: NumberOperators
     updatedAt: DateOperators
+}
+
+input OrderLineCustomFieldsInput {
+    test: String
+    test2: String
 }
 
 input OrderListOptions {
@@ -2358,10 +2312,10 @@ input OrderSortParameter {
     shippingWithTax: SortOrder
     state: SortOrder
     subTotal: SortOrder
-    subTotalBeforeTax: SortOrder
+    subTotalWithTax: SortOrder
     total: SortOrder
-    totalBeforeTax: SortOrder
     totalQuantity: SortOrder
+    totalWithTax: SortOrder
     updatedAt: SortOrder
 }
 
@@ -2463,6 +2417,9 @@ input StringOperators {
     contains: String
     eq: String
     in: [String!]
+    notContains: String
+    notEq: String
+    notIn: [String!]
     regex: String
 }
 
