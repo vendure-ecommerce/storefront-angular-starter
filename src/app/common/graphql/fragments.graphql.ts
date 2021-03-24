@@ -37,6 +37,7 @@ export const CART_FRAGMENT = gql`
             }
             discounts {
                 amount
+                amountWithTax
                 description
                 adjustmentSource
                 type
@@ -60,6 +61,7 @@ export const CART_FRAGMENT = gql`
         }
         discounts {
             amount
+            amountWithTax
             description
             adjustmentSource
             type

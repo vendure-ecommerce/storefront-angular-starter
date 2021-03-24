@@ -31,13 +31,13 @@ interface PaginatedList {
 
 union ActiveOrderResult = NoActiveOrderError | Order
 
-union AddPaymentToOrderResult = NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
+union AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
 
 union ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order
 
 union AuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError
 
-union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | StringCustomFieldConfig
+union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig
 
 union NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError
 
@@ -103,6 +103,7 @@ type AlreadyLoggedInError implements ErrorResult {
 
 type Asset implements Node {
     createdAt: DateTime!
+    customFields: JSON
     fileSize: Int!
     focalPoint: Coordinate
     height: Int!
@@ -142,6 +143,7 @@ type Channel implements Node {
     code: String!
     createdAt: DateTime!
     currencyCode: CurrencyCode!
+    customFields: JSON
     defaultLanguageCode: LanguageCode!
     defaultShippingZone: Zone
     defaultTaxZone: Zone
@@ -198,10 +200,12 @@ type ConfigArg {
 }
 
 type ConfigArgDefinition {
+    defaultValue: JSON
     description: String
     label: String
     list: Boolean!
     name: String!
+    required: Boolean!
     type: String!
     ui: JSON
 }
@@ -332,6 +336,14 @@ type DeletionResponse {
     result: DeletionResult!
 }
 
+type Discount {
+    adjustmentSource: String!
+    amount: Int!
+    amountWithTax: Int!
+    description: String!
+    type: AdjustmentType!
+}
+
 "Retured when attemting to create a Customer with an email address already registered to an existing User."
 type EmailAddressConflictError implements ErrorResult {
     errorCode: ErrorCode!
@@ -450,7 +462,14 @@ type IdentifierChangeTokenInvalidError implements ErrorResult {
     message: String!
 }
 
-"Returned when attempting to set a ShippingMethod for which the order is not eligible"
+"Returned when attempting to add a Payment using a PaymentMethod for which the Order is not eligible."
+type IneligiblePaymentMethodError implements ErrorResult {
+    eligibilityCheckerMessage: String
+    errorCode: ErrorCode!
+    message: String!
+}
+
+"Returned when attempting to set a ShippingMethod for which the Order is not eligible"
 type IneligibleShippingMethodError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -509,11 +528,11 @@ type MissingPasswordError implements ErrorResult {
 
 type Mutation {
     "Adds an item to the order. If custom fields are defined on the OrderLine entity, a third argument 'customFields' will be available."
-    addItemToOrder(customFields: OrderLineCustomFieldsInput, productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
+    addItemToOrder(productVariantId: ID!, quantity: Int!): UpdateOrderItemsResult!
     "Add a Payment to the Order"
     addPaymentToOrder(input: PaymentInput!): AddPaymentToOrderResult!
     "Adjusts an OrderLine. If custom fields are defined on the OrderLine entity, a third argument 'customFields' of type `OrderLineCustomFieldsInput` will be available."
-    adjustOrderLine(customFields: OrderLineCustomFieldsInput, orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
+    adjustOrderLine(orderLineId: ID!, quantity: Int!): UpdateOrderItemsResult!
     "Applies the given coupon code to the active Order"
     applyCouponCode(couponCode: String!): ApplyCouponCodeResult!
     "Authenticates the user using a named authentication strategy"
@@ -644,7 +663,7 @@ type Order implements Node {
     currencyCode: CurrencyCode!
     customFields: JSON
     customer: Customer
-    discounts: [Adjustment!]!
+    discounts: [Discount!]!
     fulfillments: [Fulfillment!]
     history(options: HistoryEntryListOptions): HistoryEntryList!
     id: ID!
@@ -696,6 +715,7 @@ type OrderAddress {
     company: String
     country: String
     countryCode: String
+    customFields: JSON
     fullName: String
     phoneNumber: String
     postalCode: String
@@ -753,7 +773,7 @@ type OrderLimitError implements ErrorResult {
 type OrderLine implements Node {
     adjustments: [Adjustment!]! @deprecated(reason : "Use `discounts` instead")
     createdAt: DateTime!
-    customFields: OrderLineCustomFields
+    customFields: JSON
     "The price of the line including discounts, excluding tax"
     discountedLinePrice: Int!
     "The price of the line including discounts and tax"
@@ -770,7 +790,7 @@ type OrderLine implements Node {
     discountedUnitPrice: Int!
     "The price of a single unit including discounts and tax"
     discountedUnitPriceWithTax: Int!
-    discounts: [Adjustment!]!
+    discounts: [Discount!]!
     featuredAsset: Asset
     id: ID!
     items: [OrderItem!]!
@@ -806,14 +826,13 @@ type OrderLine implements Node {
     totalPrice: Int! @deprecated(reason : "Use `linePriceWithTax` instead")
     "The price of a single unit, excluding tax and discounts"
     unitPrice: Int!
+    "Non-zero if the unitPrice has changed since it was initially added to Order"
+    unitPriceChangeSinceAdded: Int!
     "The price of a single unit, including tax but excluding discounts"
     unitPriceWithTax: Int!
+    "Non-zero if the unitPriceWithTax has changed since it was initially added to Order"
+    unitPriceWithTaxChangeSinceAdded: Int!
     updatedAt: DateTime!
-}
-
-type OrderLineCustomFields {
-    test: String
-    test2: String
 }
 
 type OrderList implements PaginatedList {
@@ -909,6 +928,13 @@ type PaymentFailedError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
     paymentErrorMessage: String!
+}
+
+type PaymentMethodQuote {
+    code: String!
+    eligibilityMessage: String
+    id: ID!
+    isEligible: Boolean!
 }
 
 "The price range where the result has more than one price"
@@ -1008,6 +1034,7 @@ type ProductVariant implements Node {
     product: Product!
     productId: ID!
     sku: String!
+    stockLevel: String!
     taxCategory: TaxCategory!
     taxRateApplied: TaxRate!
     translations: [ProductVariantTranslation!]!
@@ -1064,6 +1091,8 @@ type Query {
     collection(id: ID, slug: String): Collection
     "A list of Collections available to the shop"
     collections(options: CollectionListOptions): CollectionList!
+    "Returns a list of payment methods and their eligibility based on the current active Order"
+    eligiblePaymentMethods: [PaymentMethodQuote!]!
     "Returns a list of eligible shipping methods based on the current active Order"
     eligibleShippingMethods: [ShippingMethodQuote!]!
     "Returns information about the current authenticated User"
@@ -1107,6 +1136,18 @@ type Refund implements Node {
     total: Int!
     transactionId: String
     updatedAt: DateTime!
+}
+
+type RelationCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    entity: String!
+    internal: Boolean
+    label: [LocalizedString!]
+    list: Boolean!
+    name: String!
+    readonly: Boolean
+    scalarFields: [String!]!
+    type: String!
 }
 
 type Role implements Node {
@@ -1166,7 +1207,7 @@ type SearchResultAsset {
 type ShippingLine {
     discountedPrice: Int!
     discountedPriceWithTax: Int!
-    discounts: [Adjustment!]!
+    discounts: [Discount!]!
     price: Int!
     priceWithTax: Int!
     shippingMethod: ShippingMethod!
@@ -1192,8 +1233,10 @@ type ShippingMethodList implements PaginatedList {
 }
 
 type ShippingMethodQuote {
+    code: String!
     description: String!
     id: ID!
+    "Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult"
     metadata: JSON
     name: String!
     price: Int!
@@ -1249,9 +1292,22 @@ type Surcharge implements Node {
     updatedAt: DateTime!
 }
 
+type Tag implements Node {
+    createdAt: DateTime!
+    id: ID!
+    updatedAt: DateTime!
+    value: String!
+}
+
+type TagList implements PaginatedList {
+    items: [Tag!]!
+    totalItems: Int!
+}
+
 type TaxCategory implements Node {
     createdAt: DateTime!
     id: ID!
+    isDefault: Boolean!
     name: String!
     updatedAt: DateTime!
 }
@@ -1668,6 +1724,7 @@ enum ErrorCode {
     EMAIL_ADDRESS_CONFLICT_ERROR
     IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR
     IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR
+    INELIGIBLE_PAYMENT_METHOD_ERROR
     INELIGIBLE_SHIPPING_METHOD_ERROR
     INSUFFICIENT_STOCK_ERROR
     INVALID_CREDENTIALS_ERROR
@@ -2164,6 +2221,7 @@ input CollectionSortParameter {
 
 input ConfigArgInput {
     name: String!
+    "A JSON stringified representation of the actual value"
     value: String!
 }
 
@@ -2291,11 +2349,6 @@ input OrderFilterParameter {
     updatedAt: DateOperators
 }
 
-input OrderLineCustomFieldsInput {
-    test: String
-    test2: String
-}
-
 input OrderListOptions {
     filter: OrderFilterParameter
     skip: Int
@@ -2366,6 +2419,7 @@ input ProductVariantFilterParameter {
     priceIncludesTax: BooleanOperators
     priceWithTax: NumberOperators
     sku: StringOperators
+    stockLevel: StringOperators
     updatedAt: DateOperators
 }
 
@@ -2384,6 +2438,7 @@ input ProductVariantSortParameter {
     priceWithTax: SortOrder
     productId: SortOrder
     sku: SortOrder
+    stockLevel: SortOrder
     updatedAt: SortOrder
 }
 

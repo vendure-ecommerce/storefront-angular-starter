@@ -38,7 +38,7 @@
         Order adjustments:
         <div class="adjustment" *ngFor="let discount of cart.discounts">
             <div>{{ discount.description }}</div>
-            <div>{{ discount.amount | formatPrice }}</div>
+            <div>{{ discount.amountWithTax | formatPrice }}</div>
         </div>
     </div>
     <div class="shipping">

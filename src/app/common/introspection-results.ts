@@ -13,6 +13,7 @@
       "FloatCustomFieldConfig",
       "IntCustomFieldConfig",
       "LocaleStringCustomFieldConfig",
+      "RelationCustomFieldConfig",
       "StringCustomFieldConfig"
     ],
     "ErrorResult": [
@@ -23,6 +24,7 @@
       "EmailAddressConflictError",
       "IdentifierChangeTokenExpiredError",
       "IdentifierChangeTokenInvalidError",
+      "IneligiblePaymentMethodError",
       "IneligibleShippingMethodError",
       "InsufficientStockError",
       "InvalidCredentialsError",
@@ -69,6 +71,7 @@
       "Role",
       "ShippingMethod",
       "Surcharge",
+      "Tag",
       "TaxCategory",
       "TaxRate",
       "User",
@@ -87,6 +90,7 @@
       "PromotionList",
       "RoleList",
       "ShippingMethodList",
+      "TagList",
       "TaxRateList"
     ],
     "ActiveOrderResult": [
@@ -94,6 +98,7 @@
       "Order"
     ],
     "AddPaymentToOrderResult": [
+      "IneligiblePaymentMethodError",
       "NoActiveOrderError",
       "Order",
       "OrderPaymentStateError",
@@ -118,6 +123,7 @@
       "FloatCustomFieldConfig",
       "IntCustomFieldConfig",
       "LocaleStringCustomFieldConfig",
+      "RelationCustomFieldConfig",
       "StringCustomFieldConfig"
     ],
     "NativeAuthenticationResult": [

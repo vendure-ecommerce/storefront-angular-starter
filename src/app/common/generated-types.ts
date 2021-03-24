@@ -42,13 +42,13 @@ export type PaginatedList = {
 
 export type ActiveOrderResult = NoActiveOrderError | Order;
 
-export type AddPaymentToOrderResult = NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError;
+export type AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError;
 
 export type ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | CouponCodeLimitError | Order;
 
 export type AuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError;
 
-export type CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | StringCustomFieldConfig;
+export type CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig;
 
 export type NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError;
 
@@ -118,6 +118,7 @@ export type AlreadyLoggedInError = ErrorResult & {
 export type Asset = Node & {
   __typename?: 'Asset';
   createdAt: Scalars['DateTime'];
+  customFields?: Maybe<Scalars['JSON']>;
   fileSize: Scalars['Int'];
   focalPoint?: Maybe<Coordinate>;
   height: Scalars['Int'];
@@ -161,6 +162,7 @@ export type Channel = Node & {
   code: Scalars['String'];
   createdAt: Scalars['DateTime'];
   currencyCode: CurrencyCode;
+  customFields?: Maybe<Scalars['JSON']>;
   defaultLanguageCode: LanguageCode;
   defaultShippingZone?: Maybe<Zone>;
   defaultTaxZone?: Maybe<Zone>;
@@ -228,10 +230,12 @@ export type ConfigArg = {
 
 export type ConfigArgDefinition = {
   __typename?: 'ConfigArgDefinition';
+  defaultValue?: Maybe<Scalars['JSON']>;
   description?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
   list: Scalars['Boolean'];
   name: Scalars['String'];
+  required: Scalars['Boolean'];
   type: Scalars['String'];
   ui?: Maybe<Scalars['JSON']>;
 };
@@ -387,6 +391,15 @@ export type DeletionResponse = {
   result: DeletionResult;
 };
 
+export type Discount = {
+  __typename?: 'Discount';
+  adjustmentSource: Scalars['String'];
+  amount: Scalars['Int'];
+  amountWithTax: Scalars['Int'];
+  description: Scalars['String'];
+  type: AdjustmentType;
+};
+
 /** Retured when attemting to create a Customer with an email address already registered to an existing User. */
 export type EmailAddressConflictError = ErrorResult & {
   __typename?: 'EmailAddressConflictError';
@@ -515,7 +528,15 @@ export type IdentifierChangeTokenInvalidError = ErrorResult & {
   message: Scalars['String'];
 };
 
-/** Returned when attempting to set a ShippingMethod for which the order is not eligible */
+/** Returned when attempting to add a Payment using a PaymentMethod for which the Order is not eligible. */
+export type IneligiblePaymentMethodError = ErrorResult & {
+  __typename?: 'IneligiblePaymentMethodError';
+  eligibilityCheckerMessage?: Maybe<Scalars['String']>;
+  errorCode: ErrorCode;
+  message: Scalars['String'];
+};
+
+/** Returned when attempting to set a ShippingMethod for which the Order is not eligible */
 export type IneligibleShippingMethodError = ErrorResult & {
   __typename?: 'IneligibleShippingMethodError';
   errorCode: ErrorCode;
@@ -669,7 +690,6 @@ export type Mutation = {
 
 
 export type MutationAddItemToOrderArgs = {
-  customFields?: Maybe<OrderLineCustomFieldsInput>;
   productVariantId: Scalars['ID'];
   quantity: Scalars['Int'];
 };
@@ -681,7 +701,6 @@ export type MutationAddPaymentToOrderArgs = {
 
 
 export type MutationAdjustOrderLineArgs = {
-  customFields?: Maybe<OrderLineCustomFieldsInput>;
   orderLineId: Scalars['ID'];
   quantity: Scalars['Int'];
 };
@@ -860,7 +879,7 @@ export type Order = Node & {
   currencyCode: CurrencyCode;
   customFields?: Maybe<Scalars['JSON']>;
   customer?: Maybe<Customer>;
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
   fulfillments?: Maybe<Array<Fulfillment>>;
   history: HistoryEntryList;
   id: Scalars['ID'];
@@ -915,6 +934,7 @@ export type OrderAddress = {
   company?: Maybe<Scalars['String']>;
   country?: Maybe<Scalars['String']>;
   countryCode?: Maybe<Scalars['String']>;
+  customFields?: Maybe<Scalars['JSON']>;
   fullName?: Maybe<Scalars['String']>;
   phoneNumber?: Maybe<Scalars['String']>;
   postalCode?: Maybe<Scalars['String']>;
@@ -975,7 +995,7 @@ export type OrderLine = Node & {
   /** @deprecated Use `discounts` instead */
   adjustments: Array<Adjustment>;
   createdAt: Scalars['DateTime'];
-  customFields?: Maybe<OrderLineCustomFields>;
+  customFields?: Maybe<Scalars['JSON']>;
   /** The price of the line including discounts, excluding tax */
   discountedLinePrice: Scalars['Int'];
   /** The price of the line including discounts and tax */
@@ -991,7 +1011,7 @@ export type OrderLine = Node & {
   discountedUnitPrice: Scalars['Int'];
   /** The price of a single unit including discounts and tax */
   discountedUnitPriceWithTax: Scalars['Int'];
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
   featuredAsset?: Maybe<Asset>;
   id: Scalars['ID'];
   items: Array<OrderItem>;
@@ -1026,15 +1046,13 @@ export type OrderLine = Node & {
   totalPrice: Scalars['Int'];
   /** The price of a single unit, excluding tax and discounts */
   unitPrice: Scalars['Int'];
+  /** Non-zero if the unitPrice has changed since it was initially added to Order */
+  unitPriceChangeSinceAdded: Scalars['Int'];
   /** The price of a single unit, including tax but excluding discounts */
   unitPriceWithTax: Scalars['Int'];
+  /** Non-zero if the unitPriceWithTax has changed since it was initially added to Order */
+  unitPriceWithTaxChangeSinceAdded: Scalars['Int'];
   updatedAt: Scalars['DateTime'];
-};
-
-export type OrderLineCustomFields = {
-  __typename?: 'OrderLineCustomFields';
-  test?: Maybe<Scalars['String']>;
-  test2?: Maybe<Scalars['String']>;
 };
 
 export type OrderList = PaginatedList & {
@@ -1138,6 +1156,14 @@ export type PaymentFailedError = ErrorResult & {
   errorCode: ErrorCode;
   message: Scalars['String'];
   paymentErrorMessage: Scalars['String'];
+};
+
+export type PaymentMethodQuote = {
+  __typename?: 'PaymentMethodQuote';
+  code: Scalars['String'];
+  eligibilityMessage?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  isEligible: Scalars['Boolean'];
 };
 
 /** The price range where the result has more than one price */
@@ -1247,6 +1273,7 @@ export type ProductVariant = Node & {
   product: Product;
   productId: Scalars['ID'];
   sku: Scalars['String'];
+  stockLevel: Scalars['String'];
   taxCategory: TaxCategory;
   taxRateApplied: TaxRate;
   translations: Array<ProductVariantTranslation>;
@@ -1307,6 +1334,8 @@ export type Query = {
   collection?: Maybe<Collection>;
   /** A list of Collections available to the shop */
   collections: CollectionList;
+  /** Returns a list of payment methods and their eligibility based on the current active Order */
+  eligiblePaymentMethods: Array<PaymentMethodQuote>;
   /** Returns a list of eligible shipping methods based on the current active Order */
   eligibleShippingMethods: Array<ShippingMethodQuote>;
   /** Returns information about the current authenticated User */
@@ -1388,6 +1417,19 @@ export type Refund = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type RelationCustomFieldConfig = CustomField & {
+  __typename?: 'RelationCustomFieldConfig';
+  description?: Maybe<Array<LocalizedString>>;
+  entity: Scalars['String'];
+  internal?: Maybe<Scalars['Boolean']>;
+  label?: Maybe<Array<LocalizedString>>;
+  list: Scalars['Boolean'];
+  name: Scalars['String'];
+  readonly?: Maybe<Scalars['Boolean']>;
+  scalarFields: Array<Scalars['String']>;
+  type: Scalars['String'];
+};
+
 export type Role = Node & {
   __typename?: 'Role';
   channels: Array<Channel>;
@@ -1454,7 +1496,7 @@ export type ShippingLine = {
   __typename?: 'ShippingLine';
   discountedPrice: Scalars['Int'];
   discountedPriceWithTax: Scalars['Int'];
-  discounts: Array<Adjustment>;
+  discounts: Array<Discount>;
   price: Scalars['Int'];
   priceWithTax: Scalars['Int'];
   shippingMethod: ShippingMethod;
@@ -1483,8 +1525,10 @@ export type ShippingMethodList = PaginatedList & {
 
 export type ShippingMethodQuote = {
   __typename?: 'ShippingMethodQuote';
+  code: Scalars['String'];
   description: Scalars['String'];
   id: Scalars['ID'];
+  /** Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult */
   metadata?: Maybe<Scalars['JSON']>;
   name: Scalars['String'];
   price: Scalars['Int'];
@@ -1546,10 +1590,25 @@ export type Surcharge = Node & {
   updatedAt: Scalars['DateTime'];
 };
 
+export type Tag = Node & {
+  __typename?: 'Tag';
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  updatedAt: Scalars['DateTime'];
+  value: Scalars['String'];
+};
+
+export type TagList = PaginatedList & {
+  __typename?: 'TagList';
+  items: Array<Tag>;
+  totalItems: Scalars['Int'];
+};
+
 export type TaxCategory = Node & {
   __typename?: 'TaxCategory';
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
+  isDefault: Scalars['Boolean'];
   name: Scalars['String'];
   updatedAt: Scalars['DateTime'];
 };
@@ -1970,6 +2029,7 @@ export enum ErrorCode {
   EMAIL_ADDRESS_CONFLICT_ERROR = 'EMAIL_ADDRESS_CONFLICT_ERROR',
   IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR = 'IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR',
   IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR = 'IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR',
+  INELIGIBLE_PAYMENT_METHOD_ERROR = 'INELIGIBLE_PAYMENT_METHOD_ERROR',
   INELIGIBLE_SHIPPING_METHOD_ERROR = 'INELIGIBLE_SHIPPING_METHOD_ERROR',
   INSUFFICIENT_STOCK_ERROR = 'INSUFFICIENT_STOCK_ERROR',
   INVALID_CREDENTIALS_ERROR = 'INVALID_CREDENTIALS_ERROR',
@@ -2464,6 +2524,7 @@ export type CollectionSortParameter = {
 
 export type ConfigArgInput = {
   name: Scalars['String'];
+  /** A JSON stringified representation of the actual value */
   value: Scalars['String'];
 };
 
@@ -2591,11 +2652,6 @@ export type OrderFilterParameter = {
   updatedAt?: Maybe<DateOperators>;
 };
 
-export type OrderLineCustomFieldsInput = {
-  test?: Maybe<Scalars['String']>;
-  test2?: Maybe<Scalars['String']>;
-};
-
 export type OrderListOptions = {
   filter?: Maybe<OrderFilterParameter>;
   skip?: Maybe<Scalars['Int']>;
@@ -2665,6 +2721,7 @@ export type ProductVariantFilterParameter = {
   priceIncludesTax?: Maybe<BooleanOperators>;
   priceWithTax?: Maybe<NumberOperators>;
   sku?: Maybe<StringOperators>;
+  stockLevel?: Maybe<StringOperators>;
   updatedAt?: Maybe<DateOperators>;
 };
 
@@ -2683,6 +2740,7 @@ export type ProductVariantSortParameter = {
   priceWithTax?: Maybe<SortOrder>;
   productId?: Maybe<SortOrder>;
   sku?: Maybe<SortOrder>;
+  stockLevel?: Maybe<SortOrder>;
   updatedAt?: Maybe<SortOrder>;
 };
 
@@ -3336,6 +3394,9 @@ export type AddPaymentMutationVariables = Exact<{
 export type AddPaymentMutation = (
   { __typename?: 'Mutation' }
   & { addPaymentToOrder: (
+    { __typename?: 'IneligiblePaymentMethodError' }
+    & ErrorResult_IneligiblePaymentMethodError_Fragment
+  ) | (
     { __typename?: 'NoActiveOrderError' }
     & ErrorResult_NoActiveOrderError_Fragment
   ) | (
@@ -3583,8 +3644,8 @@ export type CartFragment = (
       { __typename?: 'ProductVariant' }
       & Pick<ProductVariant, 'id' | 'name'>
     ), discounts: Array<(
-      { __typename?: 'Adjustment' }
-      & Pick<Adjustment, 'amount' | 'description' | 'adjustmentSource' | 'type'>
+      { __typename?: 'Discount' }
+      & Pick<Discount, 'amount' | 'amountWithTax' | 'description' | 'adjustmentSource' | 'type'>
     )> }
   )>, shippingLines: Array<(
     { __typename?: 'ShippingLine' }
@@ -3594,8 +3655,8 @@ export type CartFragment = (
       & Pick<ShippingMethod, 'id' | 'code' | 'name' | 'description'>
     ) }
   )>, discounts: Array<(
-    { __typename?: 'Adjustment' }
-    & Pick<Adjustment, 'amount' | 'description' | 'adjustmentSource' | 'type'>
+    { __typename?: 'Discount' }
+    & Pick<Discount, 'amount' | 'amountWithTax' | 'description' | 'adjustmentSource' | 'type'>
   )> }
 );
 
@@ -3651,6 +3712,11 @@ type ErrorResult_IdentifierChangeTokenExpiredError_Fragment = (
 type ErrorResult_IdentifierChangeTokenInvalidError_Fragment = (
   { __typename?: 'IdentifierChangeTokenInvalidError' }
   & Pick<IdentifierChangeTokenInvalidError, 'errorCode' | 'message'>
+);
+
+type ErrorResult_IneligiblePaymentMethodError_Fragment = (
+  { __typename?: 'IneligiblePaymentMethodError' }
+  & Pick<IneligiblePaymentMethodError, 'errorCode' | 'message'>
 );
 
 type ErrorResult_IneligibleShippingMethodError_Fragment = (
@@ -3748,7 +3814,7 @@ type ErrorResult_VerificationTokenInvalidError_Fragment = (
   & Pick<VerificationTokenInvalidError, 'errorCode' | 'message'>
 );
 
-export type ErrorResultFragment = ErrorResult_AlreadyLoggedInError_Fragment | ErrorResult_CouponCodeExpiredError_Fragment | ErrorResult_CouponCodeInvalidError_Fragment | ErrorResult_CouponCodeLimitError_Fragment | ErrorResult_EmailAddressConflictError_Fragment | ErrorResult_IdentifierChangeTokenExpiredError_Fragment | ErrorResult_IdentifierChangeTokenInvalidError_Fragment | ErrorResult_IneligibleShippingMethodError_Fragment | ErrorResult_InsufficientStockError_Fragment | ErrorResult_InvalidCredentialsError_Fragment | ErrorResult_MissingPasswordError_Fragment | ErrorResult_NativeAuthStrategyError_Fragment | ErrorResult_NegativeQuantityError_Fragment | ErrorResult_NoActiveOrderError_Fragment | ErrorResult_NotVerifiedError_Fragment | ErrorResult_OrderLimitError_Fragment | ErrorResult_OrderModificationError_Fragment | ErrorResult_OrderPaymentStateError_Fragment | ErrorResult_OrderStateTransitionError_Fragment | ErrorResult_PasswordAlreadySetError_Fragment | ErrorResult_PasswordResetTokenExpiredError_Fragment | ErrorResult_PasswordResetTokenInvalidError_Fragment | ErrorResult_PaymentDeclinedError_Fragment | ErrorResult_PaymentFailedError_Fragment | ErrorResult_VerificationTokenExpiredError_Fragment | ErrorResult_VerificationTokenInvalidError_Fragment;
+export type ErrorResultFragment = ErrorResult_AlreadyLoggedInError_Fragment | ErrorResult_CouponCodeExpiredError_Fragment | ErrorResult_CouponCodeInvalidError_Fragment | ErrorResult_CouponCodeLimitError_Fragment | ErrorResult_EmailAddressConflictError_Fragment | ErrorResult_IdentifierChangeTokenExpiredError_Fragment | ErrorResult_IdentifierChangeTokenInvalidError_Fragment | ErrorResult_IneligiblePaymentMethodError_Fragment | ErrorResult_IneligibleShippingMethodError_Fragment | ErrorResult_InsufficientStockError_Fragment | ErrorResult_InvalidCredentialsError_Fragment | ErrorResult_MissingPasswordError_Fragment | ErrorResult_NativeAuthStrategyError_Fragment | ErrorResult_NegativeQuantityError_Fragment | ErrorResult_NoActiveOrderError_Fragment | ErrorResult_NotVerifiedError_Fragment | ErrorResult_OrderLimitError_Fragment | ErrorResult_OrderModificationError_Fragment | ErrorResult_OrderPaymentStateError_Fragment | ErrorResult_OrderStateTransitionError_Fragment | ErrorResult_PasswordAlreadySetError_Fragment | ErrorResult_PasswordResetTokenExpiredError_Fragment | ErrorResult_PasswordResetTokenInvalidError_Fragment | ErrorResult_PaymentDeclinedError_Fragment | ErrorResult_PaymentFailedError_Fragment | ErrorResult_VerificationTokenExpiredError_Fragment | ErrorResult_VerificationTokenInvalidError_Fragment;
 
 export type GetActiveOrderQueryVariables = Exact<{ [key: string]: never; }>;
 
