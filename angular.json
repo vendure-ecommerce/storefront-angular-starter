@@ -13,7 +13,6 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "aot": true,
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -40,7 +39,13 @@
                 "src/styles",
                 "dist"
               ]
-            }
+            },
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
           },
           "configurations": {
             "production": {
@@ -62,7 +67,6 @@
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -131,7 +135,6 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/server",
-            "sourceMap": false,
             "main": "server.ts",
             "tsConfig": "src/tsconfig.server.json",
             "stylePreprocessorOptions": {
@@ -139,7 +142,8 @@
                 "src/styles",
                 "dist"
               ]
-            }
+            },
+            "optimization": false
           },
           "configurations": {
             "production": {

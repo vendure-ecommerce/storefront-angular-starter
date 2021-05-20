@@ -53,7 +53,7 @@ export class CheckoutPaymentComponent implements OnInit {
                     case 'Order':
                         const order = addPaymentToOrder;
                         if (order && (order.state === 'PaymentSettled' || order.state === 'PaymentAuthorized')) {
-                            await new Promise(resolve => setTimeout(() => {
+                            await new Promise<void>(resolve => setTimeout(() => {
                                 this.stateService.setState('activeOrderId', null);
                                 resolve();
                             }, 500));
