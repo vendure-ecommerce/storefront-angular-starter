@@ -2910,6 +2910,12 @@ export namespace GetOrderByCode {
   export type User = (NonNullable<(NonNullable<(NonNullable<GetOrderByCodeQuery['orderByCode']>)['customer']>)['user']>);
 }
 
+export namespace GetEligiblePaymentMethods {
+  export type Variables = GetEligiblePaymentMethodsQueryVariables;
+  export type Query = GetEligiblePaymentMethodsQuery;
+  export type EligiblePaymentMethods = NonNullable<(NonNullable<GetEligiblePaymentMethodsQuery['eligiblePaymentMethods']>)[number]>;
+}
+
 export namespace AddPayment {
   export type Variables = AddPaymentMutationVariables;
   export type Mutation = AddPaymentMutation;
@@ -3383,6 +3389,17 @@ export type GetOrderByCodeQuery = (
       )> }
     )> }
     & CartFragment
+  )> }
+);
+
+export type GetEligiblePaymentMethodsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetEligiblePaymentMethodsQuery = (
+  { __typename?: 'Query' }
+  & { eligiblePaymentMethods: Array<(
+    { __typename?: 'PaymentMethodQuote' }
+    & Pick<PaymentMethodQuote, 'id' | 'code' | 'eligibilityMessage' | 'isEligible'>
   )> }
 );
 
