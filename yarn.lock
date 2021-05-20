@@ -2,21 +2,13 @@
 # yarn lockfile v1
 
 
-"@angular-devkit/architect@0.1102.13":
+"@angular-devkit/architect@0.1102.13", "@angular-devkit/architect@^0.1102.3":
   version "0.1102.13"
   resolved "https://registry.npmjs.org/@angular-devkit/architect/-/architect-0.1102.13.tgz#0f6b9d38cb8cda928b24404278f227fe8f169fc1"
   integrity sha512-v44YF54DQnxwggZKUVCB2WtgfqMW8VG5AtE+nO0RgEtgnOC3e4bB7dZ/n+2Am0LCauYx45ufQDlIespeX09XgA==
   dependencies:
     "@angular-devkit/core" "11.2.13"
     rxjs "6.6.3"
-
-"@angular-devkit/architect@^0.1001.0":
-  version "0.1001.6"
-  resolved "https://registry.npmjs.org/@angular-devkit/architect/-/architect-0.1001.6.tgz#6578b2b40cc18b406818493f9ecf4b5eeca292bc"
-  integrity sha512-Wy10cGRdZ/g+akXbWfv0sq/pjVJrhrilSChe03ovu8nOsbcyZp76z+rnqf3YBYN6yZpWaBB80cW4QC/ar7Kv4Q==
-  dependencies:
-    "@angular-devkit/core" "10.1.6"
-    rxjs "6.6.2"
 
 "@angular-devkit/build-angular@~0.1102.13":
   version "0.1102.13"
@@ -117,18 +109,7 @@
     "@angular-devkit/core" "11.2.13"
     rxjs "6.6.3"
 
-"@angular-devkit/core@10.1.6", "@angular-devkit/core@^10.1.0":
-  version "10.1.6"
-  resolved "https://registry.npmjs.org/@angular-devkit/core/-/core-10.1.6.tgz#ca142a77cbf8bdb5eed5fd249d4188fab92367fc"
-  integrity sha512-RhZCbX2I+ukR6/yu1OxwtyveBkQy+knRSQ7oxsBbwkS4M0XzmUswlf0p8lTfJI9pxrJnc2SODatMfEKeOYWmkA==
-  dependencies:
-    ajv "6.12.4"
-    fast-json-stable-stringify "2.1.0"
-    magic-string "0.25.7"
-    rxjs "6.6.2"
-    source-map "0.7.3"
-
-"@angular-devkit/core@11.2.13":
+"@angular-devkit/core@11.2.13", "@angular-devkit/core@^11.2.3":
   version "11.2.13"
   resolved "https://registry.npmjs.org/@angular-devkit/core/-/core-11.2.13.tgz#7829862132555a52009d0af9671b06ffdf9200f1"
   integrity sha512-GL97DZXeQCecqZmaIeMfG/XtHv6e7FM+uygMePNF9yn4cml32bSp4P5oRjDMgj7iFl6GIU81n8TstTMmFbt85w==
@@ -155,10 +136,10 @@
   dependencies:
     tslib "^2.0.0"
 
-"@angular/cdk@^10.2.3":
-  version "10.2.4"
-  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-10.2.4.tgz#656095648af005e7fa02c4cc68865be4bf59fc10"
-  integrity sha512-Ccm/iRb6zELWwMem6qTnFCalMVX/aS17hhN65efpNKrH3ovhyQSPWtF4p9IaEJ3rZpfXqXMPBneJ9ZXAA/iKog==
+"@angular/cdk@^11.2.13":
+  version "11.2.13"
+  resolved "https://registry.npmjs.org/@angular/cdk/-/cdk-11.2.13.tgz#d54c9187e3b8cf3f8ba190b1edddc08ed2b740de"
+  integrity sha512-FkE4iCwoLbQxLDUOjV1I7M/6hmpyb7erAjEdWgch7nGRNxF1hqX5Bqf1lvLFKPNCbx5NRI5K7YVAdIUQUR8vug==
   dependencies:
     tslib "^2.0.0"
   optionalDependencies:
@@ -2051,32 +2032,35 @@
     enhanced-resolve "5.7.0"
     webpack-sources "2.2.0"
 
-"@nguniversal/builders@^10.1.0":
-  version "10.1.0"
-  resolved "https://registry.npmjs.org/@nguniversal/builders/-/builders-10.1.0.tgz#1097bec29254e399117f0d827e73ef8af888f221"
-  integrity sha512-4GeQ9S7fVMRbj5bwjCE9VVstrYW3MFrqyIwFcbI/l5Oq1kzWFQ3B6hDX1CVEKQYiofgIi1OWDWAhr/ryrQj1yg==
+"@nguniversal/builders@^11.2.1":
+  version "11.2.1"
+  resolved "https://registry.npmjs.org/@nguniversal/builders/-/builders-11.2.1.tgz#42fbe12ee56f4e700f9feae292e431f57779512b"
+  integrity sha512-TSN12ykp2UbHoAAXrtesALaAkIs8KQ0qHmnVEEWeHqOU6/lDGYg3DHtnEpVW3kzPz0FirgudYfO3K+auer6v7g==
   dependencies:
-    "@angular-devkit/architect" "^0.1001.0"
-    "@angular-devkit/core" "^10.1.0"
+    "@angular-devkit/architect" "^0.1102.3"
+    "@angular-devkit/core" "^11.2.3"
+    "@nguniversal/common" "11.2.1"
     browser-sync "^2.26.7"
     guess-parser "^0.4.12"
     http-proxy-middleware "^1.0.0"
+    ora "^5.1.0"
     rxjs "^6.5.5"
-    tree-kill "^1.2.1"
+    tree-kill "^1.2.2"
 
-"@nguniversal/common@10.1.0":
-  version "10.1.0"
-  resolved "https://registry.npmjs.org/@nguniversal/common/-/common-10.1.0.tgz#7104f598b2a6eee078dfc1e0309cb9ea261e7da7"
-  integrity sha512-AIfLORs+LLHx9d+8kRNDq+GZj/2ToyXgg5Boi2RfgUhV5Rywey082XRlFmPwyVHxltYJzoMPeNWxzV6hrSMCzA==
+"@nguniversal/common@11.2.1":
+  version "11.2.1"
+  resolved "https://registry.npmjs.org/@nguniversal/common/-/common-11.2.1.tgz#c2f6a6ee9fee43121bf3cb5da43b76a45ce9f8eb"
+  integrity sha512-2PYo38yBCIE5GdURFj9s5b18bY/SwX3WHmNRoMaR6Aj8uE0j2kVpmyqQgdHTyvf93pgpIbRyo7x1J6MFFXPQAA==
   dependencies:
+    critters "0.0.7"
     tslib "^2.0.0"
 
-"@nguniversal/express-engine@^10.1.0":
-  version "10.1.0"
-  resolved "https://registry.npmjs.org/@nguniversal/express-engine/-/express-engine-10.1.0.tgz#b1595751eb6acfa02b65e25e9c9ffbe66baab2f5"
-  integrity sha512-UYQB8662Qnx9Y2TblZmC8QbfAZtiCE6OeLNdwWIz8rVY9jhWi4P5SFb0slvcPMyPL5JAb+FHHOKjsH1NJztsCQ==
+"@nguniversal/express-engine@^11.2.1":
+  version "11.2.1"
+  resolved "https://registry.npmjs.org/@nguniversal/express-engine/-/express-engine-11.2.1.tgz#015b2bc0b87b947195ee880221fb9789b5674f76"
+  integrity sha512-Y2t4qkyeI5xaegZeI1fJDcMUvQ4AZbKxvEibahapEX5ixN7dxq+iB6xKnSIOG+WYaP3l4c6sExhlKo/oxNXMqA==
   dependencies:
-    "@nguniversal/common" "10.1.0"
+    "@nguniversal/common" "11.2.1"
     tslib "^2.0.0"
 
 "@nodelib/fs.scandir@2.1.3":
@@ -2746,16 +2730,6 @@ ajv-keywords@^3.1.0, ajv-keywords@^3.4.1, ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://registry.npmjs.org/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
   integrity sha512-5p6WTN0DdTGVQk6VjcEju19IgaHudalcfabD7yhDGeA6bcQnmL+CpveLJq/3hvfwd1aof6L386Ougkx6RfyMIQ==
-
-ajv@6.12.4:
-  version "6.12.4"
-  resolved "https://registry.npmjs.org/ajv/-/ajv-6.12.4.tgz#0614facc4522127fa713445c6bfd3ebd376e2234"
-  integrity sha512-eienB2c9qVQs2KWexhkrdMLVDoIQCz5KSeLxwg9Lzk4DOfBtIK9PQwwufcsn1jjGuf9WZmqPMbGxOzfcuphJCQ==
-  dependencies:
-    fast-deep-equal "^3.1.1"
-    fast-json-stable-stringify "^2.0.0"
-    json-schema-traverse "^0.4.1"
-    uri-js "^4.2.2"
 
 ajv@6.12.6:
   version "6.12.6"
@@ -10676,13 +10650,6 @@ rx@4.1.0:
   resolved "https://registry.npmjs.org/rx/-/rx-4.1.0.tgz#a5f13ff79ef3b740fe30aa803fb09f98805d4782"
   integrity sha1-pfE/957zt0D+MKqAP7CfmIBdR4I=
 
-rxjs@6.6.2:
-  version "6.6.2"
-  resolved "https://registry.npmjs.org/rxjs/-/rxjs-6.6.2.tgz#8096a7ac03f2cc4fe5860ef6e572810d9e01c0d2"
-  integrity sha512-BHdBMVoWC2sL26w//BCu3YzKT4s2jip/WhwsGEDmeKYBhKDZeYezVUnHatYB7L85v5xs0BAQmg6BEYJEKxBabg==
-  dependencies:
-    tslib "^1.9.0"
-
 rxjs@6.6.3, rxjs@^6.3.3, rxjs@^6.5.0, rxjs@^6.5.3, rxjs@^6.5.5, rxjs@^6.6.0, rxjs@~6.6.3:
   version "6.6.3"
   resolved "https://registry.npmjs.org/rxjs/-/rxjs-6.6.3.tgz#8ca84635c4daa900c0d3967a6ee7ac60271ee552"
@@ -11920,7 +11887,7 @@ tr46@^2.0.2:
   dependencies:
     punycode "^2.1.1"
 
-tree-kill@1.2.2, tree-kill@^1.2.1:
+tree-kill@1.2.2, tree-kill@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/tree-kill/-/tree-kill-1.2.2.tgz#4ca09a9092c88b73a7cdc5e8a01b507b0790a0cc"
   integrity sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==
