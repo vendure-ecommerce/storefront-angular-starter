@@ -14,6 +14,10 @@ The app is built with the [Angular CLI](https://github.com/angular/angular-cli),
 3. Make sure you have a local Vendure instance running a `http://localhost:3000`.
 4. Open `http://localhost:4201` to see the storefront app running.
 
+## Code generation
+
+This project uses [graphql-code-generator](https://www.graphql-code-generator.com/) to generate TypeScript types based on the Vendure GraphQL API. To update the types, first change the `schema` property of [codegen.yml](./codegen.yml) to point to your local Vendure server, and then run the `generate-types` npm script.
+
 ## Deployment
 
 To deploy this storefront in a production environment, take the following steps:
