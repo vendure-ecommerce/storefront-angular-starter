@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { APOLLO_OPTIONS } from 'apollo-angular';
+import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
 
@@ -62,6 +62,7 @@ let providedCacheState: any | undefined;
         HttpClientModule,
         SharedModule,
         BrowserModule,
+        ApolloModule,
     ],
     providers: [
         { provide: HTTP_INTERCEPTORS, useClass: DefaultInterceptor, multi: true },
