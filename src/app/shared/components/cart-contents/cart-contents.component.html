@@ -3,7 +3,7 @@
         <ng-container *ngFor="let line of cart.lines; trackBy: trackByFn">
             <div class="item" [class.has-discount]="isDiscounted(line)">
                 <div class="thumb">
-                    <img [src]="line.featuredAsset?.preview + '?preset=tiny'">
+                    <img [src]="line.featuredAsset?.preview + '?preset=tiny'" class="rounded">
                 </div>
                 <div class="details">
                     <div class="name">{{ line.productVariant?.name }}</div>

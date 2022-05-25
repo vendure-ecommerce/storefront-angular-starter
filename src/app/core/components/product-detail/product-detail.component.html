@@ -60,14 +60,14 @@
     <div class="add-to-cart-notification">
         <div class="thumb mr-2">
             <img
-                class=""
+                class="rounded"
                 [src]="(variant.featuredAsset?.preview || product.featuredAsset?.preview) + '?preset=tiny'"
                 alt="product thumbnail"
             />
         </div>
         <div>{{ quantity }} x {{ variant.name }}</div>
     </div>
-    <button class="btn btn-sm btn-outline-primary btn-block" (click)="viewCartFromNotification(close)">
+    <button class="btn btn-sm btn-outline-primary btn-block rounded" (click)="viewCartFromNotification(close)">
         View cart
     </button>
 </ng-template>

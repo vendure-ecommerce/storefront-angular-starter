@@ -3,7 +3,8 @@
 :host {
     display: none;
     margin-bottom: 0;
-    background-color: $light;
+    background: rgb(12,150,160);
+    background: linear-gradient(90deg, rgba(12,150,160,1) 0%, rgba(7,100,135,1) 100%);
     overflow: auto;
 
     .nav-wrapper {
@@ -23,6 +24,7 @@
 .collections-menu-sub-collections {
     width: 100vw;
     background-color: white;
+    background: rgb(239, 249, 252);
     padding: $spacer 0;
     position: absolute;
     z-index: $zindex-dropdown;
@@ -42,8 +44,11 @@
 }
 
 .nav-link {
+    color: white;
+    transition: background-color 0.2s;
     &:hover, &.active {
-        background-color: white;
+        color: rgba(0,72,133,1);
+        background: rgb(239, 249, 252);
     }
 }
 

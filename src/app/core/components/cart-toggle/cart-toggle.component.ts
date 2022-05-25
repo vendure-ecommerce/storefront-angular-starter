@@ -11,23 +11,24 @@ import { GET_CART_TOTALS } from './cart-toggle.graphql';
 @Component({
     selector: 'vsf-cart-toggle',
     templateUrl: './cart-toggle.component.html',
-styleUrls: ['./cart-toggle.component.scss'],
-    })
+    styleUrls: ['./cart-toggle.component.scss'],
+})
 export class CartToggleComponent implements OnInit {
     @Output() toggle = new EventEmitter<void>();
     cart$: Observable<{ total: number; quantity: number; }>;
     cartChangeIndication$: Observable<boolean>;
 
     constructor(private dataService: DataService,
-                private stateService: StateService) {}
+                private stateService: StateService) {
+    }
 
     ngOnInit() {
-        this.cart$ =  merge(
+        this.cart$ = merge(
             this.stateService.select(state => state.activeOrderId),
             this.stateService.select(state => state.signedIn),
         ).pipe(
             switchMap(() => this.dataService.query<GetCartTotals.Query>(GET_CART_TOTALS, {}, 'network-only')),
-            map(({ activeOrder }) => {
+            map(({activeOrder}) => {
                 return {
                     total: activeOrder ? activeOrder.totalWithTax : 0,
                     quantity: activeOrder ? activeOrder.totalQuantity : 0,
@@ -39,9 +40,9 @@ export class CartToggleComponent implements OnInit {
             map(cart => cart.quantity),
             distinctUntilChanged(),
             switchMap(() => zip(
-                from([true, false]),
-                timer(0, 1000),
-                val => val,
+                    from([true, false]),
+                    timer(0, 1000),
+                    val => val,
                 ),
             ),
         );

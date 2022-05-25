@@ -1,9 +1,9 @@
 <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
+    <ol class="breadcrumb font-weight-bold py-4">
         <li class="breadcrumb-item" *ngIf="breadcrumbs?.length > 1">
             <a [routerLink]="['/']">Home</a>
         </li>
-        <li class="breadcrumb-item"
+        <li class="breadcrumb-item text-muted"
             *ngFor="let breadcrumb of tail(breadcrumbs); last as isLast; first as isFirst"
             [attr.aria-current]="isLast">
             <ng-container *ngIf="isLast && !linkLast; else link">{{ breadcrumb.name }}</ng-container>

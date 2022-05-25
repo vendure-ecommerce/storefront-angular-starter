@@ -1,7 +1,9 @@
-.header {
-    background-color: rgba(255, 255, 255, 0.9);
-    border-bottom: 1px solid #e9ecef;
+@import "variables";
 
+.header {
+    background: rgb(255,255,255);
+    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgb(245, 249, 250) 100%);
+    padding: $spacer 0 0 0;
     > .container {
         display: flex;
         align-items: center;
@@ -14,11 +16,22 @@
     align-items: center;
 
     img.logo {
-        max-height: 50px;
+        max-height: 42px;
+        animation: hue-rotate 10s infinite;
     }
 
     &:link, &:visited {
         color: #0e95c7;
         font-size: 22px;
     }
+}
+
+@keyframes hue-rotate {
+  0% {
+    filter: hue-rotate(0deg) brightness(0.9);
+  }
+
+  100% {
+    filter: hue-rotate(360deg) brightness(0.9);
+  }
 }

@@ -2,7 +2,7 @@
     <div class="main-image">
         <img *ngIf="selectedAsset" [src]="selectedAsset | assetPreview:540"
              #mainPreview
-             class="img-fluid main-preview"
+             class="img-fluid main-preview rounded-lg"
              height="500"
              (click)="openImage(selectedAsset.id)">
     </div>
