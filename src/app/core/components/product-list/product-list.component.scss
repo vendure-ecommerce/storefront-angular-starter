@@ -72,6 +72,6 @@
 
     &.show {
         width: 1rem;
-        margin-left: $spacer / 2;
+        margin-left: calc($spacer / 2);
     }
 }
