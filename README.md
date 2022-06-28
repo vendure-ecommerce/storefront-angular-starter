@@ -33,6 +33,18 @@ To deploy this storefront in a production environment, take the following steps:
     ```
 3. You then need to build for production using the `build:ssr` npm script. This can be done either locally or on your production server, depending on your preferred workflow.
 4. The built artifacts will be found in the `dist/` directory. The command to run the storefront as a server-rendered app is `node dist/server/main.js`. This will start a node server running on port 4000. You should configure your webserver to pass requests arriving on port 80 to `localhost:4000`.
+5. In the Vender server config, configure the `EmailPlugin` to point to the correct routes used by this storefront:
+   ```ts
+   EmailPlugin.init({
+     // ...
+     globalTemplateVars: {
+       fromAddress: '"Example_Server" <noreply@example.com>',
+       verifyEmailAddressUrl: 'https://your-domain.com/account/verify',
+       passwordResetUrl: 'https://your-domain.com/account/reset-password',
+       changeEmailAddressUrl: 'https://your-domain.com/account/change-email-address',
+     }
+   })
+   ```
 
 ### Building for demo.vendure.io
 
