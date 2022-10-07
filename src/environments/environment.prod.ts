@@ -5,4 +5,5 @@ export const environment = {
     shopApiPath: 'shop-api',
     baseHref: '/storefront/',
     tokenMethod: 'cookie',
+    razorpayId:""
 };

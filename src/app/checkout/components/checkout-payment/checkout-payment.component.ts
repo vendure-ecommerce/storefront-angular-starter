@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -25,7 +25,11 @@ export class CheckoutPaymentComponent implements OnInit {
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private router: Router,
-                private route: ActivatedRoute) { }
+                private route: ActivatedRoute,
+                private cd: ChangeDetectorRef,
+                private zone: NgZone
+
+                ) { }
 
     ngOnInit() {
         this.paymentMethods$ = this.dataService.query<GetEligiblePaymentMethods.Query>(GET_ELIGIBLE_PAYMENT_METHODS)

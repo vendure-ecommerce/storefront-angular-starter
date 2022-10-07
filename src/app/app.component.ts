@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { StateService } from './core/providers/state/state.service';
 
+
 @Component({
     selector: 'sf-root',
     templateUrl: './app.component.html',
@@ -16,6 +17,7 @@ export class AppComponent implements OnInit {
 
     constructor(private router: Router,
                 private stateService: StateService) {
+
     }
 
     ngOnInit(): void {

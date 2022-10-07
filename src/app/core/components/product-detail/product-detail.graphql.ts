@@ -10,6 +10,14 @@ export const GET_PRODUCT_DETAIL = gql`
             name
             description
             variants {
+                facetValues{
+                    id
+                    languageCode
+                    name
+                    facet{
+                      name
+                    }
+                }
                 id
                 name
                 options {
@@ -26,6 +34,14 @@ export const GET_PRODUCT_DETAIL = gql`
             assets {
                 ...Asset
             }
+            facetValues{
+                id
+                languageCode
+                name
+                facet{
+                  name
+                }
+            }
             collections {
                 id
                 slug
@@ -39,6 +55,8 @@ export const GET_PRODUCT_DETAIL = gql`
     }
     ${ASSET_FRAGMENT}
 `;
+
+
 
 export const ADD_TO_CART = gql`
     mutation AddToCart($variantId: ID!, $qty: Int!) {
