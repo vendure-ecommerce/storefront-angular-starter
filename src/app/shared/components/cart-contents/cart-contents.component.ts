@@ -5,7 +5,7 @@ import { Cart, CartFragment, GetActiveOrder } from '../../../common/generated-ty
 @Component({
     selector: 'vsf-cart-contents',
     templateUrl: './cart-contents.component.html',
-    styleUrls: ['./cart-contents.component.scss'],
+    // styleUrls: ['./cart-contents.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartContentsComponent {

@@ -5,7 +5,7 @@ import { StateService } from '../../providers/state/state.service';
 @Component({
     selector: 'vsf-mobile-menu-toggle',
     templateUrl: './mobile-menu-toggle.component.html',
-    styleUrls: ['./mobile-menu-toggle.component.scss'],
+    // styleUrls: ['./mobile-menu-toggle.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileMenuToggleComponent {

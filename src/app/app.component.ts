@@ -7,12 +7,27 @@ import { StateService } from './core/providers/state/state.service';
 @Component({
     selector: 'sf-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
+    // styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
     cartDrawerVisible$: Observable<boolean>;
     mobileNavVisible$: Observable<boolean>;
     isHomePage$: Observable<boolean>;
+
+    navigation = {
+        support: [
+            { name: 'Help', href: '#' },
+            { name: 'Track order', href: '#' },
+            { name: 'Shipping', href: '#' },
+            { name: 'Returns', href: '#' },
+        ],
+        company: [
+            { name: 'About', href: '#' },
+            { name: 'Blog', href: '#' },
+            { name: 'Corporate responsibility', href: '#' },
+            { name: 'Press', href: '#' },
+        ],
+    };
 
     constructor(private router: Router,
                 private stateService: StateService) {

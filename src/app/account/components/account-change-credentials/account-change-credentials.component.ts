@@ -8,7 +8,7 @@ import { CHANGE_EMAIL_ADDRESS, CHANGE_PASSWORD } from './account-change-credenti
 @Component({
     selector: 'vsf-account-change-credentials',
     templateUrl: './account-change-credentials.component.html',
-    styleUrls: ['./account-change-credentials.component.scss'],
+    // styleUrls: ['./account-change-credentials.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountChangeCredentialsComponent {

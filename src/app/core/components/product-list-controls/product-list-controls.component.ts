@@ -17,7 +17,7 @@ export interface FacetWithValues {
 @Component({
     selector: 'vsf-product-list-controls',
     templateUrl: './product-list-controls.component.html',
-    styleUrls: ['./product-list-controls.component.scss'],
+    // styleUrls: ['./product-list-controls.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductListControlsComponent implements OnChanges {

@@ -38,7 +38,7 @@ export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Frag
 @Component({
     selector: 'vsf-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
-    styleUrls: ['./checkout-shipping.component.scss'],
+    // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutShippingComponent implements OnInit {

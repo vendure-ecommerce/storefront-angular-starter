@@ -8,7 +8,7 @@ export type AssetWithDimensions = Pick<Asset.Fragment, 'id' | 'preview' | 'width
 @Component({
     selector: 'vsf-asset-gallery',
     templateUrl: './asset-gallery.component.html',
-    styleUrls: ['./asset-gallery.component.scss'],
+    // styleUrls: ['./asset-gallery.component.scss'],
 })
 export class AssetGalleryComponent implements OnInit {
     @Input() assets: AssetWithDimensions[] = [];

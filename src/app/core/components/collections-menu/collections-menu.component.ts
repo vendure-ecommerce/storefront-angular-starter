@@ -23,7 +23,7 @@ import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
 @Component({
     selector: 'vsf-collections-menu',
     templateUrl: './collections-menu.component.html',
-    styleUrls: ['./collections-menu.component.scss'],
+    // styleUrls: ['./collections-menu.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionsMenuComponent implements OnInit, OnDestroy {
@@ -44,9 +44,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
                 private viewContainerRef: ViewContainerRef) { }
 
     ngOnInit() {
-        this.collectionTree$ = this.dataService.query<GetCollections.Query, GetCollections.Variables>(GET_COLLECTIONS, {
-            options: {},
-        }).pipe(
+        this.collectionTree$ = this.dataService.query<GetCollections.Query, GetCollections.Variables>(GET_COLLECTIONS).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
 
@@ -90,8 +88,9 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
     }
 
     onMouseEnter(collection: TreeNode<GetCollections.Items>) {
-        this.setActiveCollection$.next(collection);
-        this.overlayIsOpen$.next(true);
+        // this.setActiveCollection$.next(collection);
+        // this.overlayIsOpen$.next(true);
+        // TODO: re-enable this
     }
 
     close(event: any) {

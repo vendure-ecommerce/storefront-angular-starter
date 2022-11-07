@@ -8,7 +8,7 @@ import { REGISTER } from './register.graphql';
 @Component({
     selector: 'vsf-register',
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
+    // styleUrls: ['./register.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {

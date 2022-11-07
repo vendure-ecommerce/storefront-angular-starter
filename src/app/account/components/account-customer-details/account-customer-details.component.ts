@@ -12,7 +12,7 @@ import { UPDATE_CUSTOMER_DETAILS } from './account-customer-details.graphql';
 @Component({
     selector: 'vsf-account-customer-details',
     templateUrl: './account-customer-details.component.html',
-    styleUrls: ['./account-customer-details.component.scss'],
+    // styleUrls: ['./account-customer-details.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountCustomerDetailsComponent implements OnInit {

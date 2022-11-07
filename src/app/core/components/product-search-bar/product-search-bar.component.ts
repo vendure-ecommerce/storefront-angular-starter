@@ -7,7 +7,7 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
     selector: 'vsf-product-search-bar',
     templateUrl: './product-search-bar.component.html',
-    styleUrls: ['./product-search-bar.component.scss'],
+    // styleUrls: ['./product-search-bar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductSearchBarComponent implements OnInit, OnDestroy {

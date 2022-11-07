@@ -6,7 +6,7 @@ import { DataService } from '../../../core/providers/data/data.service';
 @Component({
     selector: 'vsf-address-card',
     templateUrl: './address-card.component.html',
-    styleUrls: ['./address-card.component.scss'],
+    // styleUrls: ['./address-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressCardComponent {

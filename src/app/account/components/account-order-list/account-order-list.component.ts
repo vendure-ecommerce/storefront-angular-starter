@@ -10,7 +10,7 @@ import { GET_ORDER_LIST } from './account-order-list.graphql';
 @Component({
     selector: 'vsf-account-order-list',
     templateUrl: './account-order-list.component.html',
-    styleUrls: ['./account-order-list.component.scss'],
+    // styleUrls: ['./account-order-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountOrderListComponent implements OnInit {

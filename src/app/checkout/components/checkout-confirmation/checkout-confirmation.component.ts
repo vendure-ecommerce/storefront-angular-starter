@@ -14,7 +14,7 @@ import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
 @Component({
     selector: 'vsf-checkout-confirmation',
     templateUrl: './checkout-confirmation.component.html',
-    styleUrls: ['./checkout-confirmation.component.scss'],
+    // styleUrls: ['./checkout-confirmation.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutConfirmationComponent implements OnInit {

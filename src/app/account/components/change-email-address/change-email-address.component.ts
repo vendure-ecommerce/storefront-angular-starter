@@ -10,7 +10,7 @@ import { VERIFY_CHANGE_EMAIL_ADDRESS } from './change-email-address.graphql';
 @Component({
     selector: 'vsf-change-email-address',
     templateUrl: './change-email-address.component.html',
-    styleUrls: ['./change-email-address.component.scss'],
+    // styleUrls: ['./change-email-address.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ChangeEmailAddressComponent implements OnInit {

@@ -1,7 +1,12 @@
-@import "bootstrap";
+// @import "bootstrap";
 @import "~@angular/cdk/overlay-prebuilt";
 
 @import "variables";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 
 .loading-placeholder {
     position: relative;

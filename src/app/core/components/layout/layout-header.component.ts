@@ -16,7 +16,7 @@ import { bufferTime, filter, map } from 'rxjs/operators';
 @Component({
     selector: 'vsf-layout-header',
     template: `<div class="floating-container" #floatingContainer><ng-content></ng-content></div>`,
-    styleUrls: ['./layout-header.component.scss'],
+    // styleUrls: ['./layout-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {

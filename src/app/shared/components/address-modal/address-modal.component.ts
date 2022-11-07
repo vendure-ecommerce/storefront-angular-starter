@@ -12,7 +12,7 @@ import { CREATE_ADDRESS } from './address-modal.graphql';
 @Component({
     selector: 'vsf-address-modal',
     templateUrl: './address-modal.component.html',
-    styleUrls: ['./address-modal.component.scss'],
+    // styleUrls: ['./address-modal.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class AddressModalComponent implements Dialog<Address.Fragment>, OnInit {

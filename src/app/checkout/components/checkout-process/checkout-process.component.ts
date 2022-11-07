@@ -12,7 +12,7 @@ import { GET_NEXT_ORDER_STATES, TRANSITION_TO_ADDING_ITEMS } from './checkout-pr
 @Component({
     selector: 'vsf-checkout-process',
     templateUrl: './checkout-process.component.html',
-    styleUrls: ['./checkout-process.component.scss'],
+    // styleUrls: ['./checkout-process.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutProcessComponent implements OnInit {

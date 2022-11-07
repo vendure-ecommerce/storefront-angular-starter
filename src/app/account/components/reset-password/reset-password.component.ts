@@ -10,7 +10,7 @@ import { RESET_PASSWORD } from './reset-password.graphql';
 @Component({
     selector: 'vsf-reset-password',
     templateUrl: './reset-password.component.html',
-    styleUrls: ['./reset-password.component.scss'],
+    // styleUrls: ['./reset-password.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent {

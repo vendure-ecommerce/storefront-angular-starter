@@ -12,7 +12,7 @@ import { map } from 'rxjs/operators';
 @Component({
     selector: 'vsf-checkout-payment',
     templateUrl: './checkout-payment.component.html',
-    styleUrls: ['./checkout-payment.component.scss'],
+    // styleUrls: ['./checkout-payment.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutPaymentComponent implements OnInit {

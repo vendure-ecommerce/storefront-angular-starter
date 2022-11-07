@@ -11,7 +11,7 @@ import { SIGN_OUT } from './account.graphql';
 @Component({
     selector: 'vsf-account',
     templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss'],
+    // styleUrls: ['./account.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent {

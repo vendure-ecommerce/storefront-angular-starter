@@ -14,7 +14,7 @@ import { UPDATE_ADDRESS } from './account-address-detail.graphql';
 @Component({
     selector: 'vsf-account-address-detail',
     templateUrl: './account-address-detail.component.html',
-    styleUrls: ['./account-address-detail.component.scss'],
+    // styleUrls: ['./account-address-detail.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountAddressDetailComponent implements OnInit {

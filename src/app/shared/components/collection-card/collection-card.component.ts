@@ -7,7 +7,7 @@ import { AssetPreviewPipe } from '../../pipes/asset-preview.pipe';
 @Component({
     selector: 'vsf-collection-card',
     templateUrl: './collection-card.component.html',
-    styleUrls: ['./collection-card.component.scss'],
+    // styleUrls: ['./collection-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionCardComponent implements OnChanges {

@@ -5,7 +5,7 @@ import { GetCollection } from '../../../common/generated-types';
 @Component({
     selector: 'vsf-collection-breadcrumbs',
     templateUrl: './collection-breadcrumbs.component.html',
-    styleUrls: ['./collection-breadcrumbs.component.scss'],
+    // styleUrls: ['./collection-breadcrumbs.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CollectionBreadcrumbsComponent {
