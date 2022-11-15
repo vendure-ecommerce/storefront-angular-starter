@@ -22,7 +22,7 @@ export class CheckoutGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
         const orderState$ = this.dataService.query<GetOrderForCheckout.Query>(GET_ORDER_FOR_CHECKOUT, undefined, 'cache-first').pipe(
-            map(data => data.activeOrder ? data.activeOrder.state : ''),
+            map(data => data.activeOrder ? data.activeOrder.state : 'AddingItems'),
         );
         const signedIn$ = this.stateService.select(state => state.signedIn);
         return combineLatest(orderState$, signedIn$).pipe(
