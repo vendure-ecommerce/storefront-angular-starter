@@ -23,6 +23,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     selectedVariant: GetProductDetail.Variants;
     qty = 1;
     breadcrumbs: GetProductDetail.Breadcrumbs[] | null = null;
+    inFlight = false;
     @ViewChild('addedToCartTemplate', {static: true})
     private addToCartTemplate: TemplateRef<any>;
     private sub: Subscription;
@@ -68,10 +69,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     }
 
     addToCart(variant: GetProductDetail.Variants, qty: number) {
+        this.inFlight = true;
         this.dataService.mutate<AddToCart.Mutation, AddToCart.Variables>(ADD_TO_CART, {
             variantId: variant.id,
             qty,
         }).subscribe(({addItemToOrder}) => {
+            this.inFlight = false;
             switch (addItemToOrder.__typename) {
                 case 'Order':
                     this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);

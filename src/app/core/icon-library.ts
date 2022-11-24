@@ -8,13 +8,13 @@ import {
 import {
     faBars,
     faCreditCard,
-    faFilter,
+    faFilter, faHeart,
     faHome,
     faMinus,
     faPlus,
     faSadCry,
     faSearch,
-    faShoppingCart,
+    faShoppingCart, faStar,
     faTimes,
     faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -40,5 +40,7 @@ export function buildIconLibrary(library: FaIconLibrary) {
         faFilter,
         faBars,
         faHome,
+        faHeart,
+        faStar,
     );
 }
