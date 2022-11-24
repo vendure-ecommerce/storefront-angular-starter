@@ -9,6 +9,7 @@ import {
     faBars,
     faCreditCard,
     faFilter,
+    faHome,
     faMinus,
     faPlus,
     faSadCry,
@@ -38,5 +39,6 @@ export function buildIconLibrary(library: FaIconLibrary) {
         faSadCry,
         faFilter,
         faBars,
+        faHome,
     );
 }
