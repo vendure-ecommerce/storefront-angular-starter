@@ -16,7 +16,7 @@ import { bufferTime, filter, map } from 'rxjs/operators';
 @Component({
     selector: 'vsf-layout-header',
     template: `<div class="floating-container" #floatingContainer><ng-content></ng-content></div>`,
-    // styleUrls: ['./layout-header.component.scss'],
+    styleUrls: ['./layout-header.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
@@ -47,7 +47,7 @@ export class LayoutHeaderComponent implements AfterViewInit, OnDestroy {
     }
 
     private setUpScrollHandler(_window: Window) {
-        this.subscription = fromEvent(_window, 'scroll').pipe(
+        this.subscription = fromEvent(_window, 'scroll', { passive: true }).pipe(
             map(() => _window.scrollY),
             bufferTime(250),
             filter(val => 1 < val.length),
