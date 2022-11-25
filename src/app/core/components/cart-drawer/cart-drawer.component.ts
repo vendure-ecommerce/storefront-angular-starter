@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { merge, Observable } from 'rxjs';
 import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 
@@ -16,9 +16,9 @@ import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from '.
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartDrawerComponent implements OnInit {
-    @HostBinding('class.visible')
     @Input() visible = false;
     @Output() close = new EventEmitter<void>();
+    @ViewChild('overlay') private overlayRef: ElementRef<HTMLDivElement>;
 
     cart$: Observable<GetActiveOrder.ActiveOrder | null | undefined>;
     isEmpty$: Observable<boolean>;
@@ -46,6 +46,12 @@ export class CartDrawerComponent implements OnInit {
             this.adjustItemQuantity(event.itemId, event.quantity);
         } else {
             this.removeItem(event.itemId);
+        }
+    }
+
+    overlayClick(event: MouseEvent) {
+        if (event.target === this.overlayRef.nativeElement) {
+            this.close.emit();
         }
     }
 

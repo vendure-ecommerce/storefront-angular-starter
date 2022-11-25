@@ -1,15 +1,27 @@
-<div *ngIf="cart;" class="cart-contents">
-    <div class="items">
+<div *ngIf="cart" class="flow-root">
+    <ul role="list" class="divide-y divide-gray-200">
         <ng-container *ngFor="let line of cart.lines; trackBy: trackByFn">
-            <div class="item" [class.has-discount]="isDiscounted(line)">
-                <div class="thumb">
-                    <img [src]="line.featuredAsset?.preview + '?preset=tiny'" class="rounded">
+            <li class="py-6 flex">
+                <div class="flex-shrink-0 w-24 h-24 border border-gray-200 rounded-md overflow-hidden">
+                    <img [src]="line.featuredAsset | assetPreview:'thumb'" [alt]="line.productVariant.name"
+                         class="rounded"/>
                 </div>
-                <div class="details">
-                    <div class="name">{{ line.productVariant?.name }}</div>
-                    <div class="figures">
-                        <div class="price">{{ line.unitPriceWithTax | formatPrice }}</div>
-                        <div class="qty-controls">
+
+                <div class="ml-4 flex-1 flex flex-col">
+                    <div>
+                        <div class="flex justify-between text-base font-medium text-gray-900">
+                            <h3>
+                                <a [routerLink]="['/products', line.productVariant]">
+                                    {{ line.productVariant.name }}
+                                </a>
+                            </h3>
+                            <p class="ml-4">
+                                {{ line.linePriceWithTax | formatPrice }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex items-center justify-between text-sm text-gray-600">
+                        <div class="flex space-x-4">
                             <button class="btn btn-sm"
                                     *ngIf="canAdjustQuantities"
                                     (click)="decrement(line)">
@@ -23,35 +35,14 @@
                             </button>
                         </div>
                         <div class="total">
-                            <div class="list-price">{{ line.linePriceWithTax | formatPrice }}</div>
-                            <div class="discounted">
-                                {{ line.discountedLinePriceWithTax | formatPrice }}
+                            <div class="">
+                                {{ line.unitPriceWithTax | formatPrice }}
                             </div>
                         </div>
-
                     </div>
                 </div>
-            </div>
+            </li>
         </ng-container>
-    </div>
-    <div class="order-adjustments" *ngIf="cart.discounts.length">
-        Order adjustments:
-        <div class="adjustment" *ngFor="let discount of cart.discounts">
-            <div>{{ discount.description }}</div>
-            <div>{{ discount.amountWithTax | formatPrice }}</div>
-        </div>
-    </div>
-    <div class="shipping">
-        <div class="shipping-price">
-            <span>Shipping:</span>
-            <span>{{ cart.shippingWithTax | formatPrice }}</span>
-        </div>
-        <div class="shipping-method" *ngFor="let shippingLine of cart.shippingLines">
-            {{ shippingLine.shippingMethod.name }}
-        </div>
-    </div>
-    <div class="totals">
-        <span>Total:</span>
-        <span>{{ cart.totalWithTax | formatPrice }}</span>
-    </div>
+
+    </ul>
 </div>
