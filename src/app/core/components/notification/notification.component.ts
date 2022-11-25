@@ -6,7 +6,7 @@ import { NotificationOptions, NOTIFICATION_OPTIONS } from '../../providers/notif
 @Component({
     selector: 'vsf-notification',
     templateUrl: './notification.component.html',
-    // styleUrls: ['./notification.component.scss'],
+    styleUrls: ['./notification.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationComponent {

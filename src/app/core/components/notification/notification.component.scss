@@ -1,21 +1,9 @@
 @import "variables";
 
 :host {
-    display: block;
     animation: fadeIn 0.3s ease-out forwards;
     &.remove {
         animation: fadeOut 0.2s ease-out forwards;
-    }
-}
-
-.toast-header {
-    &.error {
-        background-color: $danger;
-        color: $light;
-    }
-    &.success {
-        background-color: $success;
-        color: $light;
     }
 }
 

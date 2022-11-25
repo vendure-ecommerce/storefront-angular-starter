@@ -92,17 +92,21 @@
 </div>
 
 <ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
-    <div class="add-to-cart-notification">
-        <div class="thumb mr-2">
+    <div class="flex">
+        <div class="mr-2">
             <img
                 class="rounded"
                 [src]="(variant.featuredAsset?.preview || product.featuredAsset?.preview) + '?preset=tiny'"
                 alt="product thumbnail"
             />
         </div>
-        <div>{{ quantity }} x {{ variant.name }}</div>
+        <div class="text-sm">{{ quantity }} x {{ variant.name }}</div>
     </div>
-    <button class="btn btn-sm btn-outline-primary btn-block rounded" (click)="viewCartFromNotification(close)">
+    <div class="flex justify-end">
+    <button type="button"
+            (click)="viewCartFromNotification(close)"
+            class="inline-flex items-center rounded border border-transparent bg-primary-100 px-2.5 py-1.5 text-xs font-medium text-primary-700 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
         View cart
     </button>
+    </div>
 </ng-template>
