@@ -82,7 +82,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                         this.notificationService.notify({
                             title: 'Added to cart',
                             type: 'info',
-                            duration: 3000,
+                            duration: 3000000,
                             templateRef: this.addToCartTemplate,
                             templateContext: {
                                 variant,

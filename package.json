@@ -37,7 +37,6 @@
     "@nguniversal/express-engine": "^13.1.1",
     "@tailwindcss/forms": "^0.5.3",
     "apollo-angular": "^3.0.1",
-    "bootstrap": "^4.5.2",
     "compression": "^1.7.4",
     "core-js": "^3.6.5",
     "express": "^4.15.2",

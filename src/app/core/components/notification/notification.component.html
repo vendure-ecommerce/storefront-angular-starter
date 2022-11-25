@@ -1,6 +1,6 @@
-<div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header" [ngClass]="options.type">
-        <strong class="mr-auto">{{ options.title }}</strong>
+<div class="pointer-events-auto w-full max-w-sm overflow-hidden rounded bg-white shadow-lg ring-1 ring-black ring-opacity-5" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="flex justify-between" [ngClass]="options.type">
+        <div class="font-bold">{{ options.title }}</div>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close" (click)="close.next()">
             <span aria-hidden="true">&times;</span>
         </button>
