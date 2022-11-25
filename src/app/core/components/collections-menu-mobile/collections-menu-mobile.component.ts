@@ -3,12 +3,14 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetCollections } from '../../../common/generated-types';
+import { GetCollectionsQuery, GetCollectionsQueryVariables } from '../../../common/generated-types';
 import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
 import { DataService } from '../../providers/data/data.service';
 import { StateService } from '../../providers/state/state.service';
 import { arrayToTree, RootNode, TreeNode } from '../collections-menu/array-to-tree';
 
+
+type CollectionItem = GetCollectionsQuery['collections']['items'][number];
 @Component({
     selector: 'vsf-collections-menu-mobile',
     templateUrl: './collections-menu-mobile.component.html',
@@ -19,7 +21,7 @@ export class CollectionsMenuMobileComponent implements OnInit {
     @HostBinding('class.visible')
     @Input() visible = false;
 
-    collectionTree$: Observable<RootNode<GetCollections.Items>>;
+    collectionTree$: Observable<RootNode<CollectionItem>>;
     selected0: string | null = null;
     selected1: string | null = null;
 
@@ -28,18 +30,18 @@ export class CollectionsMenuMobileComponent implements OnInit {
                 private dataService: DataService) { }
 
     ngOnInit() {
-        this.collectionTree$ = this.dataService.query<GetCollections.Query, GetCollections.Variables>(GET_COLLECTIONS, {
+        this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
             options: {},
         }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
     }
 
-    onL0Click(event: TouchEvent, collection: TreeNode<GetCollections.Items>) {
+    onL0Click(event: TouchEvent, collection: TreeNode<CollectionItem>) {
         this.expandOrNavigate(0, event, collection);
     }
 
-    onL1Click(event: TouchEvent, collection: TreeNode<GetCollections.Items>) {
+    onL1Click(event: TouchEvent, collection: TreeNode<CollectionItem>) {
         this.expandOrNavigate(1, event, collection);
     }
 
@@ -47,7 +49,7 @@ export class CollectionsMenuMobileComponent implements OnInit {
         this.stateService.setState('mobileNavMenuIsOpen', false);
     }
 
-    private expandOrNavigate(level: 0 | 1, event: TouchEvent, collection: TreeNode<GetCollections.Items>) {
+    private expandOrNavigate(level: 0 | 1, event: TouchEvent, collection: TreeNode<CollectionItem>) {
         if (collection.children.length && this.selected1 !== collection.id) {
             if (level === 0) {
                 this.selected0 = collection.id;

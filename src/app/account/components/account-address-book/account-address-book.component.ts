@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetCustomerAddresses } from '../../../common/generated-types';
+import { GetCustomerAddressesQuery } from '../../../common/generated-types';
 import { GET_CUSTOMER_ADDRESSES } from '../../../common/graphql/documents.graphql';
 import { DataService } from '../../../core/providers/data/data.service';
 
@@ -14,11 +14,11 @@ import { DataService } from '../../../core/providers/data/data.service';
 })
 export class AccountAddressBookComponent implements OnInit {
 
-    addresses$: Observable<GetCustomerAddresses.Addresses[] | undefined>;
+    addresses$: Observable<NonNullable<GetCustomerAddressesQuery['activeCustomer']>['addresses'] | undefined>;
     constructor(private dataService: DataService) { }
 
     ngOnInit() {
-        this.addresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
+        this.addresses$ = this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES).pipe(
             map(data => data.activeCustomer && data.activeCustomer.addresses),
         );
     }

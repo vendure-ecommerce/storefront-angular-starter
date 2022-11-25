@@ -4,16 +4,19 @@ import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 
 import {
-    Address,
+    AddressFragment,
     CreateAddressInput,
-    GetAvailableCountries,
-    GetCustomerAddresses,
-    GetEligibleShippingMethods,
-    GetShippingAddress,
-    SetCustomerForOrder,
-    SetShippingAddress,
-    SetShippingMethod,
-    TransitionToArrangingPayment
+    GetAvailableCountriesQuery,
+    GetCustomerAddressesQuery,
+    GetEligibleShippingMethodsQuery,
+    GetShippingAddressQuery,
+    SetCustomerForOrderMutation,
+    SetCustomerForOrderMutationVariables,
+    SetShippingAddressMutation,
+    SetShippingAddressMutationVariables,
+    SetShippingMethodMutation,
+    SetShippingMethodMutationVariables,
+    TransitionToArrangingPaymentMutation
 } from '../../../common/generated-types';
 import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../../common/graphql/documents.graphql';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
@@ -33,7 +36,7 @@ import {
     TRANSITION_TO_ARRANGING_PAYMENT,
 } from './checkout-shipping.graphql';
 
-export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Fragment, 'country'>> & { countryCode: string; };
+export type AddressFormValue = Pick<AddressFragment, Exclude<keyof AddressFragment, 'country'>> & { countryCode: string; };
 
 @Component({
     selector: 'vsf-checkout-shipping',
@@ -44,10 +47,10 @@ export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Frag
 export class CheckoutShippingComponent implements OnInit {
     @ViewChild('addressForm') addressForm: AddressFormComponent;
 
-    customerAddresses$: Observable<Address.Fragment[]>;
-    availableCountries$: Observable<GetAvailableCountries.AvailableCountries[]>;
-    eligibleShippingMethods$: Observable<GetEligibleShippingMethods.EligibleShippingMethods[]>;
-    shippingAddress$: Observable<GetShippingAddress.ShippingAddress | null | undefined>;
+    customerAddresses$: Observable<AddressFragment[]>;
+    availableCountries$: Observable<GetAvailableCountriesQuery['availableCountries']>;
+    eligibleShippingMethods$: Observable<GetEligibleShippingMethodsQuery['eligibleShippingMethods']>;
+    shippingAddress$: Observable<NonNullable<GetShippingAddressQuery['activeOrder']>['shippingAddress'] | null | undefined>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
     step: 'selectAddress' | 'customerDetails' | 'editAddress' | 'selectMethod' = 'selectAddress';
@@ -65,17 +68,17 @@ export class CheckoutShippingComponent implements OnInit {
 
     ngOnInit() {
         this.signedIn$ = this.stateService.select(state => state.signedIn);
-        this.customerAddresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
+        this.customerAddresses$ = this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES).pipe(
             map(data => data.activeCustomer ? data.activeCustomer.addresses || [] : []),
         );
-        this.availableCountries$ = this.dataService.query<GetAvailableCountries.Query>(GET_AVAILABLE_COUNTRIES).pipe(
+        this.availableCountries$ = this.dataService.query<GetAvailableCountriesQuery>(GET_AVAILABLE_COUNTRIES).pipe(
             map(data => data.availableCountries),
         );
-        this.shippingAddress$ = this.dataService.query<GetShippingAddress.Query>(GET_SHIPPING_ADDRESS).pipe(
+        this.shippingAddress$ = this.dataService.query<GetShippingAddressQuery>(GET_SHIPPING_ADDRESS).pipe(
             map(data => data.activeOrder && data.activeOrder.shippingAddress),
         );
         this.eligibleShippingMethods$ = this.shippingAddress$.pipe(
-            switchMap(() => this.dataService.query<GetEligibleShippingMethods.Query>(GET_ELIGIBLE_SHIPPING_METHODS)),
+            switchMap(() => this.dataService.query<GetEligibleShippingMethodsQuery>(GET_ELIGIBLE_SHIPPING_METHODS)),
             map(data => data.eligibleShippingMethods),
         );
         combineLatest(this.signedIn$, this.customerAddresses$).pipe(
@@ -104,14 +107,13 @@ export class CheckoutShippingComponent implements OnInit {
             },
             closable: true,
         }).pipe(
-            switchMap(() => this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
+            switchMap(() => this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
         )
             .subscribe();
     }
 
-    editAddress(address: Address.Fragment) {
-        this.addressForm.addressForm.patchValue({ ...address, countryCode: address.country.code });
-        this.step = 'editAddress';
+    editAddress(address: AddressFragment) {
+        this.addressForm.addressForm.patchValue({...address, countryCode: address.country.code});
     }
 
     setCustomerDetails() {
@@ -121,9 +123,9 @@ export class CheckoutShippingComponent implements OnInit {
         this.step = 'editAddress';
     }
 
-    setShippingAddress(value: AddressFormValue | Address.Fragment) {
+    setShippingAddress(value: AddressFormValue | AddressFragment) {
         const input = this.valueToAddressInput(value);
-        this.dataService.mutate<SetShippingAddress.Mutation, SetShippingAddress.Variables>(SET_SHIPPING_ADDRESS, {
+        this.dataService.mutate<SetShippingAddressMutation, SetShippingAddressMutationVariables>(SET_SHIPPING_ADDRESS, {
             input,
         }).subscribe(data => {
             this.step = 'selectMethod';
@@ -137,11 +139,11 @@ export class CheckoutShippingComponent implements OnInit {
             this.stateService.select(state => state.signedIn).pipe(
                 mergeMap(signedIn => !signedIn ? this.setCustomerForOrder() || of({}) : of({})),
                 mergeMap(() =>
-                    this.dataService.mutate<SetShippingMethod.Mutation, SetShippingMethod.Variables>(SET_SHIPPING_METHOD, {
+                    this.dataService.mutate<SetShippingMethodMutation, SetShippingMethodMutationVariables>(SET_SHIPPING_METHOD, {
                         id: shippingMethodId,
                     }),
                 ),
-                mergeMap(() => this.dataService.mutate<TransitionToArrangingPayment.Mutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
+                mergeMap(() => this.dataService.mutate<TransitionToArrangingPaymentMutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
             ).subscribe((data) => {
                 this.router.navigate(['../payment'], { relativeTo: this.route });
             });
@@ -166,7 +168,7 @@ export class CheckoutShippingComponent implements OnInit {
         }
     }
 
-    private valueToAddressInput(value: AddressFormValue | Address.Fragment): CreateAddressInput {
+    private valueToAddressInput(value: AddressFormValue | AddressFragment): CreateAddressInput {
         return {
             city: value.city || '',
             company: value.company || '',
@@ -182,7 +184,7 @@ export class CheckoutShippingComponent implements OnInit {
         };
     }
 
-    private isFormValue(input: AddressFormValue | Address.Fragment): input is AddressFormValue {
+    private isFormValue(input: AddressFormValue | AddressFragment): input is AddressFormValue {
         return typeof (input as any).countryCode === 'string';
     }
 }

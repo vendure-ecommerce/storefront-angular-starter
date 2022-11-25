@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { SignIn } from '../../../common/generated-types';
+import { SignInMutation, SignInMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -28,7 +28,7 @@ export class SignInComponent {
                 private changeDetector: ChangeDetectorRef) {}
 
     signIn() {
-        this.dataService.mutate<SignIn.Mutation, SignIn.Variables>(SIGN_IN, {
+        this.dataService.mutate<SignInMutation, SignInMutationVariables>(SIGN_IN, {
             emailAddress: this.emailAddress,
             password: this.password,
             rememberMe: this.rememberMe,

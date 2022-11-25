@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { GetActiveCustomer } from '../../common/generated-types';
+import { GetActiveCustomerQuery } from '../../common/generated-types';
 import { GET_ACTIVE_CUSTOMER } from '../../common/graphql/documents.graphql';
 import { DataService } from '../../core/providers/data/data.service';
 import { StateService } from '../../core/providers/state/state.service';
@@ -19,7 +19,7 @@ export class AccountGuard implements CanActivate {
                 if (signedIn) {
                     return of(true);
                 } else {
-                    return this.dataService.query<GetActiveCustomer.Query>(GET_ACTIVE_CUSTOMER).pipe(
+                    return this.dataService.query<GetActiveCustomerQuery>(GET_ACTIVE_CUSTOMER).pipe(
                         map(data => !!data.activeCustomer),
                     );
                 }

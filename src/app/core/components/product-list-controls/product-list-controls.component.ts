@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SearchProducts } from '../../../common/generated-types';
+import { SearchProductsQuery } from '../../../common/generated-types';
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
 
 export interface FacetWithValues {
@@ -22,7 +22,7 @@ export interface FacetWithValues {
 })
 export class ProductListControlsComponent implements OnChanges {
     @Input() activeFacetValueIds: string[] = [];
-    @Input() facetValues: SearchProducts.FacetValues[] | null;
+    @Input() facetValues: SearchProductsQuery['search']['facetValues'] | null;
     @Input() totalResults = 0;
     facets: FacetWithValues[];
     manuallyExpanded = false;
@@ -65,7 +65,7 @@ export class ProductListControlsComponent implements OnChanges {
         return item.id;
     }
 
-    private groupFacetValues(facetValues: SearchProducts.FacetValues[] | null): FacetWithValues[] {
+    private groupFacetValues(facetValues: SearchProductsQuery['search']['facetValues'] | null): FacetWithValues[] {
         if (!facetValues) {
             return [];
         }

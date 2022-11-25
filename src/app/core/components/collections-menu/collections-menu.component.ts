@@ -14,11 +14,13 @@ import {
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, map, takeUntil } from 'rxjs/operators';
 
-import { GetCollections } from '../../../common/generated-types';
+import { GetCollectionsQuery, GetCollectionsQueryVariables } from '../../../common/generated-types';
 import { GET_COLLECTIONS } from '../../../common/graphql/documents.graphql';
 import { DataService } from '../../../core/providers/data/data.service';
 
 import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
+
+type CollectionItem = GetCollectionsQuery['collections']['items'][number];
 
 @Component({
     selector: 'vsf-collections-menu',
@@ -28,14 +30,14 @@ import { arrayToTree, RootNode, TreeNode } from './array-to-tree';
 })
 export class CollectionsMenuComponent implements OnInit, OnDestroy {
 
-    collectionTree$: Observable<RootNode<GetCollections.Items>>;
-    activeCollection: TreeNode<GetCollections.Items> | null;
+    collectionTree$: Observable<RootNode<CollectionItem>>;
+    activeCollection: TreeNode<CollectionItem> | null;
 
     @ViewChild('menuTemplate', { read: TemplateRef, static: false }) menuTemplate: TemplateRef<any>;
 
     private closeFn: (() => any) | null = null;
     private overlayIsOpen$ = new Subject<boolean>();
-    private setActiveCollection$ = new Subject<TreeNode<GetCollections.Items>>();
+    private setActiveCollection$ = new Subject<TreeNode<CollectionItem>>();
     private destroy$ = new Subject();
 
     constructor(@Inject(DOCUMENT) private document: Document,
@@ -44,7 +46,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
                 private viewContainerRef: ViewContainerRef) { }
 
     ngOnInit() {
-        this.collectionTree$ = this.dataService.query<GetCollections.Query, GetCollections.Variables>(GET_COLLECTIONS).pipe(
+        this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
 
@@ -72,7 +74,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         this.destroy$.complete();
     }
 
-    onTopLevelClick(event: MouseEvent, collection: TreeNode<GetCollections.Items>) {
+    onTopLevelClick(event: MouseEvent, collection: TreeNode<CollectionItem>) {
         if (collection.children.length) {
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -87,7 +89,7 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         event.stopPropagation();
     }
 
-    onMouseEnter(collection: TreeNode<GetCollections.Items>) {
+    onMouseEnter(collection: TreeNode<CollectionItem>) {
         // this.setActiveCollection$.next(collection);
         // this.overlayIsOpen$.next(true);
         // TODO: re-enable this

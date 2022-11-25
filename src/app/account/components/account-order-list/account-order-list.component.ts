@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetOrderList, SortOrder } from '../../../common/generated-types';
+import { GetOrderListQuery, GetOrderListQueryVariables, SortOrder } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 
 import { GET_ORDER_LIST } from './account-order-list.graphql';
@@ -15,11 +15,11 @@ import { GET_ORDER_LIST } from './account-order-list.graphql';
 })
 export class AccountOrderListComponent implements OnInit {
 
-    orders$: Observable<GetOrderList.Items[] | undefined>;
+    orders$: Observable<NonNullable<GetOrderListQuery['activeCustomer']>['orders']['items'] | undefined>;
     constructor(private dataService: DataService) { }
 
     ngOnInit() {
-        this.orders$ = this.dataService.query<GetOrderList.Query, GetOrderList.Variables>(GET_ORDER_LIST, {
+        this.orders$ = this.dataService.query<GetOrderListQuery, GetOrderListQueryVariables>(GET_ORDER_LIST, {
             options: {
                 filter: {
                     active: {

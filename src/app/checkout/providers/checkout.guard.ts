@@ -3,7 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { GetOrderForCheckout } from '../../common/generated-types';
+import { GetOrderForCheckoutQuery } from '../../common/generated-types';
 import { DataService } from '../../core/providers/data/data.service';
 import { StateService } from '../../core/providers/state/state.service';
 import { CheckoutConfirmationComponent } from '../components/checkout-confirmation/checkout-confirmation.component';
@@ -21,7 +21,7 @@ export class CheckoutGuard implements CanActivate {
                 private stateService: StateService) {}
 
     canActivate(route: ActivatedRouteSnapshot): Observable<boolean> {
-        const orderState$ = this.dataService.query<GetOrderForCheckout.Query>(GET_ORDER_FOR_CHECKOUT, undefined, 'cache-first').pipe(
+        const orderState$ = this.dataService.query<GetOrderForCheckoutQuery>(GET_ORDER_FOR_CHECKOUT, undefined, 'cache-first').pipe(
             map(data => data.activeOrder ? data.activeOrder.state : ''),
         );
         const signedIn$ = this.stateService.select(state => state.signedIn);

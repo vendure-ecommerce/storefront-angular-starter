@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
-import { SearchProducts } from '../../../common/generated-types';
+import { SearchProductsQuery } from '../../../common/generated-types';
 
 @Component({
     selector: 'vsf-product-card',
@@ -10,5 +10,5 @@ import { SearchProducts } from '../../../common/generated-types';
 })
 export class ProductCardComponent {
 
-    @Input() product: SearchProducts.Items;
+    @Input() product: SearchProductsQuery['search']['items'][number];
 }

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { RequestPasswordReset } from '../../../common/generated-types';
+import { RequestPasswordResetMutation, RequestPasswordResetMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 
 import { REQUEST_PASSWORD_RESET } from './forgotten-password.graphql';
@@ -20,7 +20,7 @@ export class ForgottenPasswordComponent {
     }
 
     resetPassword() {
-        this.dataService.mutate<RequestPasswordReset.Mutation, RequestPasswordReset.Variables>(REQUEST_PASSWORD_RESET, {
+        this.dataService.mutate<RequestPasswordResetMutation, RequestPasswordResetMutationVariables>(REQUEST_PASSWORD_RESET, {
             emailAddress: this.emailAddress,
         }).subscribe(() => {
             this.submitted = true;

@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 
-import { ChangeEmailAddress, ChangePassword } from '../../../common/generated-types';
+import {
+    ChangeEmailAddressMutation,
+    ChangeEmailAddressMutationVariables,
+    ChangePasswordMutation,
+    ChangePasswordMutationVariables
+} from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 
 import { CHANGE_EMAIL_ADDRESS, CHANGE_PASSWORD } from './account-change-credentials.graphql';
@@ -18,10 +23,11 @@ export class AccountChangeCredentialsComponent {
     emailAddress = '';
     changeEmailAddressMessage = '';
 
-    constructor(private dataService: DataService, private changeDetectorRef: ChangeDetectorRef) { }
+    constructor(private dataService: DataService, private changeDetectorRef: ChangeDetectorRef) {
+    }
 
     changePassword() {
-        this.dataService.mutate<ChangePassword.Mutation, ChangePassword.Variables>(CHANGE_PASSWORD, {
+        this.dataService.mutate<ChangePasswordMutation, ChangePasswordMutationVariables>(CHANGE_PASSWORD, {
             old: this.currentPassword,
             new: this.newPassword,
         })
@@ -33,7 +39,7 @@ export class AccountChangeCredentialsComponent {
     }
 
     changeEmailAddress() {
-        this.dataService.mutate<ChangeEmailAddress.Mutation, ChangeEmailAddress.Variables>(CHANGE_EMAIL_ADDRESS, {
+        this.dataService.mutate<ChangeEmailAddressMutation, ChangeEmailAddressMutationVariables>(CHANGE_EMAIL_ADDRESS, {
             password: this.password,
             emailAddress: this.emailAddress,
         })

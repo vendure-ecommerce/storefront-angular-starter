@@ -5,8 +5,8 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
-import { DataService } from '../../providers/data/data.service';
 import { GetCollectionsQuery } from '../../../common/generated-types';
+import { DataService } from '../../providers/data/data.service';
 
 @Component({
     selector: 'vsf-home-page',

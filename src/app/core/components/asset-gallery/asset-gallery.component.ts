@@ -4,9 +4,9 @@ import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
 // import 'photoswipe/style.css';
 
-import { Asset } from '../../../common/generated-types';
+import { AssetFragment } from '../../../common/generated-types';
 
-export type AssetWithDimensions = Pick<Asset.Fragment, 'id' | 'preview' | 'width' | 'height'>;
+export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width' | 'height'>;
 
 @Component({
     selector: 'vsf-asset-gallery',

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { Cart, CartFragment, GetActiveOrder } from '../../../common/generated-types';
+import { CartFragment, GetActiveOrderQuery } from '../../../common/generated-types';
 
 @Component({
     selector: 'vsf-cart-contents',
@@ -9,15 +9,15 @@ import { Cart, CartFragment, GetActiveOrder } from '../../../common/generated-ty
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartContentsComponent {
-    @Input() cart: GetActiveOrder.ActiveOrder;
+    @Input() cart: GetActiveOrderQuery['activeOrder'];
     @Input() canAdjustQuantities = false;
     @Output() setQuantity = new EventEmitter<{ itemId: string; quantity: number; }>();
 
-    increment(item: Cart.Lines) {
+    increment(item: CartFragment['lines'][number]) {
         this.setQuantity.emit({ itemId: item.id, quantity: item.quantity + 1 });
     }
 
-    decrement(item: Cart.Lines) {
+    decrement(item: CartFragment['lines'][number]) {
         this.setQuantity.emit({ itemId: item.id, quantity: item.quantity - 1 });
     }
 
@@ -25,7 +25,7 @@ export class CartContentsComponent {
         return line.id;
     }
 
-    trackByDiscount(index: number, discount: Cart.Discounts) {
+    trackByDiscount(index: number, discount: CartFragment['discounts'][number]) {
         return discount.adjustmentSource;
     }
 
@@ -36,7 +36,7 @@ export class CartContentsComponent {
     /**
      * Filters out the Promotion adjustments for an OrderLine and aggregates the discount.
      */
-    getLinePromotions(adjustments: Cart.Discounts[]) {
+    getLinePromotions(adjustments: CartFragment['discounts']) {
         const groupedPromotions = adjustments.filter(a => a.type === 'PROMOTION')
             .reduce((groups, promotion) => {
                 if (!groups[promotion.description]) {
