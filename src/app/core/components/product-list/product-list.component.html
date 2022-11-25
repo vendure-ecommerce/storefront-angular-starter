@@ -21,6 +21,10 @@
         </ng-container>
     </ng-container>
 
+    <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8" *ngIf="searchTerm$ | async as term">
+        Results for <span class="font-medium">"{{ term }}"</span>
+    </h2>
+
     <div class="mt-6 grid sm:grid-cols-5 gap-x-4">
         <vsf-product-list-controls [facetValues]="facetValues"
                                    [activeFacetValueIds]="activeFacetValueIds$ | async"
