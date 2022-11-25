@@ -9,6 +9,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,

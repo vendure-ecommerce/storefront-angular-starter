@@ -23,15 +23,11 @@
               "src/robots.txt",
               "src/assets",
               "src/storefront-config.json",
-              "src/manifest.json",
-              {
-                "glob": "**/*",
-                "input": "./node_modules/photoswipe/dist/default-skin",
-                "output": "./assets"
-              }
+              "src/manifest.json"
             ],
             "styles": [
-              "src/styles/styles.scss"
+              "src/styles/styles.scss",
+              "./node_modules/photoswipe/dist/photoswipe.css"
             ],
             "scripts": [],
             "stylePreprocessorOptions": {
