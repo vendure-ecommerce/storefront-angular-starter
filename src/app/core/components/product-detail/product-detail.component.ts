@@ -15,6 +15,7 @@ import { NotificationService } from '../../providers/notification/notification.s
 import { StateService } from '../../providers/state/state.service';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
+import { ActiveService } from '../../providers/active/active.service';
 
 type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
 type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
@@ -22,12 +23,13 @@ type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][n
 @Component({
     selector: 'vsf-product-detail',
     templateUrl: './product-detail.component.html',
-    // styleUrls: ['./product-detail.component.scss'],
+    styleUrls: ['./product-detail.component.scss'],
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
     product: GetProductDetailQuery['product'];
     selectedAsset: { id: string; preview: string; };
+    qtyInCart: { [id: string]: number; } = {};
     selectedVariant: Variant;
     qty = 1;
     breadcrumbs: Collection['breadcrumbs'] | null = null;
@@ -39,6 +41,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private notificationService: NotificationService,
+                private activeService: ActiveService,
                 private route: ActivatedRoute) {
     }
 
@@ -68,6 +71,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
         });
+
+        this.activeService.activeOrder$.subscribe(order => {
+            this.qtyInCart = {};
+            for (const line of order?.lines ?? []) {
+                this.qtyInCart[line.productVariant.id] = line.quantity;
+            }
+        })
     }
 
     ngOnDestroy() {
@@ -90,7 +100,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                         this.notificationService.notify({
                             title: 'Added to cart',
                             type: 'info',
-                            duration: 3000000,
+                            duration: 3000,
                             templateRef: this.addToCartTemplate,
                             templateContext: {
                                 variant,

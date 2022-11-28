@@ -12,7 +12,8 @@ import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
-import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from './cart-drawer.graphql';
+import { ADJUST_ITEM_QUANTITY, REMOVE_ITEM_FROM_CART } from './cart-drawer.graphql';
+import { ActiveService } from '../../providers/active/active.service';
 
 @Component({
     selector: 'vsf-cart-drawer',
@@ -30,6 +31,7 @@ export class CartDrawerComponent implements OnInit {
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
+                private activeService: ActiveService,
                 private notificationService: NotificationService) {}
 
     ngOnInit() {
@@ -37,8 +39,7 @@ export class CartDrawerComponent implements OnInit {
             this.stateService.select(state => state.activeOrderId),
             this.stateService.select(state => state.signedIn),
         ).pipe(
-            switchMap(() => this.dataService.query<GetActiveOrderQuery, GetActiveOrderQueryVariables>(GET_ACTIVE_ORDER, {}, 'network-only')),
-            map(data => data.activeOrder),
+            switchMap(() => this.activeService.activeOrder$),
             shareReplay(1),
         );
         this.isEmpty$ = this.cart$.pipe(

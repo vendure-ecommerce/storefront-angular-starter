@@ -11,7 +11,7 @@ import { GET_CART_TOTALS } from './cart-toggle.graphql';
 @Component({
     selector: 'vsf-cart-toggle',
     templateUrl: './cart-toggle.component.html',
-    // styleUrls: ['./cart-toggle.component.scss'],
+    styleUrls: ['./cart-toggle.component.scss'],
 })
 export class CartToggleComponent implements OnInit {
     @Output() toggle = new EventEmitter<void>();

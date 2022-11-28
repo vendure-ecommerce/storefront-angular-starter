@@ -46,7 +46,11 @@
                         }"
                         (click)="addToCart(selectedVariant, qty)"
                     >
-                        Add to cart
+                        <div *ngIf="!qtyInCart[selectedVariant.id]; else inCartCount">Add to cart</div>
+                        <ng-template #inCartCount>
+                            <fa-icon icon="check" class="mr-2"></fa-icon>
+                            <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
+                        </ng-template>
                     </button>
 
                     <button
@@ -93,7 +97,7 @@
 
 <ng-template #addedToCartTemplate let-variant="variant" let-quantity="quantity" let-close="closeFn">
     <div class="flex">
-        <div class="mr-2">
+        <div class="mr-8">
             <img
                 class="rounded"
                 [src]="(variant.featuredAsset?.preview || product.featuredAsset?.preview) + '?preset=tiny'"

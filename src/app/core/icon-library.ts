@@ -6,7 +6,7 @@ import {
     faYoutube,
 } from '@fortawesome/free-brands-svg-icons';
 import {
-    faBars, faChevronRight,
+    faBars, faCheck, faChevronRight,
     faCreditCard,
     faFilter, faHeart,
     faHome,
@@ -43,5 +43,6 @@ export function buildIconLibrary(library: FaIconLibrary) {
         faHeart,
         faStar,
         faChevronRight,
+        faCheck,
     );
 }
