@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnIni
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
-import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import {
     AddressFragment,
@@ -10,7 +10,7 @@ import {
     GetAvailableCountriesQuery,
     GetCustomerAddressesQuery,
     GetEligibleShippingMethodsQuery,
-    GetShippingAddressQuery,
+    GetOrderShippingDataQuery,
     SetCustomerForOrderMutation,
     SetCustomerForOrderMutationVariables,
     SetShippingAddressMutation,
@@ -30,7 +30,7 @@ import { AddressModalComponent } from '../../../shared/components/address-modal/
 
 import {
     GET_ELIGIBLE_SHIPPING_METHODS,
-    GET_SHIPPING_ADDRESS,
+    GET_ORDER_SHIPPING_DATA,
     SET_CUSTOMER_FOR_ORDER,
     SET_SHIPPING_ADDRESS,
     SET_SHIPPING_METHOD,
@@ -51,7 +51,7 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
     customerAddresses$: Observable<AddressFragment[]>;
     availableCountries$: Observable<GetAvailableCountriesQuery['availableCountries']>;
     eligibleShippingMethods$: Observable<GetEligibleShippingMethodsQuery['eligibleShippingMethods']>;
-    shippingAddress$: Observable<NonNullable<GetShippingAddressQuery['activeOrder']>['shippingAddress'] | null | undefined>;
+    shippingAddress$: Observable<NonNullable<GetOrderShippingDataQuery['activeOrder']>['shippingAddress']>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
     contactForm: FormGroup;
@@ -80,7 +80,8 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
         this.availableCountries$ = this.dataService.query<GetAvailableCountriesQuery>(GET_AVAILABLE_COUNTRIES).pipe(
             map(data => data.availableCountries),
         );
-        this.shippingAddress$ = this.dataService.query<GetShippingAddressQuery>(GET_SHIPPING_ADDRESS).pipe(
+        const shippingData$ = this.dataService.query<GetOrderShippingDataQuery>(GET_ORDER_SHIPPING_DATA);
+        this.shippingAddress$ = shippingData$.pipe(
             map(data => data.activeOrder && data.activeOrder.shippingAddress),
         );
         this.eligibleShippingMethods$ = this.shippingAddress$.pipe(
@@ -88,12 +89,18 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
             map(data => data.eligibleShippingMethods),
         );
 
-        // this.contactForm.valueChanges.pipe(
-        //     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-        //     takeUntil(this.destroy$)
-        // ).subscribe(val => {
-        //     console.log(val);
-        // })
+        shippingData$.pipe(
+            map(data => data.activeOrder && data.activeOrder.customer),
+            takeUntil(this.destroy$)
+        ).subscribe(customer => {
+            if (customer) {
+                this.contactForm.patchValue({
+                    firstName: customer.firstName,
+                    lastName: customer.lastName,
+                    emailAddress: customer.emailAddress,
+                }, {emitEvent: false});
+            }
+        });
     }
 
     ngOnDestroy() {
@@ -131,6 +138,12 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
 
     onCustomerFormBlur() {
         this.setCustomerForOrder()?.subscribe();
+    }
+
+    onAddressFormBlur(addressForm: FormGroup) {
+        if (addressForm.dirty && addressForm.valid) {
+            this.setShippingAddress(addressForm.value);
+        }
     }
 
     setShippingAddress(value: AddressFormValue | AddressFragment) {

@@ -1,0 +1,21 @@
+<dl class="border-t mt-6 border-gray-200 py-6 space-y-6">
+    <div class="flex items-center justify-between">
+        <dt class="text-sm">Subtotal</dt>
+        <dd class="text-sm font-medium text-gray-900">{{ cart.subTotalWithTax | formatPrice }}</dd>
+    </div>
+    <div class="flex items-center justify-between">
+        <dt class="text-sm">
+            Shipping
+            <span class="text-gray-600">(<span class="" *ngFor="let line of cart.shippingLines">{{ line.shippingMethod.name }}</span>)</span>
+        </dt>
+        <dd class="text-sm font-medium text-gray-900">
+            {{ cart.shippingWithTax | formatPrice }}
+        </dd>
+    </div>
+    <div class="flex items-center justify-between border-t border-gray-200 pt-6">
+        <dt class="text-base font-medium">Total</dt>
+        <dd class="text-base font-medium text-gray-900">
+            {{ cart.totalWithTax | formatPrice }}
+        </dd>
+    </div>
+</dl>

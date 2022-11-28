@@ -21,12 +21,6 @@ export const CART_FRAGMENT = gql`
         code
         state
         active
-        customer {
-            id
-            firstName
-            lastName
-            emailAddress
-        }
         lines {
             id
             featuredAsset {

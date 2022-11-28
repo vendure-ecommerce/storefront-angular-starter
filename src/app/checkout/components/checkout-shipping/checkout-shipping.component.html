@@ -88,12 +88,9 @@
     </h2>
     <div class="card-body">
         <vsf-address-form #addressForm
+                          (focusout)="onAddressFormBlur(addressForm.addressForm)"
                           [address]="shippingAddress$ | async"
                           [availableCountries]="availableCountries$ | async"></vsf-address-form>
-        <button class="btn btn-secondary mt-3"
-                [disabled]="addressForm.addressForm.invalid"
-                (click)="setShippingAddress(addressForm.addressForm.value)">Send to this address
-        </button>
     </div>
 </div>
 <div class="mt-10 border-t border-gray-200 pt-10">
@@ -117,7 +114,9 @@
         </div>
     </vsf-radio-card-fieldset>
 </div>
-<button class="btn btn-secondary mt-3"
-        [disabled]="!shippingMethodId"
-        (click)="proceedToPayment()">Proceed to payment
+<button class="btn-primary mt-6 w-full space-x-2"
+        [disabled]="!shippingMethodId || addressForm.invalid"
+        (click)="proceedToPayment()">
+    <fa-icon icon="credit-card"></fa-icon>
+    <span>Proceed to payment</span>
 </button>
