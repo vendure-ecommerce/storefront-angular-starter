@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { map, mergeMap, switchMap, tap } from 'rxjs/operators';
 
 import {
     AddressFragment,
@@ -44,7 +45,7 @@ export type AddressFormValue = Pick<AddressFragment, Exclude<keyof AddressFragme
     // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutShippingComponent implements OnInit {
+export class CheckoutShippingComponent implements OnInit, OnDestroy {
     @ViewChild('addressForm') addressForm: AddressFormComponent;
 
     customerAddresses$: Observable<AddressFragment[]>;
@@ -53,20 +54,25 @@ export class CheckoutShippingComponent implements OnInit {
     shippingAddress$: Observable<NonNullable<GetShippingAddressQuery['activeOrder']>['shippingAddress'] | null | undefined>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
-    step: 'selectAddress' | 'customerDetails' | 'editAddress' | 'selectMethod' = 'selectAddress';
-    firstName = '';
-    lastName = '';
-    emailAddress = '';
+    contactForm: FormGroup;
+    private destroy$ = new Subject<void>();
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private changeDetector: ChangeDetectorRef,
                 private modalService: ModalService,
                 private notificationService: NotificationService,
+                private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
-                private router: Router) { }
+                private router: Router) {
+    }
 
     ngOnInit() {
+        this.contactForm = this.formBuilder.group({
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
+            emailAddress: ['', Validators.email],
+        });
         this.signedIn$ = this.stateService.select(state => state.signedIn);
         this.customerAddresses$ = this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES).pipe(
             map(data => data.activeCustomer ? data.activeCustomer.addresses || [] : []),
@@ -81,14 +87,21 @@ export class CheckoutShippingComponent implements OnInit {
             switchMap(() => this.dataService.query<GetEligibleShippingMethodsQuery>(GET_ELIGIBLE_SHIPPING_METHODS)),
             map(data => data.eligibleShippingMethods),
         );
-        combineLatest(this.signedIn$, this.customerAddresses$).pipe(
-            take(1),
-        ).subscribe(([signedIn, addresses]) => {
-            this.step = signedIn ? (addresses.length ? 'selectAddress' : 'editAddress') : 'customerDetails';
-        });
+
+        // this.contactForm.valueChanges.pipe(
+        //     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+        //     takeUntil(this.destroy$)
+        // ).subscribe(val => {
+        //     console.log(val);
+        // })
     }
 
-    getLines(address: Address.Fragment): string[] {
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    getLines(address: AddressFragment): string[] {
         return [
             address.fullName,
             address.company,
@@ -116,11 +129,8 @@ export class CheckoutShippingComponent implements OnInit {
         this.addressForm.addressForm.patchValue({...address, countryCode: address.country.code});
     }
 
-    setCustomerDetails() {
-        this.addressForm.addressForm.patchValue({
-            fullName: `${this.firstName} ${this.lastName}`,
-        });
-        this.step = 'editAddress';
+    onCustomerFormBlur() {
+        this.setCustomerForOrder()?.subscribe();
     }
 
     setShippingAddress(value: AddressFormValue | AddressFragment) {
@@ -128,9 +138,12 @@ export class CheckoutShippingComponent implements OnInit {
         this.dataService.mutate<SetShippingAddressMutation, SetShippingAddressMutationVariables>(SET_SHIPPING_ADDRESS, {
             input,
         }).subscribe(data => {
-            this.step = 'selectMethod';
             this.changeDetector.markForCheck();
         });
+    }
+
+    setShippingMethod(id: string) {
+        this.shippingMethodId = id;
     }
 
     proceedToPayment() {
@@ -145,26 +158,26 @@ export class CheckoutShippingComponent implements OnInit {
                 ),
                 mergeMap(() => this.dataService.mutate<TransitionToArrangingPaymentMutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
             ).subscribe((data) => {
-                this.router.navigate(['../payment'], { relativeTo: this.route });
+                this.router.navigate(['../payment'], {relativeTo: this.route});
             });
         }
     }
 
+    getId(method: { id: string }) {
+        return method.id;
+    }
+
     private setCustomerForOrder() {
-        if (this.emailAddress) {
-            return this.dataService.mutate<SetCustomerForOrder.Mutation, SetCustomerForOrder.Variables>(SET_CUSTOMER_FOR_ORDER, {
-                input: {
-                    emailAddress: this.emailAddress,
-                    firstName: this.firstName,
-                    lastName: this.lastName,
-                },
+        if (this.contactForm.valid) {
+            return this.dataService.mutate<SetCustomerForOrderMutation, SetCustomerForOrderMutationVariables>(SET_CUSTOMER_FOR_ORDER, {
+                input: this.contactForm.value,
             }).pipe(
-                tap(({ setCustomerForOrder }) => {
+                tap(({setCustomerForOrder}) => {
                     if (setCustomerForOrder && setCustomerForOrder.__typename !== 'Order') {
-                        this.notificationService.error((setCustomerForOrder as any).message);
+                        this.notificationService.error((setCustomerForOrder as any).message).subscribe();
                     }
                 })
-            )
+            );
         }
     }
 

@@ -10,7 +10,7 @@ import { SIGN_IN } from './sign-in.graphql';
 @Component({
     selector: 'vsf-sign-in',
     templateUrl: './sign-in.component.html',
-    // styleUrls: ['./sign-in.component.scss'],
+    styleUrls: ['./sign-in.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInComponent {
