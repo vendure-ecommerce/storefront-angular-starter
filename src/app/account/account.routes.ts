@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { SignInComponent } from '../shared/components/sign-in/sign-in.component';
-
 import { AccountAddressBookComponent } from './components/account-address-book/account-address-book.component';
 import { AccountAddressDetailComponent } from './components/account-address-detail/account-address-detail.component';
 import { AccountChangeCredentialsComponent } from './components/account-change-credentials/account-change-credentials.component';
@@ -17,6 +15,7 @@ import { ResetPasswordComponent } from './components/reset-password/reset-passwo
 import { VerifyComponent } from './components/verify/verify.component';
 import { AccountGuard } from './providers/account.guard';
 import { SignInGuard } from './providers/sign-in.guard';
+import { AccountSignInComponent } from './components/account-sign-in/account-sign-in.component';
 
 export const routes: Routes = [
     {
@@ -62,7 +61,7 @@ export const routes: Routes = [
             {
                 path: 'sign-in',
                 canActivate: [SignInGuard],
-                component: SignInComponent,
+                component: AccountSignInComponent,
             },
             {
                 path: 'register',

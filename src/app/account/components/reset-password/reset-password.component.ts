@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ResetPassword } from '../../../common/generated-types';
+import { ResetPasswordMutation, ResetPasswordMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -10,7 +10,7 @@ import { RESET_PASSWORD } from './reset-password.graphql';
 @Component({
     selector: 'vsf-reset-password',
     templateUrl: './reset-password.component.html',
-    styleUrls: ['./reset-password.component.scss'],
+    // styleUrls: ['./reset-password.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent {
@@ -30,7 +30,7 @@ export class ResetPasswordComponent {
 
     confirmPasswordReset() {
         if (this.token) {
-            this.dataService.mutate<ResetPassword.Mutation, ResetPassword.Variables>(RESET_PASSWORD, {
+            this.dataService.mutate<ResetPasswordMutation, ResetPasswordMutationVariables>(RESET_PASSWORD, {
                 token: this.token,
                 password: this.password,
             })

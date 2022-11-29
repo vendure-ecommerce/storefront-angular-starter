@@ -1,33 +1,54 @@
-<button type="button" class="close" aria-label="Close" (click)="close()">
-    <span aria-hidden="true">&times;</span>
-</button>
-<a [routerLink]="['/']" class="logo-link ml-3 mb-3" (click)="close()">
-    <img src="assets/cube-logo-line-icon-nostroke.png" class="logo" alt="Vendure Storefront">
-</a>
-<ul class="" *ngIf="collectionTree$ | async as tree">
-    <li class="level0" *ngFor="let collection of tree.children">
-        <a class=""
-           (click)="onL0Click($event, collection)">{{ collection.name }}</a>
-        <ul *ngIf="collection.children.length"
-            class="expandable"
-            [class.expanded]="selected0 === collection.id">
-            <li class="level1" *ngFor="let level1 of collection.children">
-                <a class=""
-                   (click)="onL1Click($event, level1)">{{ level1.name }}</a>
-                <ul *ngIf="level1.children.length"
-                    class="expandable"
-                    [class.expanded]="selected1 === level1.id">
-                    <li class="level2" *ngFor="let level2 of level1.children">
-                        <a class=""
-                           (click)="close()"
-                           [routerLink]="['/category', level2.slug ]">{{ level2.name }}</a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-</ul>
-<div class="flex-grow-1"></div>
-<div class="text-center">
-    <a href="http://www.vendure.io/">vendure.io</a>
+<div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in-out duration-500"
+         [ngClass]="visible ? 'visible opacity-100' : 'invisible opacity-0'"></div>
+
+    <div class="fixed inset-0 overflow-hidden overlay-container" [ngClass]="visible ? 'visible' : 'invisible'">
+        <div class="absolute inset-0 overflow-hidden" #overlay>
+            <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full">
+                <div class="pointer-events-auto w-screen transform transition ease-in-out duration-300"
+                     [ngClass]="{
+                           '-translate-x-full': !visible,
+                           'translate-x-0': visible
+                            }"
+                >
+                    <div class="flex h-full flex-col bg-white shadow-xl">
+                        <div class="flex-1 height-full flex flex-col overflow-y-hidden py-6 px-4 sm:px-6">
+                            <div class="flex items-center justify-between px-4">
+                                <a [routerLink]="['/']" class="logo-link ml-3 mb-3" (click)="close()">
+                                    <img src="assets/cube-logo-small.webp" class="logo" alt="Vendure Storefront">
+                                </a>
+                                <button class="btn" (click)="close()">
+                                    <fa-icon icon="times" class="text-gray-400"></fa-icon>
+                                </button>
+                            </div>
+
+                            <ul class="" *ngIf="collectionTree$ | async as tree">
+                                <li class="" *ngFor="let collection of tree.children">
+                                    <a class="block cursor-pointer w-full text-gray-600 hover:bg-gray-50 hover:text-gray-900 group items-center px-3 py-2 font-medium rounded-md"
+                                       (click)="onL0Click($event, collection)">{{ collection.name }}</a>
+                                    <ul *ngIf="collection.children.length"
+                                        [ngClass]="selected0 === collection.id ? 'block' : 'hidden'">
+                                        <li class="level1" *ngFor="let level1 of collection.children">
+                                            <a class="block cursor-pointer w-full pl-8 text-gray-600 hover:bg-gray-50 hover:text-gray-900 group items-center px-3 py-2 font-medium rounded-md"
+                                               (click)="onL1Click($event, level1)">{{ level1.name }}</a>
+                                            <ul *ngIf="level1.children.length"
+                                                class="expandable"
+                                                [class.expanded]="selected1 === level1.id">
+                                                <li class="level2" *ngFor="let level2 of level1.children">
+                                                    <a class=""
+                                                       (click)="close()"
+                                                       [routerLink]="['/category', level2.slug ]">{{ level2.name }}</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+

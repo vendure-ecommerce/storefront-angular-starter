@@ -7,7 +7,40 @@
       }
       const result: PossibleTypesResultData = {
   "possibleTypes": {
+    "ActiveOrderResult": [
+      "NoActiveOrderError",
+      "Order"
+    ],
+    "AddPaymentToOrderResult": [
+      "IneligiblePaymentMethodError",
+      "NoActiveOrderError",
+      "Order",
+      "OrderPaymentStateError",
+      "OrderStateTransitionError",
+      "PaymentDeclinedError",
+      "PaymentFailedError"
+    ],
+    "ApplyCouponCodeResult": [
+      "CouponCodeExpiredError",
+      "CouponCodeInvalidError",
+      "CouponCodeLimitError",
+      "Order"
+    ],
+    "AuthenticationResult": [
+      "CurrentUser",
+      "InvalidCredentialsError",
+      "NotVerifiedError"
+    ],
     "CustomField": [
+      "BooleanCustomFieldConfig",
+      "DateTimeCustomFieldConfig",
+      "FloatCustomFieldConfig",
+      "IntCustomFieldConfig",
+      "LocaleStringCustomFieldConfig",
+      "RelationCustomFieldConfig",
+      "StringCustomFieldConfig"
+    ],
+    "CustomFieldConfig": [
       "BooleanCustomFieldConfig",
       "DateTimeCustomFieldConfig",
       "FloatCustomFieldConfig",
@@ -44,6 +77,12 @@
       "PaymentFailedError",
       "VerificationTokenExpiredError",
       "VerificationTokenInvalidError"
+    ],
+    "NativeAuthenticationResult": [
+      "CurrentUser",
+      "InvalidCredentialsError",
+      "NativeAuthStrategyError",
+      "NotVerifiedError"
     ],
     "Node": [
       "Address",
@@ -92,45 +131,6 @@
       "ShippingMethodList",
       "TagList",
       "TaxRateList"
-    ],
-    "ActiveOrderResult": [
-      "NoActiveOrderError",
-      "Order"
-    ],
-    "AddPaymentToOrderResult": [
-      "IneligiblePaymentMethodError",
-      "NoActiveOrderError",
-      "Order",
-      "OrderPaymentStateError",
-      "OrderStateTransitionError",
-      "PaymentDeclinedError",
-      "PaymentFailedError"
-    ],
-    "ApplyCouponCodeResult": [
-      "CouponCodeExpiredError",
-      "CouponCodeInvalidError",
-      "CouponCodeLimitError",
-      "Order"
-    ],
-    "AuthenticationResult": [
-      "CurrentUser",
-      "InvalidCredentialsError",
-      "NotVerifiedError"
-    ],
-    "CustomFieldConfig": [
-      "BooleanCustomFieldConfig",
-      "DateTimeCustomFieldConfig",
-      "FloatCustomFieldConfig",
-      "IntCustomFieldConfig",
-      "LocaleStringCustomFieldConfig",
-      "RelationCustomFieldConfig",
-      "StringCustomFieldConfig"
-    ],
-    "NativeAuthenticationResult": [
-      "CurrentUser",
-      "InvalidCredentialsError",
-      "NativeAuthStrategyError",
-      "NotVerifiedError"
     ],
     "RefreshCustomerVerificationResult": [
       "NativeAuthStrategyError",

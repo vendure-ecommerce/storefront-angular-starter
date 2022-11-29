@@ -6,14 +6,15 @@ import {
     faYoutube,
 } from '@fortawesome/free-brands-svg-icons';
 import {
-    faBars,
+    faBars, faCheck, faChevronRight,
     faCreditCard,
-    faFilter,
+    faFilter, faHeart,
+    faHome,
     faMinus,
     faPlus,
     faSadCry,
     faSearch,
-    faShoppingCart,
+    faShoppingCart, faStar,
     faTimes,
     faUserCircle,
 } from '@fortawesome/free-solid-svg-icons';
@@ -38,5 +39,10 @@ export function buildIconLibrary(library: FaIconLibrary) {
         faSadCry,
         faFilter,
         faBars,
+        faHome,
+        faHeart,
+        faStar,
+        faChevronRight,
+        faCheck,
     );
 }

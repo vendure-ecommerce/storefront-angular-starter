@@ -1,12 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Asset } from '../../common/generated-types';
+import { AssetFragment } from '../../common/generated-types';
 
 @Pipe({
     name: 'assetPreview',
 })
 export class AssetPreviewPipe implements PipeTransform {
-    transform(asset?: Asset.Fragment, ...args: Array<string | number>): string {
+    transform(asset?: AssetFragment, ...args: Array<string | number>): string {
         if (!asset) {
             return '';
         }

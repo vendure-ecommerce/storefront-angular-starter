@@ -3,7 +3,7 @@ import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, startWith, switchMap } from 'rxjs/operators';
 
-import { GetOrderForCheckout, GetNextOrderStates, TransitionToAddingItems } from '../../../common/generated-types';
+import { GetOrderForCheckoutQuery, GetNextOrderStatesQuery, TransitionToAddingItemsMutation } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -12,12 +12,12 @@ import { GET_NEXT_ORDER_STATES, TRANSITION_TO_ADDING_ITEMS } from './checkout-pr
 @Component({
     selector: 'vsf-checkout-process',
     templateUrl: './checkout-process.component.html',
-    styleUrls: ['./checkout-process.component.scss'],
+    // styleUrls: ['./checkout-process.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutProcessComponent implements OnInit {
 
-    cart$: Observable<GetOrderForCheckout.ActiveOrder | null | undefined>;
+    cart$: Observable<GetOrderForCheckoutQuery['activeOrder'] | null | undefined>;
     nextStates$: Observable<string[]>;
     activeStage$: Observable<number>;
     signedIn$: Observable<boolean>;
@@ -28,8 +28,8 @@ export class CheckoutProcessComponent implements OnInit {
 
     ngOnInit() {
         this.signedIn$ = this.stateService.select(state => state.signedIn);
-        this.cart$ = this.route.data.pipe(switchMap(data => data.activeOrder as Observable<GetOrderForCheckout.ActiveOrder>));
-        this.nextStates$ = this.dataService.query<GetNextOrderStates.Query>(GET_NEXT_ORDER_STATES).pipe(
+        this.cart$ = this.route.data.pipe(switchMap(data => data.activeOrder as Observable<GetOrderForCheckoutQuery['activeOrder']>));
+        this.nextStates$ = this.dataService.query<GetNextOrderStatesQuery>(GET_NEXT_ORDER_STATES).pipe(
             map(data => data.nextOrderStates),
         );
         this.activeStage$ =  this.router.events.pipe(
@@ -55,7 +55,7 @@ export class CheckoutProcessComponent implements OnInit {
     }
 
     changeShippingAddress() {
-        this.dataService.mutate<TransitionToAddingItems.Mutation>(TRANSITION_TO_ADDING_ITEMS).subscribe(() => {
+        this.dataService.mutate<TransitionToAddingItemsMutation>(TRANSITION_TO_ADDING_ITEMS).subscribe(() => {
             this.router.navigate(['./shipping'], { relativeTo: this.route });
         });
     }

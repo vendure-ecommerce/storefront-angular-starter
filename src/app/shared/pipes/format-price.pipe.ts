@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
 import { map, take } from 'rxjs/operators';
 
-import { GetActiveChannel } from '../../common/generated-types';
+import { GetActiveChannelQuery } from '../../common/generated-types';
 import { DataService } from '../../core/providers/data/data.service';
 
 import { GET_ACTIVE_CHANNEL } from './get-active-channel.graphql';
@@ -47,9 +47,9 @@ export class FormatPricePipe implements PipeTransform {
             });
     }
 
-    private getActiveChannel(): Promise<GetActiveChannel.ActiveChannel> {
+    private getActiveChannel(): Promise<GetActiveChannelQuery['activeChannel']> {
         if (!channelDataPromise) {
-            channelDataPromise = this.dataService.query<GetActiveChannel.Query>(GET_ACTIVE_CHANNEL).pipe(
+            channelDataPromise = this.dataService.query<GetActiveChannelQuery>(GET_ACTIVE_CHANNEL).pipe(
                 take(1),
                 map(data => data.activeChannel),
             ).toPromise();

@@ -1,5 +1,5 @@
-<div class="nav-wrapper">
-    <ul class="nav" *ngIf="collectionTree$ | async as tree">
+<div class="max-w-6xl mx-auto p-4 flex items-center">
+    <ul class="flex space-x-4" *ngIf="collectionTree$ | async as tree">
         <li class="nav-item" *ngFor="let collection of tree.children"
             (mouseenter)="onMouseEnter(collection)"
             (mouseleave)="close($event)">

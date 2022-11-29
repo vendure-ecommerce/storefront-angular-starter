@@ -1,19 +1,20 @@
-<form #registerForm="ngForm"
-      (submit)="register()">
-    <vsf-centered-card>
-            <input class="form-control"
+<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <form #registerForm="ngForm"
+          (submit)="register()">
+        <vsf-centered-card>
+            <input class="input-text"
                    placeholder="First name"
                    name="firstName"
                    required
                    [disabled]="registrationSent"
                    [(ngModel)]="firstName">
-            <input class="form-control mt-1"
+            <input class="input-text mt-1"
                    placeholder="Last name"
                    name="lastName"
                    required
                    [disabled]="registrationSent"
                    [(ngModel)]="lastName">
-            <input class="form-control mt-1"
+            <input class="input-text mt-1"
                    placeholder="Email address"
                    name="emailAddress"
                    required
@@ -22,13 +23,14 @@
                    [disabled]="registrationSent"
                    [(ngModel)]="emailAddress">
 
-        <button class="btn btn-primary btn-block mt-3"
-                [disabled]="registerForm.invalid || registrationSent"
-                type="submit">
-            Register
-        </button>
-        <div *ngIf="registrationSent" class="registration-sent">
-            Great! Now check your email ({{ emailAddress }}) to complete registration.
-        </div>
-    </vsf-centered-card>
-</form>
+            <button class="btn btn-primary btn-block mt-3"
+                    [disabled]="registerForm.invalid || registrationSent"
+                    type="submit">
+                Register
+            </button>
+            <div *ngIf="registrationSent" class="registration-sent">
+                Great! Now check your email ({{ emailAddress }}) to complete registration.
+            </div>
+        </vsf-centered-card>
+    </form>
+</div>

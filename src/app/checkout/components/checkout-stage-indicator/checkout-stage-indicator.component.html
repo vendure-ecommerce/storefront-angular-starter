@@ -1,19 +1,23 @@
-<div class="stage" *ngIf="!signedIn" [class.active]="activeStage === 1">
-    <div class="number">1</div>
-    <div class="label">Account</div>
-</div>
-<div class="line" *ngIf="!signedIn"></div>
-<div class="stage" [class.active]="activeStage === 2">
-    <div class="number">{{ signedIn ? 1 : 2}}</div>
-    <div class="label">Shipping</div>
-</div>
-<div class="line"></div>
-<div class="stage" [class.active]="activeStage === 3">
-    <div class="number">{{ signedIn ? 2 : 3}}</div>
-    <div class="label">Payment</div>
-</div>
-<div class="line"></div>
-<div class="stage" [class.active]="activeStage === 4">
-    <div class="number">{{ signedIn ? 3 : 4}}</div>
-    <div class="label">Complete</div>
-</div>
+<nav
+    aria-label="Progress"
+    class="hidden sm:block pb-8 mb-8 border-b"
+>
+    <ol role="list" class="flex space-x-4 justify-center">
+        <li class="flex items-center" *ngIf="!signedIn" >
+            <div class="mr-4" [class.text-primary-600]="activeStage === 1">Account</div>
+            <fa-icon icon="chevron-right" class="text-gray-300"></fa-icon>
+        </li>
+        <li class="flex items-center" >
+            <div class="mr-4" [class.text-primary-600]="activeStage === 2">Shipping</div>
+            <fa-icon icon="chevron-right" class="text-gray-300"></fa-icon>
+        </li>
+        <li class="flex items-center" >
+            <div class="mr-4" [class.text-primary-600]="activeStage === 3">Payment</div>
+            <fa-icon icon="chevron-right" class="text-gray-300"></fa-icon>
+        </li>
+        <li class="flex items-center" [class.text-primary-600]="activeStage === 4">
+            <div class="mr-4" [class.text-primary-600]="activeStage === 3">Complete</div>
+        </li>
+    </ol>
+</nav>
+

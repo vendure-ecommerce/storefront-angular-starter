@@ -1,10 +1,12 @@
 <ng-container *ngIf="order$ | async as order">
-    <h2>Order {{ order.code }}</h2>
-    <div class="row">
-        <div class="col-12 col-md-8">
+    <h2 class="text-2xl mb-2">Order <span class="font-medium">{{ order.code }}</span></h2>
+    <div class="mb-4 text-gray-600">Placed on <span class="font-medium">{{ order.orderPlacedAt | date:'medium' }}</span></div>
+    <div class="md:grid grid-cols-3">
+        <div class="col-span-2">
             <vsf-cart-contents [cart]="order"></vsf-cart-contents>
+            <vsf-cart-totals [cart]="order"></vsf-cart-totals>
         </div>
-        <div class="col-12 col-md-4">
+        <div class="pl-6">
             <vsf-address-card title="Shipping address" [address]="order.shippingAddress"></vsf-address-card>
         </div>
     </div>

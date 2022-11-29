@@ -1,18 +1,18 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
-import { Address, Country, OrderAddress } from '../../../common/generated-types';
+import { AddressFragment, CountryFragment, OrderAddressFragment } from '../../../common/generated-types';
 
 @Component({
     selector: 'vsf-address-form',
     templateUrl: './address-form.component.html',
-    styleUrls: ['./address-form.component.scss'],
+    // styleUrls: ['./address-form.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressFormComponent implements OnChanges {
 
-    @Input() availableCountries: Country.Fragment[];
-    @Input() address: OrderAddress.Fragment | Address.Fragment;
+    @Input() availableCountries: CountryFragment[];
+    @Input() address: OrderAddressFragment | AddressFragment;
 
     addressForm: FormGroup;
     constructor(private formBuilder: FormBuilder) {

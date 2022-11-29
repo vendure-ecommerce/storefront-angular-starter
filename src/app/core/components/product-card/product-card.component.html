@@ -1,27 +1,21 @@
-<div class="product-card">
-    <ng-template [ngIf]="product" [ngIfElse]="placeholder">
-        <a [routerLink]="['/product', product.slug]" class="image-wrapper">
-            <img class="product-image rounded" [src]="product.productAsset | assetPreview:200:200">
-        </a>
-        <div class="">
-            <a [routerLink]="['/product', product.slug]" class="product-name">
-                {{ product.productName }}
-            </a>
-            <div class="price">
-                <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
-                    {{ product.priceWithTax.min | formatPrice }}
-                </ng-template>
-                <ng-template #range>
-                    From {{ product.priceWithTax.min | formatPrice }}
-                </ng-template>
-            </div>
+<ng-template [ngIf]="product">
+    <a class="flex flex-col" prefetch='intent' [routerLink]="['/product', product.slug]">
+        <img
+            class="rounded-xl flex-grow object-cover aspect-[7/8]"
+            alt=""
+            [src]="product.productAsset | assetPreview:300:400"
+        />
+        <div class="h-2"></div>
+        <div class="text-sm text-gray-700">
+            {{ product.productName }}
         </div>
-    </ng-template>
-    <ng-template #placeholder>
-        <div class="placeholder-image loading-placeholder"></div>
-        <div class="card-body">
-            <div class="placeholder-title loading-placeholder"></div>
-            <div class="placeholder-body loading-placeholder"></div>
+        <div class="text-sm font-medium text-gray-900">
+            <ng-template [ngIf]="product.priceWithTax.min === product.priceWithTax.max" [ngIfElse]="range">
+                {{ product.priceWithTax.min | formatPrice }}
+            </ng-template>
+            <ng-template #range>
+                From {{ product.priceWithTax.min | formatPrice }}
+            </ng-template>
         </div>
-    </ng-template>
-</div>
+    </a>
+</ng-template>

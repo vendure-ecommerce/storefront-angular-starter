@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { VerifyChangeEmailAddress } from '../../../common/generated-types';
+import { VerifyChangeEmailAddressMutation, VerifyChangeEmailAddressMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -10,7 +10,7 @@ import { VERIFY_CHANGE_EMAIL_ADDRESS } from './change-email-address.graphql';
 @Component({
     selector: 'vsf-change-email-address',
     templateUrl: './change-email-address.component.html',
-    styleUrls: ['./change-email-address.component.scss'],
+    // styleUrls: ['./change-email-address.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class ChangeEmailAddressComponent implements OnInit {
@@ -29,7 +29,7 @@ export class ChangeEmailAddressComponent implements OnInit {
         const token = this.route.snapshot.queryParamMap.get('token');
 
         if (token) {
-            this.dataService.mutate<VerifyChangeEmailAddress.Mutation, VerifyChangeEmailAddress.Variables>(VERIFY_CHANGE_EMAIL_ADDRESS, {
+            this.dataService.mutate<VerifyChangeEmailAddressMutation, VerifyChangeEmailAddressMutationVariables>(VERIFY_CHANGE_EMAIL_ADDRESS, {
                 token,
             }).subscribe(
                 () => {

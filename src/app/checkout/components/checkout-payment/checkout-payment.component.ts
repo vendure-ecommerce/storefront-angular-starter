@@ -1,25 +1,25 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { AddPayment, GetEligiblePaymentMethods } from '../../../common/generated-types';
+import { AddPaymentMutation, AddPaymentMutationVariables, GetEligiblePaymentMethodsQuery } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
 import { ADD_PAYMENT, GET_ELIGIBLE_PAYMENT_METHODS } from './checkout-payment.graphql';
-import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'vsf-checkout-payment',
     templateUrl: './checkout-payment.component.html',
-    styleUrls: ['./checkout-payment.component.scss'],
+    // styleUrls: ['./checkout-payment.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutPaymentComponent implements OnInit {
     cardNumber: string;
     expMonth: number;
     expYear: number;
-    paymentMethods$: Observable<GetEligiblePaymentMethods.EligiblePaymentMethods[]>
+    paymentMethods$: Observable<GetEligiblePaymentMethodsQuery['eligiblePaymentMethods']>
     paymentErrorMessage: string | undefined;
 
     constructor(private dataService: DataService,
@@ -28,7 +28,7 @@ export class CheckoutPaymentComponent implements OnInit {
                 private route: ActivatedRoute) { }
 
     ngOnInit() {
-        this.paymentMethods$ = this.dataService.query<GetEligiblePaymentMethods.Query>(GET_ELIGIBLE_PAYMENT_METHODS)
+        this.paymentMethods$ = this.dataService.query<GetEligiblePaymentMethodsQuery>(GET_ELIGIBLE_PAYMENT_METHODS)
             .pipe(map(res => res.eligiblePaymentMethods));
     }
 
@@ -42,7 +42,7 @@ export class CheckoutPaymentComponent implements OnInit {
     }
 
     completeOrder(paymentMethodCode: string) {
-        this.dataService.mutate<AddPayment.Mutation, AddPayment.Variables>(ADD_PAYMENT, {
+        this.dataService.mutate<AddPaymentMutation, AddPaymentMutationVariables>(ADD_PAYMENT, {
             input: {
                 method: paymentMethodCode,
                 metadata: {},

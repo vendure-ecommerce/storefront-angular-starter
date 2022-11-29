@@ -1,22 +1,59 @@
-<div class="cart-drawer-header">
-    <button class="btn" (click)="close.emit()">
-        <fa-icon icon="times"></fa-icon>
-    </button>
-    <h3 class="cart-title">Cart</h3>
-</div>
-<div *ngIf="!(isEmpty$ | async); else empty" class="cart-drawer-contents">
-    <vsf-cart-contents [cart]="cart$ | async"
-                       [canAdjustQuantities]="true"
-                       (setQuantity)="setQuantity($event)"></vsf-cart-contents>
-    <div class="checkout-button">
-        <a class="btn btn-block btn-primary"
-           color="primary"
-           (click)="close.emit()"
-           [routerLink]="['/checkout']">Check Out</a>
+<div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+    <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity ease-in-out duration-500"
+         [ngClass]="visible ? 'visible opacity-100' : 'invisible opacity-0'"></div>
+
+    <div class="fixed inset-0 overflow-hidden overlay-container" [ngClass]="visible ? 'visible' : 'invisible'">
+        <div class="absolute inset-0 overflow-hidden" (click)="overlayClick($event)" #overlay>
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                <div class="pointer-events-auto w-screen max-w-md transform transition ease-in-out duration-300"
+                     [ngClass]="{
+                           'translate-x-full': !visible,
+                           'translate-x-0': visible
+                            }"
+                >
+                    <div class="flex h-full flex-col bg-white shadow-xl">
+                        <div class="flex-1 height-full flex flex-col overflow-y-hidden py-6 px-4 sm:px-6">
+                            <div class="flex items-center justify-between px-4">
+                                <h3 class="text-lg font-medium text-gray-900">Shopping Cart</h3>
+                                <button class="btn" (click)="close.emit()">
+                                    <fa-icon icon="times" class="text-gray-400"></fa-icon>
+                                </button>
+                            </div>
+                            <div *ngIf="!(isEmpty$ | async); else empty" class="mt-8 px-4 overflow-y-auto">
+                                <vsf-cart-contents [cart]="cart$ | async"
+                                                   [canAdjustQuantities]="true"
+                                                   (setQuantity)="setQuantity($event)"></vsf-cart-contents>
+
+                            </div>
+
+                            <ng-template #empty>
+                                <div class="flex items-center justify-center h-48 text-xl text-gray-400">
+                                    Your cart is empty
+                                </div>
+                            </ng-template>
+                        </div>
+                        <div class="border-t border-gray-200 py-6 px-4 sm:px-6" *ngIf="cart$ | async as cart">
+                            <div class="flex justify-between text-base font-medium text-gray-900">
+                                <p>Subtotal</p>
+                                <p>
+                                    {{ cart.subTotalWithTax | formatPrice }}
+                                </p>
+                            </div>
+                            <p class="mt-0.5 text-sm text-gray-500">
+                                Shipping will be calculated at
+                                checkout.
+                            </p>
+                            <div class="mt-6">
+                                <button (click)="close.emit()"
+                                        [routerLink]="['/checkout']"
+                                        class="btn-primary flex w-full">
+                                    Checkout
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<ng-template #empty>
-    <div class="empty">
-        Cart is empty
-    </div>
-</ng-template>

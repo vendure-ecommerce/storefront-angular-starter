@@ -1,60 +1,178 @@
 <form [formGroup]="addressForm">
-    <div class="form-group row">
-        <label for="fullName" class="col-sm-3 col-form-label">Full name</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="fullName" id="fullName">
+    <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
+        <div>
+            <label
+                htmlFor="fullName"
+                class="block text-sm font-medium text-gray-700"
+            >
+                First name
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    formControlName="fullName"
+                    autoComplete="given-name"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="company" class="col-sm-3 col-form-label">Company</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="company" id="company">
+
+        <div class="sm:col-span-2">
+            <label
+                htmlFor="company"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Company
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="company"
+                    id="company"
+                    formControlName="company"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="streetLine1" class="col-sm-3 col-form-label">Street Line 1</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="streetLine1" id="streetLine1">
+
+        <div class="sm:col-span-2">
+            <label
+                htmlFor="streetLine1"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Address
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="streetLine1"
+                    id="streetLine1"
+                    formControlName="streetLine1"
+                    autoComplete="street-address"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="streetLine2" class="col-sm-3 col-form-label">Street Line 2</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="streetLine2" id="streetLine2">
+
+        <div class="sm:col-span-2">
+            <label
+                htmlFor="streetLine2"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Apartment, suite, etc.
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="streetLine2"
+                    id="streetLine2"
+                    formControlName="streetLine2"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="city" class="col-sm-3 col-form-label">City</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="city" id="city">
+
+        <div>
+            <label
+                htmlFor="city"
+                class="block text-sm font-medium text-gray-700"
+            >
+                City
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="city"
+                    id="city"
+                    autoComplete="address-level2"
+                    formControlName="city"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="province" class="col-sm-3 col-form-label">Province</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="province" id="province">
+
+        <div>
+            <label
+                htmlFor="countryCode"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Country
+            </label>
+            <div class="mt-1">
+                <select
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500 sm:text-sm"
+                    formControlName="countryCode" id="countryCode">
+                    <option *ngFor="let country of availableCountries" [ngValue]="country.code">
+                        {{ country.name }}
+                    </option>
+                </select>
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="postalCode" class="col-sm-3 col-form-label">Post code</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="postalCode" id="postalCode">
+
+        <div>
+            <label
+                htmlFor="province"
+                class="block text-sm font-medium text-gray-700"
+            >
+                State / Province
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="province"
+                    id="province"
+                    formControlName="province"
+                    autoComplete="address-level1"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="countryCode" class="col-sm-3 col-form-label">Country</label>
-        <div class="col-sm-9">
-            <select class="custom-select" formControlName="countryCode" id="countryCode">
-                <option *ngFor="let country of availableCountries" [ngValue]="country.code">
-                    {{ country.name }}
-                </option>
-            </select>
+
+        <div>
+            <label
+                htmlFor="postalCode"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Postal code
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="postalCode"
+                    id="postalCode"
+                    formControlName="postalCode"
+                    autoComplete="postal-code"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
-    </div>
-    <div class="form-group row">
-        <label for="phoneNumber" class="col-sm-3 col-form-label">Phone number</label>
-        <div class="col-sm-9">
-            <input class="form-control" formControlName="phoneNumber" id="phoneNumber">
+
+        <div class="sm:col-span-2">
+            <label
+                htmlFor="phoneNumber"
+                class="block text-sm font-medium text-gray-700"
+            >
+                Phone
+            </label>
+            <div class="mt-1">
+                <input
+                    type="text"
+                    name="phoneNumber"
+                    id="phoneNumber"
+                    formControlName="phoneNumber"
+                    autoComplete="tel"
+                    class="block w-full border-gray-300 rounded-md shadow-sm focus:ring-primary-500 focus:border-primary-500
+            sm:text-sm"
+                />
+            </div>
         </div>
     </div>
 </form>

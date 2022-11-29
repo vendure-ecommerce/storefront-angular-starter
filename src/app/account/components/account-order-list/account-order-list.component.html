@@ -1,22 +1,22 @@
-<table class="table">
-    <thead>
+<table class="min-w-full divide-y divide-gray-300">
+    <thead class="bg-gray-50">
     <tr>
-        <th scope="col">Order code</th>
-        <th scope="col">Status</th>
-        <th scope="col">Total</th>
-        <th scope="col">Last updated</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Order code</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Total</th>
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Last updated</th>
     </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-white">
     <tr *ngFor="let order of orders$ | async">
-        <th scope="row">
+        <th scope="row" class="text-left pl-4 font-medium text-gray-700 hover:text-primary-600">
             <a [routerLink]="['./', order.code]">
                 {{ order.code }}
             </a>
         </th>
-        <td>{{ order.state }}</td>
-        <td>{{ order.total | formatPrice }}</td>
-        <td>{{ order.updatedAt | date: 'short' }}</td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">{{ order.state }}</td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">{{ order.total | formatPrice }}</td>
+        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-600">{{ order.updatedAt | date: 'short' }}</td>
     </tr>
     </tbody>
 </table>

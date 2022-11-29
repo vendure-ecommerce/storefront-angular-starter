@@ -12,7 +12,7 @@ import { DialogButtonsDirective } from './dialog-buttons.directive';
 @Component({
     selector: 'vsf-modal-dialog',
     templateUrl: './modal-dialog.component.html',
-    styleUrls: ['./modal-dialog.component.scss'],
+    // styleUrls: ['./modal-dialog.component.scss'],
 })
 export class ModalDialogComponent<T extends Dialog<any>> {
     closeModal: (result?: any) => void;

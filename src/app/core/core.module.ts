@@ -31,6 +31,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
 import { buildIconLibrary } from './icon-library';
 import { DefaultInterceptor } from './providers/data/interceptor';
+import { TopReviewsComponent } from './components/top-reviews/top-reviews.component';
 
 const CORE_COMPONENTS = [
     ProductListComponent,
@@ -57,6 +58,7 @@ let providedCacheState: any | undefined;
 @NgModule({
     declarations: [
         ...CORE_COMPONENTS,
+        TopReviewsComponent,
     ],
     imports: [
         HttpClientModule,

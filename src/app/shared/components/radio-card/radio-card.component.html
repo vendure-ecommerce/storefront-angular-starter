@@ -1,0 +1,45 @@
+<label
+    [ngClass]="{
+        'border-gray-300': !isSelected(item),
+        'border-transparent': isSelected(item),
+        'ring-2 ring-primary-500': isFocussed(item)
+    }"
+    class="relative bg-white border rounded-lg shadow-sm p-4 flex cursor-pointer focus:outline-none"
+>
+    <input
+        type="radio"
+        name="delivery-method"
+        [value]="getItemId(item)"
+        class="sr-only"
+        (focus)="setFocussedId(item)"
+        (blur)="setFocussedId(undefined)"
+        (change)="selectChanged(item)"
+    />
+    <div class="flex-1 flex">
+        <div class="flex flex-col">
+            <ng-content></ng-content>
+        </div>
+    </div>
+    <svg
+        [class.hidden]="!isSelected(item)"
+        [attr.aria-hidden]="!isSelected(item)"
+        class="h-5 w-5 text-primary-600"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+    >
+        <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+        />
+    </svg>
+    <div
+        [ngClass]="{
+            'border-transparent': !isSelected(item),
+            'border-primary-500': isSelected(item)
+        }"
+        class="absolute -inset-px rounded-lg border-2 pointer-events-none"
+        aria-hidden="true"
+    ></div>
+</label>

@@ -7,7 +7,6 @@ generates:
       - add:
             content: "// tslint:disable"
       - "typescript"
-      - "typescript-compatibility"
       - "typescript-operations"
     config:
       namingConvention:

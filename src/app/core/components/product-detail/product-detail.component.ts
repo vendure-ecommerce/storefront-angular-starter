@@ -3,13 +3,22 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map, switchMap, withLatestFrom } from 'rxjs/operators';
 
-import { AddToCart, GetProductDetail } from '../../../common/generated-types';
+import {
+    AddToCartMutation,
+    AddToCartMutationVariables,
+    GetProductDetailQuery,
+    GetProductDetailQueryVariables
+} from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
 import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
+import { ActiveService } from '../../providers/active/active.service';
+
+type Variant = NonNullable<GetProductDetailQuery['product']>['variants'][number];
+type Collection = NonNullable<GetProductDetailQuery['product']>['collections'][number];
 
 @Component({
     selector: 'vsf-product-detail',
@@ -18,11 +27,13 @@ import { ADD_TO_CART, GET_PRODUCT_DETAIL } from './product-detail.graphql';
 })
 export class ProductDetailComponent implements OnInit, OnDestroy {
 
-    product: GetProductDetail.Product;
+    product: GetProductDetailQuery['product'];
     selectedAsset: { id: string; preview: string; };
-    selectedVariant: GetProductDetail.Variants;
+    qtyInCart: { [id: string]: number; } = {};
+    selectedVariant: Variant;
     qty = 1;
-    breadcrumbs: GetProductDetail.Breadcrumbs[] | null = null;
+    breadcrumbs: Collection['breadcrumbs'] | null = null;
+    inFlight = false;
     @ViewChild('addedToCartTemplate', {static: true})
     private addToCartTemplate: TemplateRef<any>;
     private sub: Subscription;
@@ -30,6 +41,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private notificationService: NotificationService,
+                private activeService: ActiveService,
                 private route: ActivatedRoute) {
     }
 
@@ -42,7 +54,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
         this.sub = productSlug$.pipe(
             switchMap(slug => {
-                return this.dataService.query<GetProductDetail.Query, GetProductDetail.Variables>(GET_PRODUCT_DETAIL, {
+                return this.dataService.query<GetProductDetailQuery, GetProductDetailQueryVariables>(GET_PRODUCT_DETAIL, {
                         slug,
                     },
                 );
@@ -59,6 +71,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             const collection = this.getMostRelevantCollection(product.collections, lastCollectionSlug);
             this.breadcrumbs = collection ? collection.breadcrumbs : [];
         });
+
+        this.activeService.activeOrder$.subscribe(order => {
+            this.qtyInCart = {};
+            for (const line of order?.lines ?? []) {
+                this.qtyInCart[line.productVariant.id] = line.quantity;
+            }
+        })
     }
 
     ngOnDestroy() {
@@ -67,11 +86,13 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         }
     }
 
-    addToCart(variant: GetProductDetail.Variants, qty: number) {
-        this.dataService.mutate<AddToCart.Mutation, AddToCart.Variables>(ADD_TO_CART, {
+    addToCart(variant: Variant, qty: number) {
+        this.inFlight = true;
+        this.dataService.mutate<AddToCartMutation, AddToCartMutationVariables>(ADD_TO_CART, {
             variantId: variant.id,
             qty,
         }).subscribe(({addItemToOrder}) => {
+            this.inFlight = false;
             switch (addItemToOrder.__typename) {
                 case 'Order':
                     this.stateService.setState('activeOrderId', addItemToOrder ? addItemToOrder.id : null);
@@ -108,7 +129,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
      * If there is a collection matching the `lastCollectionId`, return that. Otherwise return the collection
      * with the longest `breadcrumbs` array, which corresponds to the most specific collection.
      */
-    private getMostRelevantCollection(collections: GetProductDetail.Collections[], lastCollectionSlug: string | null) {
+    private getMostRelevantCollection(collections: Collection[], lastCollectionSlug: string | null) {
         const lastCollection = collections.find(c => c.slug === lastCollectionSlug);
         if (lastCollection) {
             return lastCollection;

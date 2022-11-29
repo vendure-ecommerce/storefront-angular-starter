@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { merge, Observable } from 'rxjs';
 import { map, shareReplay, switchMap, take } from 'rxjs/operators';
 
-import { AdjustItemQuantity, GetActiveOrder, RemoveItemFromCart } from '../../../common/generated-types';
+import {
+    AdjustItemQuantityMutation, AdjustItemQuantityMutationVariables,
+    GetActiveOrderQuery,
+    GetActiveOrderQueryVariables,
+    RemoveItemFromCartMutation, RemoveItemFromCartMutationVariables
+} from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 import { NotificationService } from '../../providers/notification/notification.service';
 import { StateService } from '../../providers/state/state.service';
 
-import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from './cart-drawer.graphql';
+import { ADJUST_ITEM_QUANTITY, REMOVE_ITEM_FROM_CART } from './cart-drawer.graphql';
+import { ActiveService } from '../../providers/active/active.service';
 
 @Component({
     selector: 'vsf-cart-drawer',
@@ -16,15 +22,16 @@ import { ADJUST_ITEM_QUANTITY, GET_ACTIVE_ORDER, REMOVE_ITEM_FROM_CART } from '.
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartDrawerComponent implements OnInit {
-    @HostBinding('class.visible')
     @Input() visible = false;
     @Output() close = new EventEmitter<void>();
+    @ViewChild('overlay') private overlayRef: ElementRef<HTMLDivElement>;
 
-    cart$: Observable<GetActiveOrder.ActiveOrder | null | undefined>;
+    cart$: Observable<GetActiveOrderQuery['activeOrder']>;
     isEmpty$: Observable<boolean>;
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
+                private activeService: ActiveService,
                 private notificationService: NotificationService) {}
 
     ngOnInit() {
@@ -32,8 +39,7 @@ export class CartDrawerComponent implements OnInit {
             this.stateService.select(state => state.activeOrderId),
             this.stateService.select(state => state.signedIn),
         ).pipe(
-            switchMap(() => this.dataService.query<GetActiveOrder.Query, GetActiveOrder.Variables>(GET_ACTIVE_ORDER, {}, 'network-only')),
-            map(data => data.activeOrder),
+            switchMap(() => this.activeService.activeOrder$),
             shareReplay(1),
         );
         this.isEmpty$ = this.cart$.pipe(
@@ -49,8 +55,14 @@ export class CartDrawerComponent implements OnInit {
         }
     }
 
+    overlayClick(event: MouseEvent) {
+        if (event.target === this.overlayRef.nativeElement) {
+            this.close.emit();
+        }
+    }
+
     private adjustItemQuantity(id: string, qty: number) {
-        this.dataService.mutate<AdjustItemQuantity.Mutation, AdjustItemQuantity.Variables>(ADJUST_ITEM_QUANTITY, {
+        this.dataService.mutate<AdjustItemQuantityMutation, AdjustItemQuantityMutationVariables>(ADJUST_ITEM_QUANTITY, {
             id,
             qty,
         }).pipe(
@@ -70,7 +82,7 @@ export class CartDrawerComponent implements OnInit {
     }
 
     private removeItem(id: string) {
-        this.dataService.mutate<RemoveItemFromCart.Mutation, RemoveItemFromCart.Variables>(REMOVE_ITEM_FROM_CART, {
+        this.dataService.mutate<RemoveItemFromCartMutation, RemoveItemFromCartMutationVariables>(REMOVE_ITEM_FROM_CART, {
             id,
         }).pipe(
             take(1),

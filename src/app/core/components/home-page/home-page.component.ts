@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
+import { DomSanitizer, SafeStyle, SafeUrl } from '@angular/platform-browser';
 import { gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
+import { GetCollectionsQuery } from '../../../common/generated-types';
 import { DataService } from '../../providers/data/data.service';
 
 @Component({
@@ -15,36 +16,23 @@ import { DataService } from '../../providers/data/data.service';
 })
 export class HomePageComponent implements OnInit {
 
-    collections$: Observable<any[]>;
-    topSellers$: Observable<any[]>;
-    topSellersLoaded$: Observable<boolean>;
-    heroImage: SafeStyle;
-    readonly placeholderProducts = Array.from({ length: 12 }).map(() => null);
-    constructor(private dataService: DataService, private sanitizer: DomSanitizer) { }
+    collections$: Observable<GetCollectionsQuery['collections']['items']>;
+    heroImage: SafeUrl;
+    readonly placeholderProducts = Array.from({length: 12}).map(() => null);
+
+    constructor(private dataService: DataService, private sanitizer: DomSanitizer) {
+    }
 
     ngOnInit() {
-        this.collections$ = this.dataService.query(GET_COLLECTIONS, {
+        this.collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
             options: {},
-        }).pipe(
-            map(data => data.collections.items
-                .filter((collection: any) => collection.parent && collection.parent.name === '__root_collection__'),
-            ),
-        );
-
-        this.topSellers$ = this.dataService.query(GET_TOP_SELLERS).pipe(
-            map(data => data.search.items),
-            shareReplay(1),
-        );
-        this.topSellersLoaded$ = this.topSellers$.pipe(
-            map(items => 0 < items.length),
-        );
-
-        this.heroImage = this.sanitizer.bypassSecurityTrustStyle(this.getHeroImageUrl());
+        }).pipe(map(({collections}) => collections.items));
+        this.heroImage = this.getHeroImageUrl();
     }
 
     private getHeroImageUrl(): string {
-        const { apiHost, apiPort } = environment;
-        return `url('${apiHost}:${apiPort}/assets/preview/40/abel-y-costa-716024-unsplash__preview.jpg')`;
+        const {apiHost, apiPort} = environment;
+        return `${apiHost}:${apiPort}/assets/preview/a2/thomas-serer-420833-unsplash__preview.jpg`;
     }
 
 }

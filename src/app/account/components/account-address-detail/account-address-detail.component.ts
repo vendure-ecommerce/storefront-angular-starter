@@ -3,7 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 
-import { GetAvailableCountries, GetCustomerAddresses, UpdateAddress, UpdateAddressInput } from '../../../common/generated-types';
+import {
+    GetAvailableCountriesQuery,
+    GetCustomerAddressesQuery,
+    UpdateAddressInput,
+    UpdateAddressMutation,
+    UpdateAddressMutationVariables
+} from '../../../common/generated-types';
 import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../../common/graphql/documents.graphql';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../../core/providers/data/data.service';
@@ -14,13 +20,13 @@ import { UPDATE_ADDRESS } from './account-address-detail.graphql';
 @Component({
     selector: 'vsf-account-address-detail',
     templateUrl: './account-address-detail.component.html',
-    styleUrls: ['./account-address-detail.component.scss'],
+    // styleUrls: ['./account-address-detail.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountAddressDetailComponent implements OnInit {
 
-    address$: Observable<GetCustomerAddresses.Addresses | undefined>;
-    availableCountries$: Observable<GetAvailableCountries.AvailableCountries[]>;
+    address$: Observable<NonNullable<NonNullable<GetCustomerAddressesQuery['activeCustomer']>['addresses']>[number] | undefined>;
+    availableCountries$: Observable<GetAvailableCountriesQuery['availableCountries']>;
     @ViewChild('addressForm', { static: true }) private addressForm: AddressFormComponent;
 
     constructor(private route: ActivatedRoute, private dataService: DataService) { }
@@ -30,14 +36,14 @@ export class AccountAddressDetailComponent implements OnInit {
             map(pm => pm.get('id')),
             filter(notNullOrUndefined),
             switchMap(id =>
-                this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
+                this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES).pipe(
                     map(data => data.activeCustomer && data.activeCustomer.addresses),
                     filter(notNullOrUndefined),
                     map(addresses => addresses.find(address => address.id === id)),
                 ),
             ),
         );
-        this.availableCountries$ = this.dataService.query<GetAvailableCountries.Query>(GET_AVAILABLE_COUNTRIES).pipe(
+        this.availableCountries$ = this.dataService.query<GetAvailableCountriesQuery>(GET_AVAILABLE_COUNTRIES).pipe(
             map(data => data.availableCountries),
         );
     }
@@ -63,7 +69,7 @@ export class AccountAddressDetailComponent implements OnInit {
             streetLine1: formValue.streetLine1,
             streetLine2: formValue.streetLine2,
         };
-        this.dataService.mutate<UpdateAddress.Mutation, UpdateAddress.Variables>(UPDATE_ADDRESS, {
+        this.dataService.mutate<UpdateAddressMutation, UpdateAddressMutationVariables>(UPDATE_ADDRESS, {
             input,
         }).subscribe(() => {
             this.addressForm.addressForm.markAsPristine();

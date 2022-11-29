@@ -1,19 +1,23 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { Observable, of, Subject } from 'rxjs';
+import { map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
 
 import {
-    Address,
+    AddressFragment,
     CreateAddressInput,
-    GetAvailableCountries,
-    GetCustomerAddresses,
-    GetEligibleShippingMethods,
-    GetShippingAddress,
-    SetCustomerForOrder,
-    SetShippingAddress,
-    SetShippingMethod,
-    TransitionToArrangingPayment
+    GetAvailableCountriesQuery,
+    GetCustomerAddressesQuery,
+    GetEligibleShippingMethodsQuery,
+    GetOrderShippingDataQuery,
+    SetCustomerForOrderMutation,
+    SetCustomerForOrderMutationVariables,
+    SetShippingAddressMutation,
+    SetShippingAddressMutationVariables,
+    SetShippingMethodMutation,
+    SetShippingMethodMutationVariables,
+    TransitionToArrangingPaymentMutation
 } from '../../../common/generated-types';
 import { GET_AVAILABLE_COUNTRIES, GET_CUSTOMER_ADDRESSES } from '../../../common/graphql/documents.graphql';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
@@ -26,66 +30,85 @@ import { AddressModalComponent } from '../../../shared/components/address-modal/
 
 import {
     GET_ELIGIBLE_SHIPPING_METHODS,
-    GET_SHIPPING_ADDRESS,
+    GET_ORDER_SHIPPING_DATA,
     SET_CUSTOMER_FOR_ORDER,
     SET_SHIPPING_ADDRESS,
     SET_SHIPPING_METHOD,
     TRANSITION_TO_ARRANGING_PAYMENT,
 } from './checkout-shipping.graphql';
 
-export type AddressFormValue = Pick<Address.Fragment, Exclude<keyof Address.Fragment, 'country'>> & { countryCode: string; };
+export type AddressFormValue = Pick<AddressFragment, Exclude<keyof AddressFragment, 'country'>> & { countryCode: string; };
 
 @Component({
     selector: 'vsf-checkout-shipping',
     templateUrl: './checkout-shipping.component.html',
-    styleUrls: ['./checkout-shipping.component.scss'],
+    // styleUrls: ['./checkout-shipping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CheckoutShippingComponent implements OnInit {
+export class CheckoutShippingComponent implements OnInit, OnDestroy {
     @ViewChild('addressForm') addressForm: AddressFormComponent;
 
-    customerAddresses$: Observable<Address.Fragment[]>;
-    availableCountries$: Observable<GetAvailableCountries.AvailableCountries[]>;
-    eligibleShippingMethods$: Observable<GetEligibleShippingMethods.EligibleShippingMethods[]>;
-    shippingAddress$: Observable<GetShippingAddress.ShippingAddress | null | undefined>;
+    customerAddresses$: Observable<AddressFragment[]>;
+    availableCountries$: Observable<GetAvailableCountriesQuery['availableCountries']>;
+    eligibleShippingMethods$: Observable<GetEligibleShippingMethodsQuery['eligibleShippingMethods']>;
+    shippingAddress$: Observable<NonNullable<GetOrderShippingDataQuery['activeOrder']>['shippingAddress']>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
-    step: 'selectAddress' | 'customerDetails' | 'editAddress' | 'selectMethod' = 'selectAddress';
-    firstName = '';
-    lastName = '';
-    emailAddress = '';
+    contactForm: FormGroup;
+    private destroy$ = new Subject<void>();
 
     constructor(private dataService: DataService,
                 private stateService: StateService,
                 private changeDetector: ChangeDetectorRef,
                 private modalService: ModalService,
                 private notificationService: NotificationService,
+                private formBuilder: FormBuilder,
                 private route: ActivatedRoute,
-                private router: Router) { }
+                private router: Router) {
+    }
 
     ngOnInit() {
+        this.contactForm = this.formBuilder.group({
+            firstName: ['', Validators.required],
+            lastName: ['', Validators.required],
+            emailAddress: ['', Validators.email],
+        });
         this.signedIn$ = this.stateService.select(state => state.signedIn);
-        this.customerAddresses$ = this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES).pipe(
+        this.customerAddresses$ = this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES).pipe(
             map(data => data.activeCustomer ? data.activeCustomer.addresses || [] : []),
         );
-        this.availableCountries$ = this.dataService.query<GetAvailableCountries.Query>(GET_AVAILABLE_COUNTRIES).pipe(
+        this.availableCountries$ = this.dataService.query<GetAvailableCountriesQuery>(GET_AVAILABLE_COUNTRIES).pipe(
             map(data => data.availableCountries),
         );
-        this.shippingAddress$ = this.dataService.query<GetShippingAddress.Query>(GET_SHIPPING_ADDRESS).pipe(
+        const shippingData$ = this.dataService.query<GetOrderShippingDataQuery>(GET_ORDER_SHIPPING_DATA);
+        this.shippingAddress$ = shippingData$.pipe(
             map(data => data.activeOrder && data.activeOrder.shippingAddress),
         );
         this.eligibleShippingMethods$ = this.shippingAddress$.pipe(
-            switchMap(() => this.dataService.query<GetEligibleShippingMethods.Query>(GET_ELIGIBLE_SHIPPING_METHODS)),
+            switchMap(() => this.dataService.query<GetEligibleShippingMethodsQuery>(GET_ELIGIBLE_SHIPPING_METHODS)),
             map(data => data.eligibleShippingMethods),
         );
-        combineLatest(this.signedIn$, this.customerAddresses$).pipe(
-            take(1),
-        ).subscribe(([signedIn, addresses]) => {
-            this.step = signedIn ? (addresses.length ? 'selectAddress' : 'editAddress') : 'customerDetails';
+
+        shippingData$.pipe(
+            map(data => data.activeOrder && data.activeOrder.customer),
+            takeUntil(this.destroy$)
+        ).subscribe(customer => {
+            if (customer) {
+                this.contactForm.patchValue({
+                    firstName: customer.firstName,
+                    lastName: customer.lastName,
+                    emailAddress: customer.emailAddress,
+                }, {emitEvent: false});
+            }
         });
     }
 
-    getLines(address: Address.Fragment): string[] {
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    getLines(address: AddressFragment): string[] {
         return [
             address.fullName,
             address.company,
@@ -104,31 +127,36 @@ export class CheckoutShippingComponent implements OnInit {
             },
             closable: true,
         }).pipe(
-            switchMap(() => this.dataService.query<GetCustomerAddresses.Query>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
+            switchMap(() => this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
         )
             .subscribe();
     }
 
-    editAddress(address: Address.Fragment) {
-        this.addressForm.addressForm.patchValue({ ...address, countryCode: address.country.code });
-        this.step = 'editAddress';
+    editAddress(address: AddressFragment) {
+        this.addressForm.addressForm.patchValue({...address, countryCode: address.country.code});
     }
 
-    setCustomerDetails() {
-        this.addressForm.addressForm.patchValue({
-            fullName: `${this.firstName} ${this.lastName}`,
-        });
-        this.step = 'editAddress';
+    onCustomerFormBlur() {
+        this.setCustomerForOrder()?.subscribe();
     }
 
-    setShippingAddress(value: AddressFormValue | Address.Fragment) {
+    onAddressFormBlur(addressForm: FormGroup) {
+        if (addressForm.dirty && addressForm.valid) {
+            this.setShippingAddress(addressForm.value);
+        }
+    }
+
+    setShippingAddress(value: AddressFormValue | AddressFragment) {
         const input = this.valueToAddressInput(value);
-        this.dataService.mutate<SetShippingAddress.Mutation, SetShippingAddress.Variables>(SET_SHIPPING_ADDRESS, {
+        this.dataService.mutate<SetShippingAddressMutation, SetShippingAddressMutationVariables>(SET_SHIPPING_ADDRESS, {
             input,
         }).subscribe(data => {
-            this.step = 'selectMethod';
             this.changeDetector.markForCheck();
         });
+    }
+
+    setShippingMethod(id: string) {
+        this.shippingMethodId = id;
     }
 
     proceedToPayment() {
@@ -137,36 +165,36 @@ export class CheckoutShippingComponent implements OnInit {
             this.stateService.select(state => state.signedIn).pipe(
                 mergeMap(signedIn => !signedIn ? this.setCustomerForOrder() || of({}) : of({})),
                 mergeMap(() =>
-                    this.dataService.mutate<SetShippingMethod.Mutation, SetShippingMethod.Variables>(SET_SHIPPING_METHOD, {
+                    this.dataService.mutate<SetShippingMethodMutation, SetShippingMethodMutationVariables>(SET_SHIPPING_METHOD, {
                         id: shippingMethodId,
                     }),
                 ),
-                mergeMap(() => this.dataService.mutate<TransitionToArrangingPayment.Mutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
+                mergeMap(() => this.dataService.mutate<TransitionToArrangingPaymentMutation>(TRANSITION_TO_ARRANGING_PAYMENT)),
             ).subscribe((data) => {
-                this.router.navigate(['../payment'], { relativeTo: this.route });
+                this.router.navigate(['../payment'], {relativeTo: this.route});
             });
         }
     }
 
+    getId(method: { id: string }) {
+        return method.id;
+    }
+
     private setCustomerForOrder() {
-        if (this.emailAddress) {
-            return this.dataService.mutate<SetCustomerForOrder.Mutation, SetCustomerForOrder.Variables>(SET_CUSTOMER_FOR_ORDER, {
-                input: {
-                    emailAddress: this.emailAddress,
-                    firstName: this.firstName,
-                    lastName: this.lastName,
-                },
+        if (this.contactForm.valid) {
+            return this.dataService.mutate<SetCustomerForOrderMutation, SetCustomerForOrderMutationVariables>(SET_CUSTOMER_FOR_ORDER, {
+                input: this.contactForm.value,
             }).pipe(
-                tap(({ setCustomerForOrder }) => {
+                tap(({setCustomerForOrder}) => {
                     if (setCustomerForOrder && setCustomerForOrder.__typename !== 'Order') {
-                        this.notificationService.error((setCustomerForOrder as any).message);
+                        this.notificationService.error((setCustomerForOrder as any).message).subscribe();
                     }
                 })
-            )
+            );
         }
     }
 
-    private valueToAddressInput(value: AddressFormValue | Address.Fragment): CreateAddressInput {
+    private valueToAddressInput(value: AddressFormValue | AddressFragment): CreateAddressInput {
         return {
             city: value.city || '',
             company: value.company || '',
@@ -182,7 +210,7 @@ export class CheckoutShippingComponent implements OnInit {
         };
     }
 
-    private isFormValue(input: AddressFormValue | Address.Fragment): input is AddressFormValue {
+    private isFormValue(input: AddressFormValue | AddressFragment): input is AddressFormValue {
         return typeof (input as any).countryCode === 'string';
     }
 }

@@ -1,59 +1,65 @@
-<div class="masthead" [class.search-mode]="searchTerm$ | async">
-    <div class="masthead-bg" [style.background-image]="mastheadBackground$ | async"></div>
-    <div class="container position-relative">
-        <vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></vsf-collection-breadcrumbs>
-        <h1 class="display-1 collection-name">{{ (collection$ | async)?.name }}</h1>
-        <h1 class="display-4 text-muted" *ngIf="searchTerm$ | async as term">
-             Results for <span class="text-dark">"{{ term }}"</span>
-        </h1>
-    </div>
-
-</div>
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-md-2">
-            <vsf-product-list-controls [facetValues]="facetValues"
-                                       [activeFacetValueIds]="activeFacetValueIds$ | async"
-                                       [totalResults]="unfilteredTotalItems"></vsf-product-list-controls>
+<div class="max-w-6xl mx-auto px-4">
+    <ng-container *ngIf="collection$ | async as collection">
+        <div class="flex justify-between items-center">
+            <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
+                {{collection.name}}
+            </h2>
         </div>
-        <div class="col-12 col-md-10">
-            <ng-container *ngIf="collection$ | async as collection">
-                <div *ngIf="collection.children.length" class="child-categories d-flex flex-column flex-md-row">
+        <vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs$ | async"></vsf-collection-breadcrumbs>
+
+        <ng-container *ngIf="collection.children.length">
+            <div class="max-w-2xl mx-auto py-16 sm:py-16 lg:max-w-none border-b mb-16">
+                <h2 class="text-2xl font-light text-gray-900">
+                    Collections
+                </h2>
+                <div class="mt-6 grid max-w-xs sm:max-w-none mx-auto sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
                     <vsf-collection-card *ngFor="let child of collection.children"
                                          [collection]="child">
                     </vsf-collection-card>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="(totalResults$ | async) !== 0; else noResults">
-                <div class="product-list">
-                    <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
-                        <vsf-product-card *ngFor="let product of products$ | async; trackBy: trackByProductId"
-                                          [product]="product"></vsf-product-card>
-                    </ng-container>
-                    <ng-template #placeholders>
-                        <vsf-product-card *ngFor="let product of placeholderProducts"
-                                          [product]="product"></vsf-product-card>
-                    </ng-template>
-                    <div class="load-more flex-fill" *ngIf="displayLoadMore$ | async">
-                        <button class="btn btn-light btn-lg d-inline-flex align-items-center"
-                                (click)="loadMore()"
-                                [disabled]="loading$ | async">
-                            Load more
-                            <span [class.show]="loading$ | async"
-                                  class="loading-indicator spinner-grow spinner-grow-sm"
-                                  role="status"
-                                  aria-hidden="true"></span>
-                        </button>
-                    </div>
-                </div>
-            </ng-container>
+            </div>
+        </ng-container>
+    </ng-container>
+
+    <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8" *ngIf="searchTerm$ | async as term">
+        Results for <span class="font-medium">"{{ term }}"</span>
+    </h2>
+
+    <div class="mt-6 grid sm:grid-cols-5 gap-x-4">
+        <vsf-product-list-controls
+            class="mb-4"
+            [facetValues]="facetValues"
+            [activeFacetValueIds]="activeFacetValueIds$ | async"
+            [totalResults]="unfilteredTotalItems"></vsf-product-list-controls>
+        <div class="sm:col-span-5 lg:col-span-4">
+            <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
+                    <vsf-product-card *ngFor="let product of products$ | async; trackBy: trackByProductId"
+                                      [product]="product"></vsf-product-card>
+                </ng-container>
+                <ng-template #placeholders>
+                    <vsf-product-card *ngFor="let product of placeholderProducts"
+                                      [product]="product"></vsf-product-card>
+                </ng-template>
+            </div>
+            <div class="load-more flex-fill" *ngIf="displayLoadMore$ | async">
+                <button class="btn btn-light btn-lg d-inline-flex align-items-center"
+                        (click)="loadMore()"
+                        [disabled]="loading$ | async">
+                    Load more
+                    <span [class.show]="loading$ | async"
+                          class="loading-indicator spinner-grow spinner-grow-sm"
+                          role="status"
+                          aria-hidden="true"></span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 
-<ng-template #noResults>
-    <div class="no-results col-12">
-        <p class="h1">No results</p>
-        <fa-icon icon="sad-cry" size="10x"></fa-icon>
-    </div>
-</ng-template>
+    <ng-template #noResults>
+        <div class="no-results col-12">
+            <p class="h1">No results</p>
+            <fa-icon icon="sad-cry" size="10x"></fa-icon>
+        </div>
+    </ng-template>
+</div>

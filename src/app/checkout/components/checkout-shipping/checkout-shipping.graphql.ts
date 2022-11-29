@@ -3,10 +3,16 @@ import {gql} from 'apollo-angular';
 
 import { CART_FRAGMENT, ERROR_RESULT_FRAGMENT, ORDER_ADDRESS_FRAGMENT } from '../../../common/graphql/fragments.graphql';
 
-export const GET_SHIPPING_ADDRESS = gql`
-    query GetShippingAddress {
+export const GET_ORDER_SHIPPING_DATA = gql`
+    query GetOrderShippingData {
         activeOrder {
             id
+            customer {
+                id
+                firstName
+                lastName
+                emailAddress
+            }
             shippingAddress {
                 ...OrderAddress
             }

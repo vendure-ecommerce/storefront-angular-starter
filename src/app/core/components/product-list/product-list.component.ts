@@ -2,22 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { BehaviorSubject, combineLatest, merge, Observable, of } from 'rxjs';
-import {
-    distinctUntilChanged,
-    exhaustMap,
-    map,
-    mapTo,
-    scan,
-    share,
-    shareReplay,
-    skip,
-    switchMap,
-    take,
-    tap,
-    withLatestFrom,
-} from 'rxjs/operators';
+import { distinctUntilChanged, map, mapTo, scan, share, shareReplay, skip, switchMap, take, tap, } from 'rxjs/operators';
 
-import { GetCollection, SearchProducts } from '../../../common/generated-types';
+import {
+    GetCollectionQuery,
+    GetCollectionQueryVariables,
+    SearchProductsQuery,
+    SearchProductsQueryVariables
+} from '../../../common/generated-types';
 import { getRouteArrayParam } from '../../../common/utils/get-route-array-param';
 import { AssetPreviewPipe } from '../../../shared/pipes/asset-preview.pipe';
 import { DataService } from '../../providers/data/data.service';
@@ -25,16 +17,18 @@ import { StateService } from '../../providers/state/state.service';
 
 import { GET_COLLECTION, SEARCH_PRODUCTS } from './product-list.graphql';
 
+type SearchItem = SearchProductsQuery['search']['items'][number];
+
 @Component({
     selector: 'vsf-product-list',
     templateUrl: './product-list.component.html',
-styleUrls: ['./product-list.component.scss'],
+// styleUrls: ['./product-list.component.scss'],
     })
 export class ProductListComponent implements OnInit {
-    products$: Observable<SearchProducts.Items[]>;
+    products$: Observable<SearchItem[]>;
     totalResults$: Observable<number>;
-    collection$: Observable<GetCollection.Collection | undefined>;
-    facetValues: SearchProducts.FacetValues[] | undefined;
+    collection$: Observable<GetCollectionQuery['collection']>;
+    facetValues: SearchProductsQuery['search']['facetValues'];
     unfilteredTotalItems = 0;
     activeFacetValueIds$: Observable<string[]>;
     searchTerm$: Observable<string>;
@@ -79,7 +73,7 @@ export class ProductListComponent implements OnInit {
         this.collection$ = collectionSlug$.pipe(
             switchMap(slug => {
                 if (slug) {
-                    return this.dataService.query<GetCollection.Query, GetCollection.Variables>(GET_COLLECTION, {
+                    return this.dataService.query<GetCollectionQuery, GetCollectionQueryVariables>(GET_COLLECTION, {
                         slug,
                     }).pipe(
                         map(data => data.collection),
@@ -119,7 +113,7 @@ export class ProductListComponent implements OnInit {
             combineLatest(this.collection$, this.searchTerm$).pipe(
                 take(1),
                 switchMap(([collection, term]) => {
-                    return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
+                    return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
                         input: {
                             term,
                             groupByProduct: true,
@@ -139,7 +133,7 @@ export class ProductListComponent implements OnInit {
         );
         const queryResult$ = triggerFetch$.pipe(
             switchMap(([collection, facetValueIds, term]) => {
-                return this.dataService.query<SearchProducts.Query, SearchProducts.Variables>(SEARCH_PRODUCTS, {
+                return this.dataService.query<SearchProductsQuery, SearchProductsQueryVariables>(SEARCH_PRODUCTS, {
                     input: {
                         term,
                         groupByProduct: true,
@@ -177,13 +171,13 @@ export class ProductListComponent implements OnInit {
             share(),
         );
         this.products$ = merge(items$, reset$).pipe(
-            scan<SearchProducts.Items[] | string, SearchProducts.Items[]>((acc, val) => {
+            scan<SearchItem[] | string, SearchItem[]>((acc, val) => {
                 if (typeof val === 'string') {
                     return [];
                 } else {
                     return acc.concat(val);
                 }
-            }, [] as SearchProducts.Items[]),
+            }, [] as SearchItem[]),
         );
         this.totalResults$ = queryResult$.pipe(map(data => data.search.totalItems));
         this.displayLoadMore$ = combineLatest(this.products$, this.totalResults$).pipe(
@@ -194,7 +188,7 @@ export class ProductListComponent implements OnInit {
 
     }
 
-    trackByProductId(index: number, item: SearchProducts.Items) {
+    trackByProductId(index: number, item: SearchItem) {
         return item.productId;
     }
 

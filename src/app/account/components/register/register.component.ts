@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { Register } from '../../../common/generated-types';
+import { RegisterMutation, RegisterMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 
 import { REGISTER } from './register.graphql';
@@ -8,7 +8,7 @@ import { REGISTER } from './register.graphql';
 @Component({
     selector: 'vsf-register',
     templateUrl: './register.component.html',
-    styleUrls: ['./register.component.scss'],
+    // styleUrls: ['./register.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterComponent {
@@ -20,7 +20,7 @@ export class RegisterComponent {
                 private changeDetector: ChangeDetectorRef) { }
 
     register() {
-        this.dataService.mutate<Register.Mutation, Register.Variables>(REGISTER, {
+        this.dataService.mutate<RegisterMutation, RegisterMutationVariables>(REGISTER, {
             input: {
                 emailAddress: this.emailAddress,
                 firstName: this.firstName,

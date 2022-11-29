@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Verify } from '../../../common/generated-types';
+import { VerifyMutation, VerifyMutationVariables } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -10,7 +10,7 @@ import { VERIFY } from './verify.graphql';
 @Component({
     selector: 'vsf-verify',
     templateUrl: './verify.component.html',
-    styleUrls: ['./verify.component.scss'],
+    // styleUrls: ['./verify.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
 })
 export class VerifyComponent {
@@ -26,7 +26,7 @@ export class VerifyComponent {
         const token = this.route.snapshot.queryParamMap.get('token');
 
         if (password && token) {
-            this.dataService.mutate<Verify.Mutation, Verify.Variables>(VERIFY, {
+            this.dataService.mutate<VerifyMutation, VerifyMutationVariables>(VERIFY, {
                 password,
                 token,
             }).subscribe(() => {

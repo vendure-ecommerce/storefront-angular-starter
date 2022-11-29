@@ -3,12 +3,12 @@ import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/r
 import { Observable } from 'rxjs';
 import { map, shareReplay, take } from 'rxjs/operators';
 
-import { GetOrderForCheckout } from '../../common/generated-types';
+import { GetOrderForCheckoutQuery } from '../../common/generated-types';
 import { DataService } from '../../core/providers/data/data.service';
 
 import { GET_ORDER_FOR_CHECKOUT } from './checkout-resolver.graphql';
 
-export type ActiveOrderStream = Observable<GetOrderForCheckout.ActiveOrder | null | undefined>;
+export type ActiveOrderStream = Observable<GetOrderForCheckoutQuery['activeOrder'] | null | undefined>;
 
 @Injectable({ providedIn: 'root' })
 export class CheckoutResolver implements Resolve<ActiveOrderStream> {
@@ -16,7 +16,7 @@ export class CheckoutResolver implements Resolve<ActiveOrderStream> {
     constructor(private dataService: DataService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<ActiveOrderStream> {
-        const activeOrder$ = this.dataService.query<GetOrderForCheckout.Query>(GET_ORDER_FOR_CHECKOUT).pipe(
+        const activeOrder$ = this.dataService.query<GetOrderForCheckoutQuery>(GET_ORDER_FOR_CHECKOUT).pipe(
             map(data => data.activeOrder),
         );
 

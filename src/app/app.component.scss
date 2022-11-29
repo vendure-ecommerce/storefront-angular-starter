@@ -1,14 +1,6 @@
 @import "variables";
 
 .header {
-    background: rgb(255,255,255);
-    background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgb(245, 249, 250) 100%);
-    padding: $spacer 0 0 0;
-    > .container {
-        display: flex;
-        align-items: center;
-        padding: 6px;
-    }
 }
 
 .logo-link {

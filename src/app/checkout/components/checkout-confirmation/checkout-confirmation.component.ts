@@ -4,7 +4,12 @@ import { Observable, of } from 'rxjs';
 import { filter, map, mergeMap, shareReplay, switchMap, take } from 'rxjs/operators';
 
 import { REGISTER } from '../../../account/components/register/register.graphql';
-import { GetOrderByCode, Register } from '../../../common/generated-types';
+import {
+    GetOrderByCodeQuery,
+    GetOrderByCodeQueryVariables,
+    RegisterMutation,
+    RegisterMutationVariables
+} from '../../../common/generated-types';
 import { notNullOrUndefined } from '../../../common/utils/not-null-or-undefined';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
@@ -14,12 +19,12 @@ import { GET_ORDER_BY_CODE } from './checkout-confirmation.graphql';
 @Component({
     selector: 'vsf-checkout-confirmation',
     templateUrl: './checkout-confirmation.component.html',
-    styleUrls: ['./checkout-confirmation.component.scss'],
+    // styleUrls: ['./checkout-confirmation.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CheckoutConfirmationComponent implements OnInit {
     registrationSent = false;
-    order$: Observable<GetOrderByCode.OrderByCode>;
+    order$: Observable<GetOrderByCodeQuery['orderByCode']>;
     notFound$: Observable<boolean>;
 
     constructor(private stateService: StateService,
@@ -31,7 +36,7 @@ export class CheckoutConfirmationComponent implements OnInit {
         const orderRequest$ = this.route.paramMap.pipe(
             map(paramMap => paramMap.get('code')),
             filter(notNullOrUndefined),
-            switchMap(code => this.dataService.query<GetOrderByCode.Query, GetOrderByCode.Variables>(
+            switchMap(code => this.dataService.query<GetOrderByCodeQuery, GetOrderByCodeQueryVariables>(
                 GET_ORDER_BY_CODE,
                 { code },
             )),
@@ -52,7 +57,7 @@ export class CheckoutConfirmationComponent implements OnInit {
             mergeMap(order => {
                 const customer = order?.customer;
                 if (customer) {
-                    return this.dataService.mutate<Register.Mutation, Register.Variables>(REGISTER, {
+                    return this.dataService.mutate<RegisterMutation, RegisterMutationVariables>(REGISTER, {
                         input: {
                             emailAddress: customer.emailAddress,
                             firstName: customer.firstName,

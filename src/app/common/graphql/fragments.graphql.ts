@@ -21,6 +21,8 @@ export const CART_FRAGMENT = gql`
         code
         state
         active
+        updatedAt
+        orderPlacedAt
         lines {
             id
             featuredAsset {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
-import { SignOut } from '../../../common/generated-types';
+import { SignOutMutation } from '../../../common/generated-types';
 import { DataService } from '../../../core/providers/data/data.service';
 import { StateService } from '../../../core/providers/state/state.service';
 
@@ -11,7 +11,7 @@ import { SIGN_OUT } from './account.graphql';
 @Component({
     selector: 'vsf-account',
     templateUrl: './account.component.html',
-    styleUrls: ['./account.component.scss'],
+    // styleUrls: ['./account.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent {
@@ -25,7 +25,7 @@ export class AccountComponent {
     }
 
     signOut() {
-        this.dataService.mutate<SignOut.Mutation>(SIGN_OUT).subscribe({
+        this.dataService.mutate<SignOutMutation>(SIGN_OUT).subscribe({
             next: () => {
                 this.stateService.setState('signedIn', false);
                 this.router.navigate(['/']);

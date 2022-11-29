@@ -1,15 +1,18 @@
-<h2>Already have an account?</h2>
-
-<div class="sign-in-row">
-    <vsf-sign-in [navigateToOnSuccess]="['/checkout', 'shipping']"
-                 [displayRegisterLink]="false"></vsf-sign-in>
-    <div class="or"><div>or</div></div>
-    <div class="card guest">
-        <div class="card-body d-flex align-items-center">
-            <div>
-                <a class="btn btn-primary"
-                   [routerLink]="['./shipping']">Continue as guest</a>
+<div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <vsf-sign-in [navigateToOnSuccess]="['/checkout', 'shipping']"
+                     [displayRegisterLink]="false"></vsf-sign-in>
+        <div class="mt-6">
+            <div class="relative">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="bg-white px-2 text-gray-500">Or</span>
+                </div>
             </div>
+            <a class="block mt-6 text-center w-full justify-center rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:bg-gray-300"
+               [routerLink]="['./shipping']">Continue as guest</a>
         </div>
     </div>
 </div>
