@@ -8,24 +8,29 @@
                 </a>
             </div>
         </li>
-        <li *ngFor="let breadcrumb of tail(breadcrumbs); last as isLast; first as isFirst">
-            <div class="flex items-center">
-                <svg
-                    class="flex-shrink-0 h-5 w-5 text-gray-300"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    aria-hidden="true"
-                >
-                    <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"/>
-                </svg>
-                <div class="ml-2 md:ml-4 text-xs md:text-sm font-medium text-gray-500 hover:text-gray-700">
-                    <ng-container *ngIf="isLast && !linkLast; else link">{{ breadcrumb.name }}</ng-container>
-                    <ng-template #link>
-                        <a [routerLink]="['/category', breadcrumb.slug]">{{ breadcrumb.name }}</a>
-                    </ng-template>
+        <ng-container *ngIf="breadcrumbs; else placeholder">
+            <li *ngFor="let breadcrumb of tail(breadcrumbs); last as isLast; first as isFirst">
+                <div class="flex items-center">
+                    <svg
+                        class="flex-shrink-0 h-5 w-5 text-gray-300"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                    >
+                        <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z"/>
+                    </svg>
+                    <div class="ml-2 md:ml-4 text-xs md:text-sm font-medium text-gray-500 hover:text-gray-700">
+                        <ng-container *ngIf="isLast && !linkLast; else link">{{ breadcrumb.name }}</ng-container>
+                        <ng-template #link>
+                            <a [routerLink]="['/category', breadcrumb.slug]">{{ breadcrumb.name }}</a>
+                        </ng-template>
+                    </div>
                 </div>
-            </div>
-        </li>
+            </li>
+        </ng-container>
+        <ng-template #placeholder>
+            <li class="h-6 rounded bg-gray-200 animate-pulse w-64"></li>
+        </ng-template>
     </ol>
 </nav>

@@ -1,24 +1,30 @@
-<div class="max-w-6xl mx-auto px-4" *ngIf="product">
-    <h2 class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
-        {{ product.name }}
+<div class="max-w-6xl mx-auto px-4">
+    <h2 *ngIf="product; else titlePlaceholder"
+        class="text-3xl sm:text-5xl font-light tracking-tight text-gray-900 my-8">
+        {{ product?.name ?? '  ' }}
     </h2>
+    <ng-template #titlePlaceholder>
+        <div class="h-8 w-72 bg-gray-200 animate-pulse my-8">
+            {{ product?.name ?? '  ' }}
+        </div>
+    </ng-template>
     <vsf-collection-breadcrumbs [breadcrumbs]="breadcrumbs"
-                                *ngIf="product"
                                 class="mb-2"
                                 [linkLast]="true"></vsf-collection-breadcrumbs>
     <div class="lg:grid lg:grid-cols-2 lg:gap-x-8 lg:items-start mt-4 md:mt-12">
-        <vsf-asset-gallery [assets]="product.assets"
-                           [selectedAssetId]="product.featuredAsset?.id"></vsf-asset-gallery>
+        <vsf-asset-gallery
+            [assets]="product?.assets"
+            [selectedAssetId]="product?.featuredAsset?.id"></vsf-asset-gallery>
         <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0" #zoomPreviewArea>
             <div class="">
                 <h3 class="sr-only">Description</h3>
 
                 <div
                     class="text-base text-gray-700"
-                    [innerHTML]="product.description"
+                    [innerHTML]="product?.description"
                 ></div>
             </div>
-            <div class="mt-4" *ngIf="product.variants.length > 1">
+            <div class="mt-4" *ngIf="product?.variants.length > 1">
                 <label
                     htmlFor="option"
                     class="block text-sm font-medium text-gray-700"
@@ -27,7 +33,7 @@
                 </label>
                 <select [(ngModel)]="selectedVariant"
                         class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500 sm:text-sm rounded-md">
-                    <option *ngFor="let variant of product.variants"
+                    <option *ngFor="let variant of product?.variants"
                             [ngValue]="variant">{{ variant.name }}</option>
                 </select>
             </div>
@@ -46,7 +52,7 @@
                         }"
                         (click)="addToCart(selectedVariant, qty)"
                     >
-                        <div *ngIf="!qtyInCart[selectedVariant.id]; else inCartCount">Add to cart</div>
+                        <div *ngIf="!product || !qtyInCart[selectedVariant.id]; else inCartCount">Add to cart</div>
                         <ng-template #inCartCount>
                             <fa-icon icon="check" class="mr-2"></fa-icon>
                             <span>{{ qtyInCart[selectedVariant.id] }} in cart</span>
@@ -100,17 +106,17 @@
         <div class="mr-8">
             <img
                 class="rounded"
-                [src]="(variant.featuredAsset?.preview || product.featuredAsset?.preview) + '?preset=tiny'"
+                [src]="(variant.featuredAsset?.preview || product?.featuredAsset?.preview) + '?preset=tiny'"
                 alt="product thumbnail"
             />
         </div>
         <div class="text-sm">{{ quantity }} x {{ variant.name }}</div>
     </div>
     <div class="flex justify-end">
-    <button type="button"
-            (click)="viewCartFromNotification(close)"
-            class="inline-flex items-center rounded border border-transparent bg-primary-100 px-2.5 py-1.5 text-xs font-medium text-primary-700 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
-        View cart
-    </button>
+        <button type="button"
+                (click)="viewCartFromNotification(close)"
+                class="inline-flex items-center rounded border border-transparent bg-primary-100 px-2.5 py-1.5 text-xs font-medium text-primary-700 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2">
+            View cart
+        </button>
     </div>
 </ng-template>

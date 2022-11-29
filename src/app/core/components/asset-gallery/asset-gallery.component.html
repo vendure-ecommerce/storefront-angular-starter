@@ -1,8 +1,12 @@
-<img [src]="selectedAsset | assetPreview:540" alt=""
+<img *ngIf="selectedAsset" [src]="selectedAsset | assetPreview:540" alt=""
      (click)="openImage(selectedAsset?.id)"
+     (load)="onLoad()"
      class="w-full h-full object-center object-cover rounded-lg cursor-zoom-in"
 />
-<div class="flex flex-wrap space-x-2 mt-2" *ngIf="1 < assets.length">
+<div *ngIf="!selectedAsset || !featuredAssetLoaded"
+     class="rounded-lg bg-gray-200 animate-pulse aspect-video w-full"></div>
+
+<div class="flex flex-wrap space-x-2 mt-2" *ngIf="1 < assets?.length">
     <div *ngFor="let asset of assets"
          (click)="selectImage(asset.id)">
         <img [src]="asset | assetPreview:'thumb'" class="rounded-lg select-none h-24 w-full object-cover">
