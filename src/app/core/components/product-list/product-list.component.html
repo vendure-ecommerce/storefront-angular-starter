@@ -26,9 +26,11 @@
     </h2>
 
     <div class="mt-6 grid sm:grid-cols-5 gap-x-4">
-        <vsf-product-list-controls [facetValues]="facetValues"
-                                   [activeFacetValueIds]="activeFacetValueIds$ | async"
-                                   [totalResults]="unfilteredTotalItems"></vsf-product-list-controls>
+        <vsf-product-list-controls
+            class="mb-4"
+            [facetValues]="facetValues"
+            [activeFacetValueIds]="activeFacetValueIds$ | async"
+            [totalResults]="unfilteredTotalItems"></vsf-product-list-controls>
         <div class="sm:col-span-5 lg:col-span-4">
             <div class="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                 <ng-container *ngIf="(totalResults$ | async) !== null; else placeholders">
