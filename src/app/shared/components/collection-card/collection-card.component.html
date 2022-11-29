@@ -4,7 +4,7 @@
 >
      <span aria-hidden="true" class="">
        <div class="w-full h-full object-center object-cover">
-           <img [src]="collection.featuredAsset?.preview + '?w=300&h=300'"/>
+           <img [src]="collection.featuredAsset | assetPreview:300:300"/>
        </div>
      </span>
     <span
