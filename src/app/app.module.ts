@@ -2,10 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule, makeStateKey, TransferState } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterModule, UrlSerializer } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
 import { filter } from 'rxjs/operators';
-
-import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { routes } from './app.routes';
@@ -26,10 +23,11 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled', initialNavigation: 'enabledBlocking' }),
         CoreModule,
         SharedModule,
-        ServiceWorkerModule.register(`${environment.baseHref}ngsw-worker.js`, {
-            enabled: environment.production,
-            registrationStrategy: 'registerWithDelay:5000',
-        }),
+        // Using the service worker appears to break SSR after the initial page load.
+        // ServiceWorkerModule.register(`${environment.baseHref}ngsw-worker.js`, {
+        //     enabled: environment.production,
+        //     registrationStrategy: 'registerWithDelay:5000',
+        // }),
     ],
     bootstrap: [AppComponent],
 })
