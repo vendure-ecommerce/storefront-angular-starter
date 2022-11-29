@@ -23,7 +23,7 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
     imports: [
         BrowserModule.withServerTransition({appId: 'serverApp'}),
         BrowserTransferStateModule,
-        RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled', initialNavigation: 'enabledBlocking', relativeLinkResolution: 'legacy' }),
+        RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled', initialNavigation: 'enabledBlocking' }),
         CoreModule,
         SharedModule,
         ServiceWorkerModule.register(`${environment.baseHref}ngsw-worker.js`, {

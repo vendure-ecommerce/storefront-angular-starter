@@ -13,7 +13,7 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "allowSyntheticDefaultImports": true,
-    "target": "es2020",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -21,6 +21,7 @@
       "es2017",
       "dom",
       "esnext.asynciterable"
-    ]
+    ],
+    "useDefineForClassFields": false
   }
 }
