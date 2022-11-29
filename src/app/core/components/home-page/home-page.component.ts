@@ -11,7 +11,7 @@ import { DataService } from '../../providers/data/data.service';
 @Component({
     selector: 'vsf-home-page',
     templateUrl: './home-page.component.html',
-    // styleUrls: ['./home-page.component.scss'],
+    styleUrls: ['./home-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent implements OnInit {
@@ -32,7 +32,7 @@ export class HomePageComponent implements OnInit {
 
     private getHeroImageUrl(): string {
         const {apiHost, apiPort} = environment;
-        return `${apiHost}:${apiPort}/assets/preview/40/abel-y-costa-716024-unsplash__preview.jpg`;
+        return `${apiHost}:${apiPort}/assets/preview/a2/thomas-serer-420833-unsplash__preview.jpg`;
     }
 
 }

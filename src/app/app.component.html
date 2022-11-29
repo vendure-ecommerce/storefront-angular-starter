@@ -7,7 +7,7 @@
                         <p class="hidden sm:block">
                             Exclusive: Get your own
                             <a
-                                href="https://github.com/vendure-ecommerce/storefront-remix-starter"
+                                href="https://github.com/vendure-ecommerce/storefront-angular-starter"
                                 target="_blank"
                                 class="underline"
                             >
@@ -23,7 +23,7 @@
             <div class="max-w-6xl mx-2 py-2 md:mx-auto flex items-center space-x-4">
                 <vsf-mobile-menu-toggle class="md:hidden"></vsf-mobile-menu-toggle>
                 <a [routerLink]="['/']" class="l">
-                    <img src="assets/cube-logo-line-icon-nostroke.png" class="w-12" alt="Vendure Storefront">
+                    <img src="assets/cube-logo-small.webp" class="w-10" alt="Vendure Storefront">
                 </a>
                 <vsf-collections-menu class="text-white"></vsf-collections-menu>
                 <vsf-product-search-bar class="flex-1"></vsf-product-search-bar>
@@ -57,21 +57,14 @@
                                     Shop
                                 </h3>
                                 <ul role="list" class="mt-4 space-y-4">
-                                    <!--  {collections.map((collection) => (
-                                          <li key={collection.id}>
-                                              <Link
-                                                  class="text-base text-gray-500 hover:text-gray-600"
-                                                  to={
-                                                      '/collections/' +
-                                                      collection.slug
-                                                  }
-                                                  prefetch="intent"
-                                                  key={collection.id}
-                                              >
-                                                  {collection.name}
-                                              </Link>
-                                          </li>
-                                      ))}-->
+                                    <li *ngFor="let item of topCollections$ | async">
+                                        <a
+                                            [routerLink]="['/category', item.slug]"
+                                            class="text-base text-gray-500 hover:text-gray-600"
+                                        >
+                                            {{item.name}}
+                                        </a>
+                                    </li>
                                 </ul>
                             </div>
                             <div class="mt-12 md:mt-0">
@@ -142,7 +135,7 @@
                 <div class="mt-8 border-t pt-8">
                     <a
                         class="flex items-center space-x-4 font-medium text-gray-500 hover:text-gray-700"
-                        href="https://github.com/vendure-ecommerce/storefront-remix-starter"
+                        href="https://github.com/vendure-ecommerce/storefront-angular-starter"
                     >
                         <svg
                             fill="currentColor"
@@ -156,9 +149,7 @@
                                 clipRule="evenodd"
                             />
                         </svg>
-                        <span>
-                                   github.com/vendure-ecommerce/storefront-remix-starter
-                               </span>
+                        <span>github.com/vendure-ecommerce/storefront-angular-starter</span>
                     </a>
                 </div>
             </div>

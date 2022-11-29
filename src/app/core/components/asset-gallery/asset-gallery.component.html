@@ -1,6 +1,6 @@
 <img [src]="selectedAsset | assetPreview:540" alt=""
      (click)="openImage(selectedAsset?.id)"
-     class="w-full h-full object-center object-cover rounded-lg"
+     class="w-full h-full object-center object-cover rounded-lg cursor-zoom-in"
 />
 <div class="flex flex-wrap space-x-2 mt-2" *ngIf="1 < assets.length">
     <div *ngFor="let asset of assets"
