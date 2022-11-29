@@ -25,13 +25,13 @@
                 <a [routerLink]="['/']" class="l">
                     <img src="assets/cube-logo-small.webp" class="w-10" alt="Vendure Storefront">
                 </a>
-                <vsf-collections-menu class="text-white"></vsf-collections-menu>
+                <vsf-collections-menu class="hidden md:block text-white"></vsf-collections-menu>
                 <vsf-product-search-bar class="flex-1"></vsf-product-search-bar>
                 <vsf-cart-toggle (toggle)="openCartDrawer()"></vsf-cart-toggle>
             </div>
         </div>
     </vsf-layout-header>
-    <vsf-collections-menu-mobile [visible]="mobileNavVisible$ | async"></vsf-collections-menu-mobile>
+    <vsf-collections-menu-mobile [visible]="mobileNavVisible$ | async" class="z-10"></vsf-collections-menu-mobile>
     <vsf-cart-drawer [visible]="cartDrawerVisible$ | async" (close)="closeCartDrawer()"></vsf-cart-drawer>
     <div class="contents">
         <vsf-home-page *ngIf="isHomePage$ | async; else main"></vsf-home-page>
