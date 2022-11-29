@@ -1,25 +1,28 @@
 <ng-container *ngIf="form">
-    <form [formGroup]="form">
-        <div class="form-group row">
-            <label for="firstName" class="col-sm-3 col-form-label">First name</label>
-            <div class="col-sm-9">
-                <input class="form-control" formControlName="firstName" id="firstName">
+    <vsf-centered-card class="block max-w-sm">
+        <form [formGroup]="form">
+            <div class="text-left mb-2">
+                <label for="firstName" class="text-sm text-gray-600">First name</label>
+                <div class="col-sm-9">
+                    <input class="input-text" formControlName="firstName" id="firstName">
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="lastName" class="col-sm-3 col-form-label">Last name</label>
-            <div class="col-sm-9">
-                <input class="form-control" formControlName="lastName" id="lastName">
+            <div class="text-left mb-2">
+                <label for="lastName" class="text-sm text-gray-600">Last name</label>
+                <div class="col-sm-9">
+                    <input class="input-text" formControlName="lastName" id="lastName">
+                </div>
             </div>
-        </div>
-        <div class="form-group row">
-            <label for="phoneNumber" class="col-sm-3 col-form-label">Phone number</label>
-            <div class="col-sm-9">
-                <input class="form-control" formControlName="phoneNumber" id="phoneNumber">
+            <div class="text-left mb-2">
+                <label for="phoneNumber" class="text-sm text-gray-600">Phone number</label>
+                <div class="col-sm-9">
+                    <input class="input-text" formControlName="phoneNumber" id="phoneNumber">
+                </div>
             </div>
-        </div>
-    </form>
-    <button class="btn btn-secondary mt-3"
-            [disabled]="form.invalid || form.pristine"
-            (click)="updateDetails()">Update Details</button>
+        </form>
+        <button class="btn-primary mt-3"
+                [disabled]="form.invalid || form.pristine"
+                (click)="updateDetails()">Update Details
+        </button>
+    </vsf-centered-card>
 </ng-container>

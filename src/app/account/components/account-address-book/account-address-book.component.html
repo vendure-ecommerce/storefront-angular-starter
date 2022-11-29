@@ -1,7 +1,8 @@
-<div class="card-deck">
+<div class="flex flex-wrap space-x-6">
     <vsf-address-card *ngFor="let address of addresses$ | async"
-                      [address]="address">
-        <a class="btn btn-secondary btn-sm"
+                      [address]="address"
+                      class="w-64">
+        <a class="block hover:text-primary-600 border-t mt-2 pt-2"
            [routerLink]="['./', address.id]">
             Edit
         </a>

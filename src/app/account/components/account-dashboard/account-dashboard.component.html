@@ -1,5 +1,5 @@
 <ng-container *ngIf="activeCustomer$ | async as customer">
-    <h2 class="display-4">
+    <h2 class="text-3xl">
         {{ customer.firstName }} {{ customer.lastName }}
     </h2>
     <p class="lead">{{ customer.emailAddress }}</p>

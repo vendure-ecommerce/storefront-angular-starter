@@ -5,7 +5,7 @@
         <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
         <div class="mt-1">
             <input [(ngModel)]="emailAddress" id="email" name="email" type="email" autocomplete="email" required
-                   class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+                   class="input-text">
         </div>
     </div>
 
@@ -14,7 +14,7 @@
         <div class="mt-1">
             <input [(ngModel)]="password" id="password" name="password" type="password"
                    autocomplete="current-password" required
-                   class="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-primary-500 focus:outline-none focus:ring-primary-500 sm:text-sm">
+                   class="input-text">
         </div>
     </div>
 
@@ -27,18 +27,16 @@
         </div>
 
         <div class="text-sm">
-            <a [routerLink]="['/account/forgotten-password', { email: this.emailAddress }]"
+            <a [routerLink]="['/account/forgotten-password', { email: this.emailAddress ?? '' }]"
                class="font-medium text-primary-600 hover:text-primary-500">Forgot your password?</a>
         </div>
-        <div *ngIf="displayRegisterLink" class="text-sm">
-            <a [routerLink]="['/account/register']">No account? Register here</a>
-        </div>
     </div>
-    <div>
         <button type="submit"
                 [disabled]="signInForm.invalid || signInForm.pristine"
-                class="w-full justify-center rounded-md border border-transparent bg-primary-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 disabled:bg-gray-300">
+                class="w-full btn-primary">
             Sign in
         </button>
+    <div *ngIf="displayRegisterLink" class="text-sm font-medium text-primary-600 hover:text-primary-500 mx-auto">
+        <a [routerLink]="['/account/register']">No account? Register here</a>
     </div>
 </form>

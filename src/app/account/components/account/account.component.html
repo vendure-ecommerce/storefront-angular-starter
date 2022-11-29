@@ -1,40 +1,40 @@
-<div class="container">
-    <div class="row">
-        <div class="col-12 col-md-3"
-             *ngIf="isSignedIn$ | async">
-            <div class="list-group-flush">
-                <a class="list-group-item list-group-item-action"
+<div class="lg:max-w-7xl max-w-2xl mx-auto pt-8 pb-24 px-4 sm:px-6 lg:px-8">
+    <div class="md:grid" [class.md:grid-cols-4]="isSignedIn$ | async">
+        <div class="bg-gray-50 rounded-lg p-4" *ngIf="isSignedIn$ | async">
+            <div class="flex flex-wrap md:flex-col md:space-y-2">
+                <a class="text-gray-600 hover:bg-primary-50 hover:text-gray-900 border border-transparent flex items-center px-3 py-2 text-sm font-medium rounded-md"
                    [routerLink]="['./']"
                    [routerLinkActiveOptions]="{ exact: true }"
-                   routerLinkActive="active">
+                   routerLinkActive="bg-primary-50 border-primary-100 text-primary-600">
                     Dashboard
                 </a>
-                <a class="list-group-item list-group-item-action"
+                <a class="text-gray-600 hover:bg-primary-50 hover:text-gray-900 border border-transparent flex items-center px-3 py-2 text-sm font-medium rounded-md"
                    [routerLink]="['./', 'orders']"
-                   routerLinkActive="active">
+                   routerLinkActive="bg-primary-50 border-primary-100 text-primary-600">
                     Orders
                 </a>
-                <a class="list-group-item list-group-item-action"
+                <a class="text-gray-600 hover:bg-primary-50 hover:text-gray-900 border border-transparent flex items-center px-3 py-2 text-sm font-medium rounded-md"
                    [routerLink]="['./', 'address-book']"
-                   routerLinkActive="active">
+                   routerLinkActive="bg-primary-50 border-primary-100 text-primary-600">
                     Address book
                 </a>
-                <a class="list-group-item list-group-item-action"
+                <a class="text-gray-600 hover:bg-primary-50 hover:text-gray-900 border border-transparent flex items-center px-3 py-2 text-sm font-medium rounded-md"
                    [routerLink]="['./', 'details']"
-                   routerLinkActive="active">
+                   routerLinkActive="bg-primary-50 border-primary-100 text-primary-600">
                     Personal details
                 </a>
-                <a class="list-group-item list-group-item-action"
+                <a class="text-gray-600 hover:bg-primary-50 hover:text-gray-900 border border-transparent flex items-center px-3 py-2 text-sm font-medium rounded-md"
                    [routerLink]="['./', 'change-credentials']"
-                   routerLinkActive="active">
+                   routerLinkActive="bg-primary-50 border-primary-100 text-primary-600">
                     Change credentials
                 </a>
-                <a class="list-group-item">
-                    <button class="btn btn-warning btn-sm btn-block" (click)="signOut()">Sign out</button>
-                </a>
+            </div>
+
+            <div class="px-3 py-2 mt-12 border-t">
+                <button class="text-gray-700 hover:text-primary-600 text-sm" (click)="signOut()">Sign out</button>
             </div>
         </div>
-        <div class="col-12" [class.col-md-9]="isSignedIn$ | async">
+        <div class="px-6" [class.col-span-3]="isSignedIn$ | async">
             <router-outlet></router-outlet>
         </div>
     </div>
