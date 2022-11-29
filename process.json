@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "script": "dist/server/main.js",
+      "name": "angular-storefront-server",
+      "max_memory_restart": "1G",
+      "cron_restart": "0 3 */1 * *",
+      "kill_timeout": 2000
+    }
+  ]
+}
