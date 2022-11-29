@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { filter, map } from 'rxjs/operators';
 
 import {
@@ -22,10 +22,10 @@ import { UPDATE_CUSTOMER_DETAILS } from './account-customer-details.graphql';
 })
 export class AccountCustomerDetailsComponent implements OnInit {
 
-    form: FormGroup;
+    form: UntypedFormGroup;
 
     constructor(private dataService: DataService,
-                private formBuilder: FormBuilder,
+                private formBuilder: UntypedFormBuilder,
                 private changeDetectorRef: ChangeDetectorRef) {
     }
 

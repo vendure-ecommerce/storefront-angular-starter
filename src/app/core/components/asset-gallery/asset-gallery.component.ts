@@ -1,10 +1,9 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-// import * as PhotoSwipe from 'photoswipe';
-// import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default';
 import PhotoSwipeLightbox from 'photoswipe/lightbox';
-// import 'photoswipe/style.css';
 
 import { AssetFragment } from '../../../common/generated-types';
+
+import './types.d';
 
 export type AssetWithDimensions = Pick<AssetFragment, 'id' | 'preview' | 'width' | 'height'>;
 

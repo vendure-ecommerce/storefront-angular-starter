@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of, Subject } from 'rxjs';
 import { map, mergeMap, switchMap, takeUntil, tap } from 'rxjs/operators';
@@ -54,7 +54,7 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
     shippingAddress$: Observable<NonNullable<GetOrderShippingDataQuery['activeOrder']>['shippingAddress']>;
     signedIn$: Observable<boolean>;
     shippingMethodId: string | undefined;
-    contactForm: FormGroup;
+    contactForm: UntypedFormGroup;
     private destroy$ = new Subject<void>();
 
     constructor(private dataService: DataService,
@@ -62,7 +62,7 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
                 private changeDetector: ChangeDetectorRef,
                 private modalService: ModalService,
                 private notificationService: NotificationService,
-                private formBuilder: FormBuilder,
+                private formBuilder: UntypedFormBuilder,
                 private route: ActivatedRoute,
                 private router: Router) {
     }
@@ -140,7 +140,7 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
         this.setCustomerForOrder()?.subscribe();
     }
 
-    onAddressFormBlur(addressForm: FormGroup) {
+    onAddressFormBlur(addressForm: UntypedFormGroup) {
         if (addressForm.dirty && addressForm.valid) {
             this.setShippingAddress(addressForm.value);
         }

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 
 import { AddressFragment, CountryFragment, OrderAddressFragment } from '../../../common/generated-types';
 
@@ -14,8 +14,8 @@ export class AddressFormComponent implements OnChanges {
     @Input() availableCountries: CountryFragment[];
     @Input() address: OrderAddressFragment | AddressFragment;
 
-    addressForm: FormGroup;
-    constructor(private formBuilder: FormBuilder) {
+    addressForm: UntypedFormGroup;
+    constructor(private formBuilder: UntypedFormBuilder) {
         this.addressForm = this.formBuilder.group({
             fullName: '',
             company: '',
