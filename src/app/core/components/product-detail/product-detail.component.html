@@ -21,7 +21,7 @@
 
                 <div
                     class="text-base text-gray-700"
-                    [innerHTML]="product?.description"
+                    [innerHTML]="product?.description | safeHtml"
                 ></div>
             </div>
             <div class="mt-4" *ngIf="product?.variants.length > 1">
