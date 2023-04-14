@@ -27,6 +27,7 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { AssetPreviewPipe } from './pipes/asset-preview.pipe';
 import { FormatPricePipe } from './pipes/format-price.pipe';
 import { ProductUrlPipe } from './pipes/product-url.pipe';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 const SHARED_DECLARATIONS = [
     CartContentsComponent,
@@ -47,6 +48,7 @@ const SHARED_DECLARATIONS = [
     FormatPricePipe,
     ProductUrlPipe,
     AssetPreviewPipe,
+    SafeHtmlPipe,
     RadioCardComponent,
     RadioCardFieldsetComponent,
     CartTotalsComponent,
