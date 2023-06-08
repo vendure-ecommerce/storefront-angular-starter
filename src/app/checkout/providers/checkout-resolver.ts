@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, shareReplay, take } from 'rxjs/operators';
 
@@ -11,7 +11,7 @@ import { GET_ORDER_FOR_CHECKOUT } from './checkout-resolver.graphql';
 export type ActiveOrderStream = Observable<GetOrderForCheckoutQuery['activeOrder'] | null | undefined>;
 
 @Injectable({ providedIn: 'root' })
-export class CheckoutResolver implements Resolve<ActiveOrderStream> {
+export class CheckoutResolver  {
 
     constructor(private dataService: DataService) {}
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
@@ -9,7 +9,7 @@ import { DataService } from '../../core/providers/data/data.service';
 import { StateService } from '../../core/providers/state/state.service';
 
 @Injectable({ providedIn: 'root' })
-export class AccountGuard implements CanActivate {
+export class AccountGuard  {
 
     constructor(private stateService: StateService, private dataService: DataService) {}
 

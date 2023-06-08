@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ApolloLink, InMemoryCache } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { APOLLO_OPTIONS, ApolloModule } from 'apollo-angular';
+import { ApolloModule, APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 
 
@@ -29,9 +29,9 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { ProductListControlsComponent } from './components/product-list-controls/product-list-controls.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
 import { ProductSearchBarComponent } from './components/product-search-bar/product-search-bar.component';
+import { TopReviewsComponent } from './components/top-reviews/top-reviews.component';
 import { buildIconLibrary } from './icon-library';
 import { DefaultInterceptor } from './providers/data/interceptor';
-import { TopReviewsComponent } from './components/top-reviews/top-reviews.component';
 
 const CORE_COMPONENTS = [
     ProductListComponent,
@@ -147,6 +147,7 @@ export function apolloOptionsFactory(httpLink: HttpLink, platformId: any) {
                         }
                     }
                 }
+                return {};
             }),
             httpLink.create({
                 uri: `${apiHost}:${apiPort}/${shopApiPath}`,

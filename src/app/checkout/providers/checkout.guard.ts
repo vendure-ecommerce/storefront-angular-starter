@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router } from '@angular/router';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -14,7 +14,7 @@ import { CheckoutSignInComponent } from '../components/checkout-sign-in/checkout
 import { GET_ORDER_FOR_CHECKOUT } from './checkout-resolver.graphql';
 
 @Injectable({ providedIn: 'root' })
-export class CheckoutGuard implements CanActivate {
+export class CheckoutGuard  {
 
     constructor(private router: Router,
                 private dataService: DataService,

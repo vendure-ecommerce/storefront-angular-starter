@@ -127,7 +127,7 @@ export class CheckoutShippingComponent implements OnInit, OnDestroy {
             },
             closable: true,
         }).pipe(
-            switchMap(() => this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES, null, 'network-only')),
+            switchMap(() => this.dataService.query<GetCustomerAddressesQuery>(GET_CUSTOMER_ADDRESSES, {}, 'network-only')),
         )
             .subscribe();
     }

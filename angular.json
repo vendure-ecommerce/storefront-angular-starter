@@ -138,7 +138,8 @@
                 "dist"
               ]
             },
-            "optimization": false
+            "optimization": false,
+            "buildOptimizer": false
           },
           "configurations": {
             "production": {
@@ -148,7 +149,8 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true
+              "optimization": true,
+              "buildOptimizer": true
             },
             "docker": {
               "fileReplacements": [
@@ -157,7 +159,8 @@
                   "with": "src/environments/environment.docker.ts"
                 }
               ],
-              "optimization": true
+              "optimization": true,
+              "buildOptimizer": true
             }
           }
         },
