@@ -50,6 +50,17 @@ To deploy this storefront in a production environment, take the following steps:
 
 This project is used in the [angular-storefront.vendure.io](https://angular-storefront.vendure.io) demo. There is a [GitHub Actions workflow](./.github/workflows/build.yml) which is triggered whenever a new tag is added. The tag should be of the format `"vX.Y.Z"`. The workflow will run the `build:ssr` script and upload the compiled output to an Amazon S3 bucket, from which the vendure-demo project will pull the artifacts.
 
+1. Update the version in package.json & Dockerfile
+2. Commit the changes "Bump version to vX.Y.Z"
+3. Create a tag with the same version number:
+   ```sh
+   git tag -a v1.2.3 -m "v1.2.3"
+   ```
+4. Push the tag to GitHub:
+   ```sh
+   git push origin master --follow-tags
+   ```
+
 Once the GitHub action workflow has completed and the built artifacts have been successfully uploaded to the S3 bucket, the app can be deployed with `git push dokku master`.
 
 ## License
