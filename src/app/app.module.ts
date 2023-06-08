@@ -1,6 +1,6 @@
-import { DOCUMENT } from '@angular/common';
-import { Inject, NgModule } from '@angular/core';
-import { BrowserModule, makeStateKey, TransferState } from '@angular/platform-browser';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Inject, NgModule, PLATFORM_ID } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
 import { NavigationEnd, Router, RouterModule, UrlSerializer } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -10,15 +10,13 @@ import { HomePageComponent } from './core/components/home-page/home-page.compone
 import { CoreModule } from './core/core.module';
 import { SharedModule } from './shared/shared.module';
 
-const STATE_KEY = makeStateKey<any>('apollo.state');
-
 @NgModule({
     declarations: [
         AppComponent,
         HomePageComponent,
     ],
     imports: [
-        BrowserModule.withServerTransition({appId: 'serverApp'}),
+        BrowserModule,
         RouterModule.forRoot(routes, { scrollPositionRestoration: 'disabled', initialNavigation: 'enabledBlocking' }),
         CoreModule,
         SharedModule,
@@ -33,32 +31,14 @@ const STATE_KEY = makeStateKey<any>('apollo.state');
 export class AppModule {
 
     constructor(
-        private coreModule: CoreModule,
-        private readonly transferState: TransferState,
         private router: Router,
         private urlSerializer: UrlSerializer,
+        @Inject(PLATFORM_ID) private platformId: any,
         @Inject(DOCUMENT) private document?: Document,
     ) {
-        const isBrowser = this.transferState.hasKey<any>(STATE_KEY);
-
-        if (isBrowser) {
-            this.onBrowser();
+        if (isPlatformBrowser(this.platformId)) {
             this.handleScrollOnNavigations();
-        } else {
-            this.onServer();
         }
-    }
-
-    onServer() {
-        this.transferState.onSerialize(STATE_KEY, () => {
-            const state = this.coreModule.extractState();
-            return state;
-        });
-    }
-
-    onBrowser() {
-        const state = this.transferState.get<any>(STATE_KEY, null);
-        this.coreModule.restoreState(state);
     }
 
     /**

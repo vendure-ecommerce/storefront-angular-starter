@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
+import { provideClientHydration } from '@angular/platform-browser';
+import { ServerModule } from '@angular/platform-server';
 
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
@@ -8,8 +9,11 @@ import { AppModule } from './app.module';
     imports: [
         AppModule,
         ServerModule,
-        ServerTransferStateModule,
     ],
     bootstrap: [AppComponent],
+    providers: [
+        provideClientHydration(),
+    ],
 })
-export class AppServerModule {}
+export class AppServerModule {
+}
