@@ -3,10 +3,10 @@ import { Router, RouterEvent } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
-import { StateService } from './core/providers/state/state.service';
-import { DataService } from './core/providers/data/data.service';
-import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
 import { GetCollectionsQuery, GetCollectionsQueryVariables } from './common/generated-types';
+import { GET_COLLECTIONS } from './common/graphql/documents.graphql';
+import { DataService } from './core/providers/data/data.service';
+import { StateService } from './core/providers/state/state.service';
 
 @Component({
     selector: 'vsf-root',
@@ -46,8 +46,10 @@ export class AppComponent implements OnInit {
             filter<any>(event => event instanceof RouterEvent),
             map((event: RouterEvent) => event.url === '/'),
         );
-        this.topCollections$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS).pipe(
-            map(({collections}) => collections.items.filter(c => c.parent?.name === '__root_collection__'))
+        this.topCollections$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
+            options: {take: 25, topLevelOnly: true }
+        }).pipe(
+            map(({collections}) => collections.items)
         );
     }
 

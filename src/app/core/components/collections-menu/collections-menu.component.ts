@@ -43,10 +43,13 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
     constructor(@Inject(DOCUMENT) private document: Document,
                 private dataService: DataService,
                 private overlay: Overlay,
-                private viewContainerRef: ViewContainerRef) { }
+                private viewContainerRef: ViewContainerRef) {
+    }
 
     ngOnInit() {
-        this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS).pipe(
+        this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
+            options: { take: 50 }
+        }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
 
@@ -105,8 +108,8 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
         }
         const positionStrategy = this.overlay.position().flexibleConnectedTo(this.viewContainerRef.element)
             .withPositions([{
-                originX : 'center',
-                originY : 'bottom',
+                originX: 'center',
+                originY: 'bottom',
                 overlayX: 'center',
                 overlayY: 'top',
             }])
@@ -137,5 +140,5 @@ export class CollectionsMenuComponent implements OnInit, OnDestroy {
             this.document.removeEventListener('touchstart', handler);
         };
         this.document.addEventListener('touchstart', handler);
-    }
+    };
 }

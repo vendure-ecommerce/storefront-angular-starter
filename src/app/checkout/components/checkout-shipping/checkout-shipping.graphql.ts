@@ -52,7 +52,7 @@ export const GET_ELIGIBLE_SHIPPING_METHODS = gql`
 `;
 
 export const SET_SHIPPING_METHOD = gql`
-    mutation SetShippingMethod($id: ID!) {
+    mutation SetShippingMethod($id: [ID!]!) {
         setOrderShippingMethod(shippingMethodId: $id) {
             ...Cart
             ...ErrorResult

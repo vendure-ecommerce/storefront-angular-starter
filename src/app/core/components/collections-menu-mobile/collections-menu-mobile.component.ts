@@ -31,7 +31,7 @@ export class CollectionsMenuMobileComponent implements OnInit {
 
     ngOnInit() {
         this.collectionTree$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
-            options: {},
+            options: { take: 50 },
         }).pipe(
             map(data => arrayToTree(data.collections.items)),
         );
