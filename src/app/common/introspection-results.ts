@@ -37,8 +37,10 @@
       "FloatCustomFieldConfig",
       "IntCustomFieldConfig",
       "LocaleStringCustomFieldConfig",
+      "LocaleTextCustomFieldConfig",
       "RelationCustomFieldConfig",
-      "StringCustomFieldConfig"
+      "StringCustomFieldConfig",
+      "TextCustomFieldConfig"
     ],
     "CustomFieldConfig": [
       "BooleanCustomFieldConfig",
@@ -46,8 +48,10 @@
       "FloatCustomFieldConfig",
       "IntCustomFieldConfig",
       "LocaleStringCustomFieldConfig",
+      "LocaleTextCustomFieldConfig",
       "RelationCustomFieldConfig",
-      "StringCustomFieldConfig"
+      "StringCustomFieldConfig",
+      "TextCustomFieldConfig"
     ],
     "ErrorResult": [
       "AlreadyLoggedInError",
@@ -55,6 +59,7 @@
       "CouponCodeInvalidError",
       "CouponCodeLimitError",
       "EmailAddressConflictError",
+      "GuestCheckoutError",
       "IdentifierChangeTokenExpiredError",
       "IdentifierChangeTokenInvalidError",
       "IneligiblePaymentMethodError",
@@ -73,6 +78,7 @@
       "PasswordAlreadySetError",
       "PasswordResetTokenExpiredError",
       "PasswordResetTokenInvalidError",
+      "PasswordValidationError",
       "PaymentDeclinedError",
       "PaymentFailedError",
       "VerificationTokenExpiredError",
@@ -98,16 +104,18 @@
       "Fulfillment",
       "HistoryEntry",
       "Order",
-      "OrderItem",
       "OrderLine",
       "Payment",
+      "PaymentMethod",
       "Product",
       "ProductOption",
       "ProductOptionGroup",
       "ProductVariant",
       "Promotion",
+      "Province",
       "Refund",
       "Role",
+      "Seller",
       "ShippingMethod",
       "Surcharge",
       "Tag",
@@ -127,6 +135,7 @@
       "ProductList",
       "ProductVariantList",
       "PromotionList",
+      "ProvinceList",
       "RoleList",
       "ShippingMethodList",
       "TagList",
@@ -136,9 +145,14 @@
       "NativeAuthStrategyError",
       "Success"
     ],
+    "Region": [
+      "Country",
+      "Province"
+    ],
     "RegisterCustomerAccountResult": [
       "MissingPasswordError",
       "NativeAuthStrategyError",
+      "PasswordValidationError",
       "Success"
     ],
     "RemoveOrderItemsResult": [
@@ -158,8 +172,10 @@
     "ResetPasswordResult": [
       "CurrentUser",
       "NativeAuthStrategyError",
+      "NotVerifiedError",
       "PasswordResetTokenExpiredError",
-      "PasswordResetTokenInvalidError"
+      "PasswordResetTokenInvalidError",
+      "PasswordValidationError"
     ],
     "SearchResultPrice": [
       "PriceRange",
@@ -168,6 +184,7 @@
     "SetCustomerForOrderResult": [
       "AlreadyLoggedInError",
       "EmailAddressConflictError",
+      "GuestCheckoutError",
       "NoActiveOrderError",
       "Order"
     ],
@@ -190,6 +207,7 @@
     "UpdateCustomerPasswordResult": [
       "InvalidCredentialsError",
       "NativeAuthStrategyError",
+      "PasswordValidationError",
       "Success"
     ],
     "UpdateOrderItemsResult": [
@@ -204,6 +222,7 @@
       "MissingPasswordError",
       "NativeAuthStrategyError",
       "PasswordAlreadySetError",
+      "PasswordValidationError",
       "VerificationTokenExpiredError",
       "VerificationTokenInvalidError"
     ]

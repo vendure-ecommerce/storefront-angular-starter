@@ -1,4 +1,4 @@
-# This file was generated based on ".graphqlconfig". Do not edit manually.
+# This file was generated. Do not edit manually.
 
 schema {
     query: Query
@@ -11,8 +11,10 @@ interface CustomField {
     label: [LocalizedString!]
     list: Boolean!
     name: String!
+    nullable: Boolean
     readonly: Boolean
     type: String!
+    ui: JSON
 }
 
 interface ErrorResult {
@@ -29,6 +31,20 @@ interface PaginatedList {
     totalItems: Int!
 }
 
+interface Region {
+    code: String!
+    createdAt: DateTime!
+    enabled: Boolean!
+    id: ID!
+    languageCode: LanguageCode!
+    name: String!
+    parent: Region
+    parentId: ID
+    translations: [RegionTranslation!]!
+    type: String!
+    updatedAt: DateTime!
+}
+
 union ActiveOrderResult = NoActiveOrderError | Order
 
 union AddPaymentToOrderResult = IneligiblePaymentMethodError | NoActiveOrderError | Order | OrderPaymentStateError | OrderStateTransitionError | PaymentDeclinedError | PaymentFailedError
@@ -37,13 +53,13 @@ union ApplyCouponCodeResult = CouponCodeExpiredError | CouponCodeInvalidError | 
 
 union AuthenticationResult = CurrentUser | InvalidCredentialsError | NotVerifiedError
 
-union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig
+union CustomFieldConfig = BooleanCustomFieldConfig | DateTimeCustomFieldConfig | FloatCustomFieldConfig | IntCustomFieldConfig | LocaleStringCustomFieldConfig | LocaleTextCustomFieldConfig | RelationCustomFieldConfig | StringCustomFieldConfig | TextCustomFieldConfig
 
 union NativeAuthenticationResult = CurrentUser | InvalidCredentialsError | NativeAuthStrategyError | NotVerifiedError
 
 union RefreshCustomerVerificationResult = NativeAuthStrategyError | Success
 
-union RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | Success
+union RegisterCustomerAccountResult = MissingPasswordError | NativeAuthStrategyError | PasswordValidationError | Success
 
 union RemoveOrderItemsResult = Order | OrderModificationError
 
@@ -51,12 +67,12 @@ union RequestPasswordResetResult = NativeAuthStrategyError | Success
 
 union RequestUpdateCustomerEmailAddressResult = EmailAddressConflictError | InvalidCredentialsError | NativeAuthStrategyError | Success
 
-union ResetPasswordResult = CurrentUser | NativeAuthStrategyError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError
+union ResetPasswordResult = CurrentUser | NativeAuthStrategyError | NotVerifiedError | PasswordResetTokenExpiredError | PasswordResetTokenInvalidError | PasswordValidationError
 
 "The price of a search result product, either as a range or as a single price"
 union SearchResultPrice = PriceRange | SinglePrice
 
-union SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | NoActiveOrderError | Order
+union SetCustomerForOrderResult = AlreadyLoggedInError | EmailAddressConflictError | GuestCheckoutError | NoActiveOrderError | Order
 
 union SetOrderShippingMethodResult = IneligibleShippingMethodError | NoActiveOrderError | Order | OrderModificationError
 
@@ -64,11 +80,11 @@ union TransitionOrderToStateResult = Order | OrderStateTransitionError
 
 union UpdateCustomerEmailAddressResult = IdentifierChangeTokenExpiredError | IdentifierChangeTokenInvalidError | NativeAuthStrategyError | Success
 
-union UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | Success
+union UpdateCustomerPasswordResult = InvalidCredentialsError | NativeAuthStrategyError | PasswordValidationError | Success
 
 union UpdateOrderItemsResult = InsufficientStockError | NegativeQuantityError | Order | OrderLimitError | OrderModificationError
 
-union VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | VerificationTokenExpiredError | VerificationTokenInvalidError
+union VerifyCustomerAccountResult = CurrentUser | MissingPasswordError | NativeAuthStrategyError | PasswordAlreadySetError | PasswordValidationError | VerificationTokenExpiredError | VerificationTokenInvalidError
 
 type Address implements Node {
     city: String
@@ -90,12 +106,13 @@ type Address implements Node {
 
 type Adjustment {
     adjustmentSource: String!
-    amount: Int!
+    amount: Money!
+    data: JSON
     description: String!
     type: AdjustmentType!
 }
 
-"Retured when attemting to set the Customer for an Order when already logged in."
+"Returned when attempting to set the Customer for an Order when already logged in."
 type AlreadyLoggedInError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -112,6 +129,7 @@ type Asset implements Node {
     name: String!
     preview: String!
     source: String!
+    tags: [Tag!]!
     type: AssetType!
     updatedAt: DateTime!
     width: Int!
@@ -135,21 +153,31 @@ type BooleanCustomFieldConfig implements CustomField {
     label: [LocalizedString!]
     list: Boolean!
     name: String!
+    nullable: Boolean
     readonly: Boolean
     type: String!
+    ui: JSON
 }
 
 type Channel implements Node {
+    availableCurrencyCodes: [CurrencyCode!]!
+    availableLanguageCodes: [LanguageCode!]
     code: String!
     createdAt: DateTime!
-    currencyCode: CurrencyCode!
+    currencyCode: CurrencyCode! @deprecated(reason: "Use defaultCurrencyCode instead")
     customFields: JSON
+    defaultCurrencyCode: CurrencyCode!
     defaultLanguageCode: LanguageCode!
     defaultShippingZone: Zone
     defaultTaxZone: Zone
     id: ID!
+    "Not yet used - will be implemented in a future release."
+    outOfStockThreshold: Int
     pricesIncludeTax: Boolean!
+    seller: Seller
     token: String!
+    "Not yet used - will be implemented in a future release."
+    trackInventory: Boolean
     updatedAt: DateTime!
 }
 
@@ -166,6 +194,7 @@ type Collection implements Node {
     languageCode: LanguageCode
     name: String!
     parent: Collection
+    parentId: ID!
     position: Int!
     productVariants(options: ProductVariantListOptions): ProductVariantList!
     slug: String!
@@ -182,6 +211,16 @@ type CollectionBreadcrumb {
 type CollectionList implements PaginatedList {
     items: [Collection!]!
     totalItems: Int!
+}
+
+"""
+
+Which Collections are present in the products returned
+by the search, and in what quantity.
+"""
+type CollectionResult {
+    collection: Collection!
+    count: Int!
 }
 
 type CollectionTranslation {
@@ -226,28 +265,24 @@ type Coordinate {
     y: Float!
 }
 
-type Country implements Node {
+type Country implements Node & Region {
     code: String!
     createdAt: DateTime!
+    customFields: JSON
     enabled: Boolean!
     id: ID!
     languageCode: LanguageCode!
     name: String!
-    translations: [CountryTranslation!]!
+    parent: Region
+    parentId: ID
+    translations: [RegionTranslation!]!
+    type: String!
     updatedAt: DateTime!
 }
 
 type CountryList implements PaginatedList {
     items: [Country!]!
     totalItems: Int!
-}
-
-type CountryTranslation {
-    createdAt: DateTime!
-    id: ID!
-    languageCode: LanguageCode!
-    name: String!
-    updatedAt: DateTime!
 }
 
 "Returned if the provided coupon code is invalid"
@@ -302,6 +337,7 @@ type Customer implements Node {
 
 type CustomerGroup implements Node {
     createdAt: DateTime!
+    customFields: JSON
     customers(options: CustomerListOptions): CustomerList!
     id: ID!
     name: String!
@@ -326,9 +362,11 @@ type DateTimeCustomFieldConfig implements CustomField {
     max: String
     min: String
     name: String!
+    nullable: Boolean
     readonly: Boolean
     step: Int
     type: String!
+    ui: JSON
 }
 
 type DeletionResponse {
@@ -338,13 +376,13 @@ type DeletionResponse {
 
 type Discount {
     adjustmentSource: String!
-    amount: Int!
-    amountWithTax: Int!
+    amount: Money!
+    amountWithTax: Money!
     description: String!
     type: AdjustmentType!
 }
 
-"Retured when attemting to create a Customer with an email address already registered to an existing User."
+"Returned when attempting to create a Customer with an email address already registered to an existing User."
 type EmailAddressConflictError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -413,20 +451,38 @@ type FloatCustomFieldConfig implements CustomField {
     max: Float
     min: Float
     name: String!
+    nullable: Boolean
     readonly: Boolean
     step: Float
     type: String!
+    ui: JSON
 }
 
 type Fulfillment implements Node {
     createdAt: DateTime!
     customFields: JSON
     id: ID!
+    lines: [FulfillmentLine!]!
     method: String!
-    orderItems: [OrderItem!]!
     state: String!
+    summary: [FulfillmentLine!]! @deprecated(reason: "Use the `lines` field instead")
     trackingCode: String
     updatedAt: DateTime!
+}
+
+type FulfillmentLine {
+    fulfillment: Fulfillment!
+    fulfillmentId: ID!
+    orderLine: OrderLine!
+    orderLineId: ID!
+    quantity: Int!
+}
+
+"Returned when attempting to set the Customer on a guest checkout when the configured GuestCheckoutStrategy does not allow it."
+type GuestCheckoutError implements ErrorResult {
+    errorCode: ErrorCode!
+    errorDetail: String!
+    message: String!
 }
 
 type HistoryEntry implements Node {
@@ -444,7 +500,7 @@ type HistoryEntryList implements PaginatedList {
 
 """
 
-Retured if the token used to change a Customer's email address is valid, but has
+Returned if the token used to change a Customer's email address is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type IdentifierChangeTokenExpiredError implements ErrorResult {
@@ -454,7 +510,7 @@ type IdentifierChangeTokenExpiredError implements ErrorResult {
 
 """
 
-Retured if the token used to change a Customer's email address is either
+Returned if the token used to change a Customer's email address is either
 invalid or does not match any expected tokens.
 """
 type IdentifierChangeTokenInvalidError implements ErrorResult {
@@ -491,9 +547,11 @@ type IntCustomFieldConfig implements CustomField {
     max: Int
     min: Int
     name: String!
+    nullable: Boolean
     readonly: Boolean
     step: Int
     type: String!
+    ui: JSON
 }
 
 "Returned if the user authentication credentials are not valid"
@@ -510,9 +568,23 @@ type LocaleStringCustomFieldConfig implements CustomField {
     length: Int
     list: Boolean!
     name: String!
+    nullable: Boolean
     pattern: String
     readonly: Boolean
     type: String!
+    ui: JSON
+}
+
+type LocaleTextCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    internal: Boolean
+    label: [LocalizedString!]
+    list: Boolean!
+    name: String!
+    nullable: Boolean
+    readonly: Boolean
+    type: String!
+    ui: JSON
 }
 
 type LocalizedString {
@@ -520,7 +592,7 @@ type LocalizedString {
     value: String!
 }
 
-"Retured when attemting to register or verify a customer account without a password, when one is required."
+"Returned when attempting to register or verify a customer account without a password, when one is required."
 type MissingPasswordError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -557,7 +629,7 @@ type Mutation {
     verificationToken would then be passed to the `verifyCustomerAccount` mutation _without_ a password. The Customer is then
     verified and authenticated in one step.
     2. **The Customer is registered _without_ a password**. A verificationToken will be created (and typically emailed to the Customer). That
-    verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosed password of the Customer. The Customer is then
+    verificationToken would then be passed to the `verifyCustomerAccount` mutation _with_ the chosen password of the Customer. The Customer is then
     verified and authenticated in one step.
 
     _If `authOptions.requireVerification` is set to `false`:_
@@ -591,8 +663,14 @@ type Mutation {
     setOrderCustomFields(input: UpdateOrderInput!): ActiveOrderResult!
     "Sets the shipping address for this order"
     setOrderShippingAddress(input: CreateAddressInput!): ActiveOrderResult!
-    "Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query"
-    setOrderShippingMethod(shippingMethodId: ID!): SetOrderShippingMethodResult!
+    """
+
+    Sets the shipping method by id, which can be obtained with the `eligibleShippingMethods` query.
+    An Order can have multiple shipping methods, in which case you can pass an array of ids. In this case,
+    you should configure a custom ShippingLineAssignmentStrategy in order to know which OrderLines each
+    shipping method will apply to.
+    """
+    setOrderShippingMethod(shippingMethodId: [ID!]!): SetOrderShippingMethodResult!
     "Transitions an Order to a new state. Valid next states can be found by querying `nextOrderStates`"
     transitionOrderToState(state: String!): TransitionOrderToStateResult
     "Update an existing Customer"
@@ -611,19 +689,19 @@ type Mutation {
 
     Verify a Customer email address with the token sent to that address. Only applicable if `authOptions.requireVerification` is set to true.
 
-    If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the a password _must_ be
+    If the Customer was not registered with a password in the `registerCustomerAccount` mutation, the password _must_ be
     provided here.
     """
     verifyCustomerAccount(password: String, token: String!): VerifyCustomerAccountResult!
 }
 
-"Retured when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured."
+"Returned when attempting an operation that relies on the NativeAuthStrategy, if that strategy is not configured."
 type NativeAuthStrategyError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
 }
 
-"Retured when attemting to set a negative OrderLine quantity."
+"Returned when attempting to set a negative OrderLine quantity."
 type NegativeQuantityError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -652,8 +730,6 @@ type NotVerifiedError implements ErrorResult {
 type Order implements Node {
     "An order is active as long as the payment process has not been completed"
     active: Boolean!
-    "Order-level adjustments to the order total, such as discounts from promotions"
-    adjustments: [Adjustment!]! @deprecated(reason : "Use `discounts` instead")
     billingAddress: OrderAddress
     "A unique code for the Order"
     code: String!
@@ -672,26 +748,26 @@ type Order implements Node {
 
     The date & time that the Order was placed, i.e. the Customer
     completed the checkout and the Order is no longer "active"
-  """
+    """
     orderPlacedAt: DateTime
     payments: [Payment!]
     "Promotions applied to the order. Only gets populated after the payment process has completed."
     promotions: [Promotion!]!
-    shipping: Int!
+    shipping: Money!
     shippingAddress: OrderAddress
     shippingLines: [ShippingLine!]!
-    shippingWithTax: Int!
+    shippingWithTax: Money!
     state: String!
     """
 
     The subTotal is the total of all OrderLines in the Order. This figure also includes any Order-level
-    discounts which have been prorated (proportionally distributed) amongst the OrderItems.
+    discounts which have been prorated (proportionally distributed) amongst the items of each OrderLine.
     To get a total of all OrderLines which does not account for prorated discounts, use the
     sum of `OrderLine.discountedLinePrice` values.
     """
-    subTotal: Int!
+    subTotal: Money!
     "Same as subTotal, but inclusive of tax"
-    subTotalWithTax: Int!
+    subTotalWithTax: Money!
     """
 
     Surcharges are arbitrary modifications to the Order total which are neither
@@ -703,10 +779,11 @@ type Order implements Node {
     "A summary of the taxes being applied to this Order"
     taxSummary: [OrderTaxSummary!]!
     "Equal to subTotal plus shipping"
-    total: Int!
+    total: Money!
     totalQuantity: Int!
     "The final payable amount. Equal to subTotalWithTax plus shippingWithTax"
-    totalWithTax: Int!
+    totalWithTax: Money!
+    type: OrderType!
     updatedAt: DateTime!
 }
 
@@ -724,46 +801,7 @@ type OrderAddress {
     streetLine2: String
 }
 
-type OrderItem implements Node {
-    adjustments: [Adjustment!]!
-    cancelled: Boolean!
-    createdAt: DateTime!
-    """
-
-    The price of a single unit including discounts, excluding tax.
-
-    If Order-level discounts have been applied, this will not be the
-    actual taxable unit price (see `proratedUnitPrice`), but is generally the
-    correct price to display to customers to avoid confusion
-    about the internal handling of distributed Order-level discounts.
-    """
-    discountedUnitPrice: Int!
-    "The price of a single unit including discounts and tax"
-    discountedUnitPriceWithTax: Int!
-    fulfillment: Fulfillment
-    id: ID!
-    """
-
-    The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
-    Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
-    and refund calculations.
-    """
-    proratedUnitPrice: Int!
-    "The proratedUnitPrice including tax"
-    proratedUnitPriceWithTax: Int!
-    refundId: ID
-    taxLines: [TaxLine!]!
-    taxRate: Float!
-    "The price of a single unit, excluding tax and discounts"
-    unitPrice: Int!
-    unitPriceIncludesTax: Boolean! @deprecated(reason : "`unitPrice` is now always without tax")
-    "The price of a single unit, including tax but excluding discounts"
-    unitPriceWithTax: Int!
-    unitTax: Int!
-    updatedAt: DateTime!
-}
-
-"Retured when the maximum order size limit has been reached."
+"Returned when the maximum order size limit has been reached."
 type OrderLimitError implements ErrorResult {
     errorCode: ErrorCode!
     maxItems: Int!
@@ -771,13 +809,12 @@ type OrderLimitError implements ErrorResult {
 }
 
 type OrderLine implements Node {
-    adjustments: [Adjustment!]! @deprecated(reason : "Use `discounts` instead")
     createdAt: DateTime!
     customFields: JSON
     "The price of the line including discounts, excluding tax"
-    discountedLinePrice: Int!
+    discountedLinePrice: Money!
     "The price of the line including discounts and tax"
-    discountedLinePriceWithTax: Int!
+    discountedLinePriceWithTax: Money!
     """
 
     The price of a single unit including discounts, excluding tax.
@@ -787,51 +824,52 @@ type OrderLine implements Node {
     correct price to display to customers to avoid confusion
     about the internal handling of distributed Order-level discounts.
     """
-    discountedUnitPrice: Int!
+    discountedUnitPrice: Money!
     "The price of a single unit including discounts and tax"
-    discountedUnitPriceWithTax: Int!
+    discountedUnitPriceWithTax: Money!
     discounts: [Discount!]!
     featuredAsset: Asset
+    fulfillmentLines: [FulfillmentLine!]
     id: ID!
-    items: [OrderItem!]!
     "The total price of the line excluding tax and discounts."
-    linePrice: Int!
-    "The total price of the line including tax bit excluding discounts."
-    linePriceWithTax: Int!
+    linePrice: Money!
+    "The total price of the line including tax but excluding discounts."
+    linePriceWithTax: Money!
     "The total tax on this line"
-    lineTax: Int!
+    lineTax: Money!
     order: Order!
+    "The quantity at the time the Order was placed"
+    orderPlacedQuantity: Int!
     productVariant: ProductVariant!
     """
 
-    The actual line price, taking into account both item discounts _and_ prorated (proportially-distributed)
+    The actual line price, taking into account both item discounts _and_ prorated (proportionally-distributed)
     Order-level discounts. This value is the true economic value of the OrderLine, and is used in tax
     and refund calculations.
     """
-    proratedLinePrice: Int!
+    proratedLinePrice: Money!
     "The proratedLinePrice including tax"
-    proratedLinePriceWithTax: Int!
+    proratedLinePriceWithTax: Money!
     """
 
-    The actual unit price, taking into account both item discounts _and_ prorated (proportially-distributed)
+    The actual unit price, taking into account both item discounts _and_ prorated (proportionally-distributed)
     Order-level discounts. This value is the true economic value of the OrderItem, and is used in tax
     and refund calculations.
     """
-    proratedUnitPrice: Int!
+    proratedUnitPrice: Money!
     "The proratedUnitPrice including tax"
-    proratedUnitPriceWithTax: Int!
+    proratedUnitPriceWithTax: Money!
     quantity: Int!
     taxLines: [TaxLine!]!
     taxRate: Float!
-    totalPrice: Int! @deprecated(reason : "Use `linePriceWithTax` instead")
     "The price of a single unit, excluding tax and discounts"
-    unitPrice: Int!
+    unitPrice: Money!
     "Non-zero if the unitPrice has changed since it was initially added to Order"
-    unitPriceChangeSinceAdded: Int!
+    unitPriceChangeSinceAdded: Money!
     "The price of a single unit, including tax but excluding discounts"
-    unitPriceWithTax: Int!
+    unitPriceWithTax: Money!
     "Non-zero if the unitPriceWithTax has changed since it was initially added to Order"
-    unitPriceWithTaxChangeSinceAdded: Int!
+    unitPriceWithTaxChangeSinceAdded: Money!
     updatedAt: DateTime!
 }
 
@@ -869,15 +907,15 @@ by taxRate.
 type OrderTaxSummary {
     "A description of this tax"
     description: String!
-    "The total net price or OrderItems to which this taxRate applies"
-    taxBase: Int!
+    "The total net price of OrderLines to which this taxRate applies"
+    taxBase: Money!
     "The taxRate as a percentage"
     taxRate: Float!
     "The total tax being applied to the Order at this taxRate"
-    taxTotal: Int!
+    taxTotal: Money!
 }
 
-"Retured when attemting to verify a customer account with a password, when a password has already been set."
+"Returned when attempting to verify a customer account with a password, when a password has already been set."
 type PasswordAlreadySetError implements ErrorResult {
     errorCode: ErrorCode!
     message: String!
@@ -885,7 +923,7 @@ type PasswordAlreadySetError implements ErrorResult {
 
 """
 
-Retured if the token used to reset a Customer's password is valid, but has
+Returned if the token used to reset a Customer's password is valid, but has
 expired according to the `verificationTokenDuration` setting in the AuthOptions.
 """
 type PasswordResetTokenExpiredError implements ErrorResult {
@@ -895,7 +933,7 @@ type PasswordResetTokenExpiredError implements ErrorResult {
 
 """
 
-Retured if the token used to reset a Customer's password is either
+Returned if the token used to reset a Customer's password is either
 invalid or does not match any expected tokens.
 """
 type PasswordResetTokenInvalidError implements ErrorResult {
@@ -903,8 +941,15 @@ type PasswordResetTokenInvalidError implements ErrorResult {
     message: String!
 }
 
+"Returned when attempting to register or verify a customer account where the given password fails password validation."
+type PasswordValidationError implements ErrorResult {
+    errorCode: ErrorCode!
+    message: String!
+    validationErrorMessage: String!
+}
+
 type Payment implements Node {
-    amount: Int!
+    amount: Money!
     createdAt: DateTime!
     errorMessage: String
     id: ID!
@@ -930,17 +975,43 @@ type PaymentFailedError implements ErrorResult {
     paymentErrorMessage: String!
 }
 
+type PaymentMethod implements Node {
+    checker: ConfigurableOperation
+    code: String!
+    createdAt: DateTime!
+    customFields: JSON
+    description: String!
+    enabled: Boolean!
+    handler: ConfigurableOperation!
+    id: ID!
+    name: String!
+    translations: [PaymentMethodTranslation!]!
+    updatedAt: DateTime!
+}
+
 type PaymentMethodQuote {
     code: String!
+    customFields: JSON
+    description: String!
     eligibilityMessage: String
     id: ID!
     isEligible: Boolean!
+    name: String!
+}
+
+type PaymentMethodTranslation {
+    createdAt: DateTime!
+    description: String!
+    id: ID!
+    languageCode: LanguageCode!
+    name: String!
+    updatedAt: DateTime!
 }
 
 "The price range where the result has more than one price"
 type PriceRange {
-    max: Int!
-    min: Int!
+    max: Money!
+    min: Money!
 }
 
 type Product implements Node {
@@ -958,6 +1029,9 @@ type Product implements Node {
     slug: String!
     translations: [ProductTranslation!]!
     updatedAt: DateTime!
+    "Returns a paginated, sortable, filterable list of ProductVariants"
+    variantList(options: ProductVariantListOptions): ProductVariantList!
+    "Returns all ProductVariants"
     variants: [ProductVariant!]!
 }
 
@@ -1028,9 +1102,8 @@ type ProductVariant implements Node {
     languageCode: LanguageCode!
     name: String!
     options: [ProductOption!]!
-    price: Int!
-    priceIncludesTax: Boolean! @deprecated(reason : "price now always excludes tax")
-    priceWithTax: Int!
+    price: Money!
+    priceWithTax: Money!
     product: Product!
     productId: ID!
     sku: String!
@@ -1059,17 +1132,49 @@ type Promotion implements Node {
     conditions: [ConfigurableOperation!]!
     couponCode: String
     createdAt: DateTime!
+    customFields: JSON
+    description: String!
     enabled: Boolean!
     endsAt: DateTime
     id: ID!
     name: String!
     perCustomerUsageLimit: Int
     startsAt: DateTime
+    translations: [PromotionTranslation!]!
     updatedAt: DateTime!
 }
 
 type PromotionList implements PaginatedList {
     items: [Promotion!]!
+    totalItems: Int!
+}
+
+type PromotionTranslation {
+    createdAt: DateTime!
+    description: String!
+    id: ID!
+    languageCode: LanguageCode!
+    name: String!
+    updatedAt: DateTime!
+}
+
+type Province implements Node & Region {
+    code: String!
+    createdAt: DateTime!
+    customFields: JSON
+    enabled: Boolean!
+    id: ID!
+    languageCode: LanguageCode!
+    name: String!
+    parent: Region
+    parentId: ID
+    translations: [RegionTranslation!]!
+    type: String!
+    updatedAt: DateTime!
+}
+
+type ProvinceList implements PaginatedList {
+    items: [Province!]!
     totalItems: Int!
 }
 
@@ -1081,13 +1186,13 @@ type Query {
     """
 
     The active Order. Will be `null` until an Order is created via `addItemToOrder`. Once an Order reaches the
-    state of `PaymentApproved` or `PaymentSettled`, then that Order is no longer considered "active" and this
+    state of `PaymentAuthorized` or `PaymentSettled`, then that Order is no longer considered "active" and this
     query will once again return `null`.
     """
     activeOrder: Order
     "An array of supported Countries"
     availableCountries: [Country!]!
-    "Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is speicified, an error will result."
+    "Returns a Collection either by its id or slug. If neither 'id' nor 'slug' is specified, an error will result."
     collection(id: ID, slug: String): Collection
     "A list of Collections available to the shop"
     collections(options: CollectionListOptions): CollectionList!
@@ -1095,6 +1200,10 @@ type Query {
     eligiblePaymentMethods: [PaymentMethodQuote!]!
     "Returns a list of eligible shipping methods based on the current active Order"
     eligibleShippingMethods: [ShippingMethodQuote!]!
+    "Returns a Facet by its id"
+    facet(id: ID!): Facet
+    "A list of Facets available to the shop"
+    facets(options: FacetListOptions): FacetList!
     "Returns information about the current authenticated User"
     me: CurrentUser
     "Returns the possible next states that the activeOrder can transition to"
@@ -1113,7 +1222,7 @@ type Query {
     general anonymous access to Order data.
     """
     orderByCode(code: String!): Order
-    "Get a Product either by id or slug. If neither 'id' nor 'slug' is speicified, an error will result."
+    "Get a Product either by id or slug. If neither 'id' nor 'slug' is specified, an error will result."
     product(id: ID, slug: String): Product
     "Get a list of Products"
     products(options: ProductListOptions): ProductList!
@@ -1122,19 +1231,35 @@ type Query {
 }
 
 type Refund implements Node {
-    adjustment: Int!
+    adjustment: Money!
     createdAt: DateTime!
     id: ID!
-    items: Int!
+    items: Money!
+    lines: [RefundLine!]!
     metadata: JSON
     method: String
-    orderItems: [OrderItem!]!
     paymentId: ID!
     reason: String
-    shipping: Int!
+    shipping: Money!
     state: String!
-    total: Int!
+    total: Money!
     transactionId: String
+    updatedAt: DateTime!
+}
+
+type RefundLine {
+    orderLine: OrderLine!
+    orderLineId: ID!
+    quantity: Int!
+    refund: Refund!
+    refundId: ID!
+}
+
+type RegionTranslation {
+    createdAt: DateTime!
+    id: ID!
+    languageCode: LanguageCode!
+    name: String!
     updatedAt: DateTime!
 }
 
@@ -1145,9 +1270,11 @@ type RelationCustomFieldConfig implements CustomField {
     label: [LocalizedString!]
     list: Boolean!
     name: String!
+    nullable: Boolean
     readonly: Boolean
     scalarFields: [String!]!
     type: String!
+    ui: JSON
 }
 
 type Role implements Node {
@@ -1170,6 +1297,7 @@ type SearchReindexResponse {
 }
 
 type SearchResponse {
+    collections: [CollectionResult!]!
     facetValues: [FacetValueResult!]!
     items: [SearchResult!]!
     totalItems: Int!
@@ -1187,12 +1315,10 @@ type SearchResult {
     productAsset: SearchResultAsset
     productId: ID!
     productName: String!
-    productPreview: String! @deprecated(reason : "Use `productAsset.preview` instead")
     productVariantAsset: SearchResultAsset
     productVariantId: ID!
     productVariantName: String!
-    productVariantPreview: String! @deprecated(reason : "Use `productVariantAsset.preview` instead")
-    "A relevence score for the result. Differs between database implementations"
+    "A relevance score for the result. Differs between database implementations"
     score: Float!
     sku: String!
     slug: String!
@@ -1204,12 +1330,21 @@ type SearchResultAsset {
     preview: String!
 }
 
+type Seller implements Node {
+    createdAt: DateTime!
+    customFields: JSON
+    id: ID!
+    name: String!
+    updatedAt: DateTime!
+}
+
 type ShippingLine {
-    discountedPrice: Int!
-    discountedPriceWithTax: Int!
+    discountedPrice: Money!
+    discountedPriceWithTax: Money!
     discounts: [Discount!]!
-    price: Int!
-    priceWithTax: Int!
+    id: ID!
+    price: Money!
+    priceWithTax: Money!
     shippingMethod: ShippingMethod!
 }
 
@@ -1222,6 +1357,7 @@ type ShippingMethod implements Node {
     description: String!
     fulfillmentHandlerCode: String!
     id: ID!
+    languageCode: LanguageCode!
     name: String!
     translations: [ShippingMethodTranslation!]!
     updatedAt: DateTime!
@@ -1234,13 +1370,14 @@ type ShippingMethodList implements PaginatedList {
 
 type ShippingMethodQuote {
     code: String!
+    customFields: JSON
     description: String!
     id: ID!
     "Any optional metadata returned by the ShippingCalculator in the ShippingCalculationResult"
     metadata: JSON
     name: String!
-    price: Int!
-    priceWithTax: Int!
+    price: Money!
+    priceWithTax: Money!
 }
 
 type ShippingMethodTranslation {
@@ -1254,7 +1391,7 @@ type ShippingMethodTranslation {
 
 "The price value where the result has a single price"
 type SinglePrice {
-    value: Int!
+    value: Money!
 }
 
 type StringCustomFieldConfig implements CustomField {
@@ -1264,10 +1401,12 @@ type StringCustomFieldConfig implements CustomField {
     length: Int
     list: Boolean!
     name: String!
+    nullable: Boolean
     options: [StringFieldOption!]
     pattern: String
     readonly: Boolean
     type: String!
+    ui: JSON
 }
 
 type StringFieldOption {
@@ -1284,8 +1423,8 @@ type Surcharge implements Node {
     createdAt: DateTime!
     description: String!
     id: ID!
-    price: Int!
-    priceWithTax: Int!
+    price: Money!
+    priceWithTax: Money!
     sku: String
     taxLines: [TaxLine!]!
     taxRate: Float!
@@ -1306,6 +1445,7 @@ type TagList implements PaginatedList {
 
 type TaxCategory implements Node {
     createdAt: DateTime!
+    customFields: JSON
     id: ID!
     isDefault: Boolean!
     name: String!
@@ -1320,6 +1460,7 @@ type TaxLine {
 type TaxRate implements Node {
     category: TaxCategory!
     createdAt: DateTime!
+    customFields: JSON
     customerGroup: CustomerGroup
     enabled: Boolean!
     id: ID!
@@ -1332,6 +1473,18 @@ type TaxRate implements Node {
 type TaxRateList implements PaginatedList {
     items: [TaxRate!]!
     totalItems: Int!
+}
+
+type TextCustomFieldConfig implements CustomField {
+    description: [LocalizedString!]
+    internal: Boolean
+    label: [LocalizedString!]
+    list: Boolean!
+    name: String!
+    nullable: Boolean
+    readonly: Boolean
+    type: String!
+    ui: JSON
 }
 
 type User implements Node {
@@ -1358,7 +1511,7 @@ type VerificationTokenExpiredError implements ErrorResult {
 
 """
 
-Retured if the verification token (used to verify a Customer's email address) is either
+Returned if the verification token (used to verify a Customer's email address) is either
 invalid or does not match any expected tokens.
 """
 type VerificationTokenInvalidError implements ErrorResult {
@@ -1368,14 +1521,16 @@ type VerificationTokenInvalidError implements ErrorResult {
 
 type Zone implements Node {
     createdAt: DateTime!
+    customFields: JSON
     id: ID!
-    members: [Country!]!
+    members: [Region!]!
     name: String!
     updatedAt: DateTime!
 }
 
 enum AdjustmentType {
     DISTRIBUTED_ORDER_PROMOTION
+    OTHER
     PROMOTION
 }
 
@@ -1722,6 +1877,7 @@ enum ErrorCode {
     COUPON_CODE_INVALID_ERROR
     COUPON_CODE_LIMIT_ERROR
     EMAIL_ADDRESS_CONFLICT_ERROR
+    GUEST_CHECKOUT_ERROR
     IDENTIFIER_CHANGE_TOKEN_EXPIRED_ERROR
     IDENTIFIER_CHANGE_TOKEN_INVALID_ERROR
     INELIGIBLE_PAYMENT_METHOD_ERROR
@@ -1740,6 +1896,7 @@ enum ErrorCode {
     PASSWORD_ALREADY_SET_ERROR
     PASSWORD_RESET_TOKEN_EXPIRED_ERROR
     PASSWORD_RESET_TOKEN_INVALID_ERROR
+    PASSWORD_VALIDATION_ERROR
     PAYMENT_DECLINED_ERROR
     PAYMENT_FAILED_ERROR
     UNKNOWN_ERROR
@@ -2112,11 +2269,42 @@ enum LogicalOperator {
     OR
 }
 
+enum OrderType {
+    Aggregate
+    Regular
+    Seller
+}
+
 """
 
 @description
 Permissions for administrators and customers. Used to control access to
 GraphQL resolvers via the {@link Allow} decorator.
+
+## Understanding Permission.Owner
+
+`Permission.Owner` is a special permission which is used in some Vendure resolvers to indicate that that resolver should only
+be accessible to the "owner" of that resource.
+
+For example, the Shop API `activeCustomer` query resolver should only return the Customer object for the "owner" of that Customer, i.e.
+based on the activeUserId of the current session. As a result, the resolver code looks like this:
+
+@example
+```TypeScript
+\@Query()
+\@Allow(Permission.Owner)
+async activeCustomer(\@Ctx() ctx: RequestContext): Promise<Customer | undefined> {
+const userId = ctx.activeUserId;
+if (userId) {
+return this.customerService.findOneByUserId(ctx, userId);
+}
+}
+```
+
+Here we can see that the "ownership" must be enforced by custom logic inside the resolver. Since "ownership" cannot be defined generally
+nor statically encoded at build-time, any resolvers using `Permission.Owner` **must** include logic to enforce that only the owner
+of the resource has access. If not, then it is the equivalent of using `Permission.Public`.
+
 
 @docsCategory common
 """
@@ -2125,58 +2313,188 @@ enum Permission {
     Authenticated
     "Grants permission to create Administrator"
     CreateAdministrator
-    "Grants permission to create Catalog"
+    "Grants permission to create Asset"
+    CreateAsset
+    "Grants permission to create Products, Facets, Assets, Collections"
     CreateCatalog
+    "Grants permission to create Channel"
+    CreateChannel
+    "Grants permission to create Collection"
+    CreateCollection
+    "Grants permission to create Country"
+    CreateCountry
     "Grants permission to create Customer"
     CreateCustomer
+    "Grants permission to create CustomerGroup"
+    CreateCustomerGroup
+    "Grants permission to create Facet"
+    CreateFacet
     "Grants permission to create Order"
     CreateOrder
+    "Grants permission to create PaymentMethod"
+    CreatePaymentMethod
+    "Grants permission to create Product"
+    CreateProduct
     "Grants permission to create Promotion"
     CreatePromotion
-    "Grants permission to create Settings"
+    "Grants permission to create Seller"
+    CreateSeller
+    "Grants permission to create PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings"
     CreateSettings
+    "Grants permission to create ShippingMethod"
+    CreateShippingMethod
+    "Grants permission to create StockLocation"
+    CreateStockLocation
+    "Grants permission to create System"
+    CreateSystem
+    "Grants permission to create Tag"
+    CreateTag
+    "Grants permission to create TaxCategory"
+    CreateTaxCategory
+    "Grants permission to create TaxRate"
+    CreateTaxRate
+    "Grants permission to create Zone"
+    CreateZone
     "Grants permission to delete Administrator"
     DeleteAdministrator
-    "Grants permission to delete Catalog"
+    "Grants permission to delete Asset"
+    DeleteAsset
+    "Grants permission to delete Products, Facets, Assets, Collections"
     DeleteCatalog
+    "Grants permission to delete Channel"
+    DeleteChannel
+    "Grants permission to delete Collection"
+    DeleteCollection
+    "Grants permission to delete Country"
+    DeleteCountry
     "Grants permission to delete Customer"
     DeleteCustomer
+    "Grants permission to delete CustomerGroup"
+    DeleteCustomerGroup
+    "Grants permission to delete Facet"
+    DeleteFacet
     "Grants permission to delete Order"
     DeleteOrder
+    "Grants permission to delete PaymentMethod"
+    DeletePaymentMethod
+    "Grants permission to delete Product"
+    DeleteProduct
     "Grants permission to delete Promotion"
     DeletePromotion
-    "Grants permission to delete Settings"
+    "Grants permission to delete Seller"
+    DeleteSeller
+    "Grants permission to delete PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings"
     DeleteSettings
+    "Grants permission to delete ShippingMethod"
+    DeleteShippingMethod
+    "Grants permission to delete StockLocation"
+    DeleteStockLocation
+    "Grants permission to delete System"
+    DeleteSystem
+    "Grants permission to delete Tag"
+    DeleteTag
+    "Grants permission to delete TaxCategory"
+    DeleteTaxCategory
+    "Grants permission to delete TaxRate"
+    DeleteTaxRate
+    "Grants permission to delete Zone"
+    DeleteZone
     "Owner means the user owns this entity, e.g. a Customer's own Order"
     Owner
     "Public means any unauthenticated user may perform the operation"
     Public
     "Grants permission to read Administrator"
     ReadAdministrator
-    "Grants permission to read Catalog"
+    "Grants permission to read Asset"
+    ReadAsset
+    "Grants permission to read Products, Facets, Assets, Collections"
     ReadCatalog
+    "Grants permission to read Channel"
+    ReadChannel
+    "Grants permission to read Collection"
+    ReadCollection
+    "Grants permission to read Country"
+    ReadCountry
     "Grants permission to read Customer"
     ReadCustomer
+    "Grants permission to read CustomerGroup"
+    ReadCustomerGroup
+    "Grants permission to read Facet"
+    ReadFacet
     "Grants permission to read Order"
     ReadOrder
+    "Grants permission to read PaymentMethod"
+    ReadPaymentMethod
+    "Grants permission to read Product"
+    ReadProduct
     "Grants permission to read Promotion"
     ReadPromotion
-    "Grants permission to read Settings"
+    "Grants permission to read Seller"
+    ReadSeller
+    "Grants permission to read PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings"
     ReadSettings
+    "Grants permission to read ShippingMethod"
+    ReadShippingMethod
+    "Grants permission to read StockLocation"
+    ReadStockLocation
+    "Grants permission to read System"
+    ReadSystem
+    "Grants permission to read Tag"
+    ReadTag
+    "Grants permission to read TaxCategory"
+    ReadTaxCategory
+    "Grants permission to read TaxRate"
+    ReadTaxRate
+    "Grants permission to read Zone"
+    ReadZone
     "SuperAdmin has unrestricted access to all operations"
     SuperAdmin
     "Grants permission to update Administrator"
     UpdateAdministrator
-    "Grants permission to update Catalog"
+    "Grants permission to update Asset"
+    UpdateAsset
+    "Grants permission to update Products, Facets, Assets, Collections"
     UpdateCatalog
+    "Grants permission to update Channel"
+    UpdateChannel
+    "Grants permission to update Collection"
+    UpdateCollection
+    "Grants permission to update Country"
+    UpdateCountry
     "Grants permission to update Customer"
     UpdateCustomer
+    "Grants permission to update CustomerGroup"
+    UpdateCustomerGroup
+    "Grants permission to update Facet"
+    UpdateFacet
+    "Grants permission to update GlobalSettings"
+    UpdateGlobalSettings
     "Grants permission to update Order"
     UpdateOrder
+    "Grants permission to update PaymentMethod"
+    UpdatePaymentMethod
+    "Grants permission to update Product"
+    UpdateProduct
     "Grants permission to update Promotion"
     UpdatePromotion
-    "Grants permission to update Settings"
+    "Grants permission to update Seller"
+    UpdateSeller
+    "Grants permission to update PaymentMethods, ShippingMethods, TaxCategories, TaxRates, Zones, Countries, System & GlobalSettings"
     UpdateSettings
+    "Grants permission to update ShippingMethod"
+    UpdateShippingMethod
+    "Grants permission to update StockLocation"
+    UpdateStockLocation
+    "Grants permission to update System"
+    UpdateSystem
+    "Grants permission to update Tag"
+    UpdateTag
+    "Grants permission to update TaxCategory"
+    UpdateTaxCategory
+    "Grants permission to update TaxRate"
+    UpdateTaxRate
+    "Grants permission to update Zone"
+    UpdateZone
 }
 
 enum SortOrder {
@@ -2184,29 +2502,57 @@ enum SortOrder {
     DESC
 }
 
+"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
+scalar DateTime
+
+"The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
+scalar JSON
+
+"The `Money` scalar type represents monetary values and supports signed double-precision fractional values as specified by [IEEE 754](https://en.wikipedia.org/wiki/IEEE_floating_point)."
+scalar Money
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
 input AuthenticationInput {
     native: NativeAuthInput
 }
 
+"Operators for filtering on a list of Boolean fields"
+input BooleanListOperators {
+    inList: Boolean!
+}
+
+"Operators for filtering on a Boolean field"
 input BooleanOperators {
     eq: Boolean
+    isNull: Boolean
 }
 
 input CollectionFilterParameter {
     createdAt: DateOperators
     description: StringOperators
+    id: IDOperators
     languageCode: StringOperators
     name: StringOperators
+    parentId: IDOperators
     position: NumberOperators
     slug: StringOperators
     updatedAt: DateOperators
 }
 
 input CollectionListOptions {
+    "Allows the results to be filtered"
     filter: CollectionFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: CollectionSortParameter
+    "Takes n results, for use in pagination"
     take: Int
+    topLevelOnly: Boolean
 }
 
 input CollectionSortParameter {
@@ -2214,6 +2560,7 @@ input CollectionSortParameter {
     description: SortOrder
     id: SortOrder
     name: SortOrder
+    parentId: SortOrder
     position: SortOrder
     slug: SortOrder
     updatedAt: SortOrder
@@ -2258,6 +2605,7 @@ input CustomerFilterParameter {
     createdAt: DateOperators
     emailAddress: StringOperators
     firstName: StringOperators
+    id: IDOperators
     lastName: StringOperators
     phoneNumber: StringOperators
     title: StringOperators
@@ -2265,9 +2613,15 @@ input CustomerFilterParameter {
 }
 
 input CustomerListOptions {
+    "Allows the results to be filtered"
     filter: CustomerFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: CustomerSortParameter
+    "Takes n results, for use in pagination"
     take: Int
 }
 
@@ -2282,11 +2636,18 @@ input CustomerSortParameter {
     updatedAt: SortOrder
 }
 
+"Operators for filtering on a list of Date fields"
+input DateListOperators {
+    inList: DateTime!
+}
+
+"Operators for filtering on a DateTime field"
 input DateOperators {
     after: DateTime
     before: DateTime
     between: DateRange
     eq: DateTime
+    isNull: Boolean
 }
 
 input DateRange {
@@ -2294,16 +2655,67 @@ input DateRange {
     start: DateTime!
 }
 
+input FacetFilterParameter {
+    code: StringOperators
+    createdAt: DateOperators
+    id: IDOperators
+    languageCode: StringOperators
+    name: StringOperators
+    updatedAt: DateOperators
+}
+
+input FacetListOptions {
+    "Allows the results to be filtered"
+    filter: FacetFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
+    skip: Int
+    "Specifies which properties to sort the results by"
+    sort: FacetSortParameter
+    "Takes n results, for use in pagination"
+    take: Int
+}
+
+input FacetSortParameter {
+    code: SortOrder
+    createdAt: SortOrder
+    id: SortOrder
+    name: SortOrder
+    updatedAt: SortOrder
+}
+
+"""
+
+Used to construct boolean expressions for filtering search results
+by FacetValue ID. Examples:
+
+* ID=1 OR ID=2: `{ facetValueFilters: [{ or: [1,2] }] }`
+* ID=1 AND ID=2: `{ facetValueFilters: [{ and: 1 }, { and: 2 }] }`
+* ID=1 AND (ID=2 OR ID=3): `{ facetValueFilters: [{ and: 1 }, { or: [2,3] }] }`
+"""
+input FacetValueFilterInput {
+    and: ID
+    or: [ID!]
+}
+
 input HistoryEntryFilterParameter {
     createdAt: DateOperators
+    id: IDOperators
     type: StringOperators
     updatedAt: DateOperators
 }
 
 input HistoryEntryListOptions {
+    "Allows the results to be filtered"
     filter: HistoryEntryFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: HistoryEntrySortParameter
+    "Takes n results, for use in pagination"
     take: Int
 }
 
@@ -2313,16 +2725,37 @@ input HistoryEntrySortParameter {
     updatedAt: SortOrder
 }
 
+"Operators for filtering on a list of ID fields"
+input IDListOperators {
+    inList: ID!
+}
+
+"Operators for filtering on an ID field"
+input IDOperators {
+    eq: String
+    in: [String!]
+    isNull: Boolean
+    notEq: String
+    notIn: [String!]
+}
+
 input NativeAuthInput {
     password: String!
     username: String!
 }
 
+"Operators for filtering on a list of Number fields"
+input NumberListOperators {
+    inList: Float!
+}
+
+"Operators for filtering on a Int or Float field"
 input NumberOperators {
     between: NumberRange
     eq: Float
     gt: Float
     gte: Float
+    isNull: Boolean
     lt: Float
     lte: Float
 }
@@ -2337,6 +2770,7 @@ input OrderFilterParameter {
     code: StringOperators
     createdAt: DateOperators
     currencyCode: StringOperators
+    id: IDOperators
     orderPlacedAt: DateOperators
     shipping: NumberOperators
     shippingWithTax: NumberOperators
@@ -2346,13 +2780,20 @@ input OrderFilterParameter {
     total: NumberOperators
     totalQuantity: NumberOperators
     totalWithTax: NumberOperators
+    type: StringOperators
     updatedAt: DateOperators
 }
 
 input OrderListOptions {
+    "Allows the results to be filtered"
     filter: OrderFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: OrderSortParameter
+    "Takes n results, for use in pagination"
     take: Int
 }
 
@@ -2381,13 +2822,14 @@ input PaymentInput {
     data generated by the payment provider.
     """
     metadata: JSON!
-    "This field should correspond to the `code` property of a PaymentMethodHandler."
+    "This field should correspond to the `code` property of a PaymentMethod."
     method: String!
 }
 
 input ProductFilterParameter {
     createdAt: DateOperators
     description: StringOperators
+    id: IDOperators
     languageCode: StringOperators
     name: StringOperators
     slug: StringOperators
@@ -2395,9 +2837,15 @@ input ProductFilterParameter {
 }
 
 input ProductListOptions {
+    "Allows the results to be filtered"
     filter: ProductFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: ProductSortParameter
+    "Takes n results, for use in pagination"
     take: Int
 }
 
@@ -2413,20 +2861,27 @@ input ProductSortParameter {
 input ProductVariantFilterParameter {
     createdAt: DateOperators
     currencyCode: StringOperators
+    id: IDOperators
     languageCode: StringOperators
     name: StringOperators
     price: NumberOperators
-    priceIncludesTax: BooleanOperators
     priceWithTax: NumberOperators
+    productId: IDOperators
     sku: StringOperators
     stockLevel: StringOperators
     updatedAt: DateOperators
 }
 
 input ProductVariantListOptions {
+    "Allows the results to be filtered"
     filter: ProductVariantFilterParameter
+    "Specifies whether multiple \"filter\" arguments should be combines with a logical AND or OR operation. Defaults to AND."
+    filterOperator: LogicalOperator
+    "Skips the first n results, for use in pagination"
     skip: Int
+    "Specifies which properties to sort the results by"
     sort: ProductVariantSortParameter
+    "Takes n results, for use in pagination"
     take: Int
 }
 
@@ -2454,8 +2909,7 @@ input RegisterCustomerInput {
 input SearchInput {
     collectionId: ID
     collectionSlug: String
-    facetValueIds: [ID!]
-    facetValueOperator: LogicalOperator
+    facetValueFilters: [FacetValueFilterInput!]
     groupByProduct: Boolean
     skip: Int
     sort: SearchResultSortParameter
@@ -2468,10 +2922,17 @@ input SearchResultSortParameter {
     price: SortOrder
 }
 
+"Operators for filtering on a list of String fields"
+input StringListOperators {
+    inList: String!
+}
+
+"Operators for filtering on a String field"
 input StringOperators {
     contains: String
     eq: String
     in: [String!]
+    isNull: Boolean
     notContains: String
     notEq: String
     notIn: [String!]
@@ -2505,13 +2966,3 @@ input UpdateCustomerInput {
 input UpdateOrderInput {
     customFields: JSON
 }
-
-
-"The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf)."
-scalar JSON
-
-"A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar."
-scalar DateTime
-
-"The `Upload` scalar type represents a file upload."
-scalar Upload

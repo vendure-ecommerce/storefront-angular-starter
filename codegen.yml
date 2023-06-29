@@ -10,7 +10,7 @@ generates:
       - "typescript-operations"
     config:
       namingConvention:
-          enumValues: 'keep'
+        enumValues: 'keep'
       maybeValue: 'T'
       strict: true
   ./src/app/common/introspection-results.ts:
