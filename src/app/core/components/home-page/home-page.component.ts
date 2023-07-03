@@ -25,7 +25,7 @@ export class HomePageComponent implements OnInit {
 
     ngOnInit() {
         this.collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
-            options: {},
+            options: { take: 50 },
         }).pipe(map(({collections}) => collections.items));
         this.heroImage = this.getHeroImageUrl();
     }
