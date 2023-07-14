@@ -5,6 +5,6 @@ RUN npm install pm2 -g --unsafe-perm
 USER node
 COPY --chown=node:node . .
 RUN ["chmod", "+x", "install-storefront.sh"]
-RUN ["./install-storefront.sh", "v0.3.0"]
+RUN ["./install-storefront.sh", "v0.3.1"]
 EXPOSE 4000
 CMD [ "pm2-runtime", "process.json" ]
