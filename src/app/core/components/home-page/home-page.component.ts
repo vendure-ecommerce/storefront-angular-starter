@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { DomSanitizer, SafeStyle, SafeUrl } from '@angular/platform-browser';
+import { SafeUrl } from '@angular/platform-browser';
 import { gql } from 'apollo-angular';
 import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { GetCollectionsQuery } from '../../../common/generated-types';
@@ -18,12 +18,11 @@ export class HomePageComponent implements OnInit {
 
     collections$: Observable<GetCollectionsQuery['collections']['items']>;
     heroImage: SafeUrl;
-    readonly placeholderProducts = Array.from({length: 12}).map(() => null);
 
-    constructor(private dataService: DataService, private sanitizer: DomSanitizer) {
+    constructor(private dataService: DataService) {
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         this.collections$ = this.dataService.query<GetCollectionsQuery>(GET_COLLECTIONS, {
             options: { take: 50 },
         }).pipe(map(({collections}) => collections.items));
@@ -53,34 +52,6 @@ const GET_COLLECTIONS = gql`
                     id
                     preview
                 }
-            }
-        }
-    }
-`;
-
-const GET_TOP_SELLERS = gql`
-    query GetTopSellers {
-        search(input: {
-            take: 8,
-            groupByProduct: true,
-            sort: {
-                price: ASC
-            }
-        }) {
-            items {
-                productId
-                slug
-                productAsset {
-                    id
-                    preview
-                }
-                priceWithTax {
-                    ... on PriceRange {
-                        min
-                        max
-                    }
-                }
-                productName
             }
         }
     }
