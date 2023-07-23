@@ -36,7 +36,7 @@ export function arrayToTree<T extends HasParent>(nodes: T[]): RootNode<T> {
             }
         }
     }
-    // tslint:disable-next-line:no-non-null-assertion
+
     const rootId = topLevelNodes.length ? topLevelNodes[0].parent!.id : undefined;
     return {id: rootId, children: topLevelNodes};
 }
