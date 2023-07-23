@@ -47,7 +47,7 @@ export class AppComponent implements OnInit {
             map((event: RouterEvent) => event.url === '/'),
         );
         this.topCollections$ = this.dataService.query<GetCollectionsQuery, GetCollectionsQueryVariables>(GET_COLLECTIONS, {
-            options: {take: 25, topLevelOnly: true }
+            options: {take: 25, topLevelOnly: true}
         }).pipe(
             map(({collections}) => collections.items)
         );
