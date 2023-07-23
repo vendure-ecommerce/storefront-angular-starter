@@ -5,7 +5,7 @@ generates:
   ./src/app/common/generated-types.ts:
     plugins:
       - add:
-            content: "// tslint:disable"
+            content: "// eslint-disable"
       - "typescript"
       - "typescript-operations"
     config:
@@ -16,7 +16,7 @@ generates:
   ./src/app/common/introspection-results.ts:
     plugins:
       - add:
-            content: "// tslint:disable"
+            content: "// eslint-disable"
       - "fragment-matcher"
     config:
         apolloClientVersion: 3
