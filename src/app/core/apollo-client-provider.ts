@@ -1,9 +1,9 @@
 import { isPlatformBrowser } from '@angular/common';
 import { HttpHeaders } from '@angular/common/http';
-import { FactoryProvider, Optional, PLATFORM_ID } from '@angular/core';
-import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { FactoryProvider, Optional, PLATFORM_ID, makeStateKey, TransferState } from '@angular/core';
+
 import { ApolloClientOptions, ApolloLink, InMemoryCache } from '@apollo/client/core';
-import { REQUEST } from '@nguniversal/express-engine/tokens';
+import { REQUEST } from '../../express.tokens';
 import { APOLLO_OPTIONS } from 'apollo-angular';
 import { HttpLink, Options } from 'apollo-angular/http';
 import { Request } from 'express';
